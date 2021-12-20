@@ -1,0 +1,11 @@
+TweakVGA 256 BGI driver
+Version 0.5
+August 20, 1991
+
+This is the first version of my 256 color tweaked BGI driver.  All functions 
+have been implemented (except getimage/putimage, but these will be added soon).
+
+NOTES:
+ Paging and mouse cursor will not work
+
+

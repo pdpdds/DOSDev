@@ -1,0 +1,3 @@
+draw.c(176): Warning! E1178: Type qualifier mismatch
+draw.c(176): Note! I2003: source conversion type is 'struct OffsetPic const *'
+draw.c(176): Note! I2004: target conversion type is 'struct OffsetPic *'

@@ -1,0 +1,25 @@
+SuperVGA 256 BGI driver 
+Version 2.21
+August 20, 1991
+
+This is the newest version of my SuperVGA 256 BGI driver.  I have fixed 
+several bugs in the previous releases, as well as added several improvements.
+
+	o 1024x768x256 color mode is now supported on Tseng 4000,
+	  Chips&Tech, Trident 8900 and Ahead video cards.
+
+	o Getimage and putimage will work with bitmaps up to the 
+	 size of available memory. (> 64k)
+
+	o VESA support has been added.
+
+	o Added setvgapalette256 function.
+
+	o Floodfill is implemented.
+
+	o Added new logical operations to putimage
+	  XNOR_PUT
+	  NAND_PUT
+	  NOR_PUT
+	  TRANS_COPY_PUT - Treats 0 as transparent
+

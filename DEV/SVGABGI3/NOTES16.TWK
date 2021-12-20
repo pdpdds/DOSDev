@@ -1,0 +1,12 @@
+TweakVGA 16 BGI driver
+Version 1.0
+August 20, 1991
+
+This is the first version of my 16 color tweaked BGI driver.  All functions 
+have been implemented (including floodfill), and should work like
+the EGAVGA driver.
+
+NOTES:
+ Paging and mouse cursor will not work
+
+

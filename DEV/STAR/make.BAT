@@ -1,0 +1,1 @@
+bcc -ml *.c graphics.lib

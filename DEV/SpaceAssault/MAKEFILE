@@ -1,0 +1,39 @@
+!include MAKEFILE.LOC
+
+# compiler
+CC=$(TCCDIR)\bin\tcc.exe
+CFLAGS=-1 -ms -g3 -j3 -G -d -O2 -Z -I$(TCCDIR)\include -Isrc
+
+# linker
+TL=$(TCCDIR)\bin\tlink
+
+# all objects
+OBJS=\
+d_bible.obj \
+d_flank.obj \
+d_gen.obj \
+d_grch.obj \
+d_octo.obj \
+d_supply.obj \
+data.obj \
+input.obj \
+objpool.obj \
+screen.obj \
+shooter.obj
+
+# default rule
+start.exe: $(OBJS)
+    $(TL) /L$(TCCDIR)\lib /x @&&! 
+c0s $(OBJS) 
+$*
+$*
+emu cs
+!
+
+# implicit rules to compile sources
+{src}.c.obj:
+    $(CC) $(CFLAGS) -c $<
+
+# clean obj files
+clean:
+    del *.obj

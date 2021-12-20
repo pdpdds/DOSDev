@@ -1,0 +1,1 @@
+bcc -mh -K Aplay.c adlib.c play.c timer.asm smshan.c font.c

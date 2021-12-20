@@ -1,0 +1,18 @@
+## Makefile for initsvga.c (SuperVGA drivers)
+## Demonstrates use of registerfarbgidriver
+PROG 	= initsvga			# Program name to compile
+CC 	= bcc				# Command-line compiler (tcc/bcc)
+LIB 	= c:\borlandc\lib			# Library directory
+INCLUDE = c:\borlandc\include		# Include directory
+MODEL	= s				# Memory Model
+
+$(PROG).exe: $(PROG).c svga256f.obj svga16f.obj
+	$(CC) -L$(LIB) -I$(INCLUDE) -m$(MODEL) $(PROG).c \
+	svga256f.obj svga16f.obj graphics.lib
+
+svga256f.obj : svga256.bgi
+	bgiobj /F svga256.bgi svga256f.obj _Svga256_fdriver SVGA256_TEXT
+
+svga16f.obj : svga16.bgi
+	bgiobj /F svga16.bgi svga16f.obj _Svga16_fdriver SVGA16_TEXT
+

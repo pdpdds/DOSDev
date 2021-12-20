@@ -1,0 +1,1 @@
+bcc -ml *.cpp graphics.lib

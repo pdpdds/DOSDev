@@ -1,0 +1,102 @@
+objs.c(66): Warning! E1178: Type qualifier mismatch
+objs.c(66): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(66): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(77): Warning! E1178: Type qualifier mismatch
+objs.c(77): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(77): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(88): Warning! E1178: Type qualifier mismatch
+objs.c(88): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(88): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(100): Warning! E1178: Type qualifier mismatch
+objs.c(100): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(100): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(111): Warning! E1178: Type qualifier mismatch
+objs.c(111): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(111): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(122): Warning! E1178: Type qualifier mismatch
+objs.c(122): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(122): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(133): Warning! E1178: Type qualifier mismatch
+objs.c(133): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(133): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(146): Warning! E1178: Type qualifier mismatch
+objs.c(146): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(146): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(157): Warning! E1178: Type qualifier mismatch
+objs.c(157): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(157): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(168): Warning! E1178: Type qualifier mismatch
+objs.c(168): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(168): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(179): Warning! E1178: Type qualifier mismatch
+objs.c(179): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(179): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(190): Warning! E1178: Type qualifier mismatch
+objs.c(190): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(190): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(203): Warning! E1178: Type qualifier mismatch
+objs.c(203): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(203): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(217): Warning! E1178: Type qualifier mismatch
+objs.c(217): Note! I2003: source conversion type is 'struct OffsetPic const *'
+objs.c(217): Note! I2004: target conversion type is 'struct OffsetPic *'
+objs.c(343): Warning! W131: No prototype found for function 'Fire'
+objs.c(345): Warning! W131: No prototype found for function 'Gas'
+objs.c(428): Warning! W131: No prototype found for function 'HitItem'
+objs.c(450): Warning! W102: Type mismatch (warning)
+objs.c(450): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(450): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(518): Warning! W102: Type mismatch (warning)
+objs.c(518): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(518): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(682): Warning! W102: Type mismatch (warning)
+objs.c(682): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(682): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(697): Warning! W102: Type mismatch (warning)
+objs.c(697): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(697): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(754): Warning! W102: Type mismatch (warning)
+objs.c(754): Note! I2003: source conversion type is 'void *'
+objs.c(754): Note! I2004: target conversion type is 'int '
+objs.c(901): Warning! W102: Type mismatch (warning)
+objs.c(901): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(901): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(906): Warning! W102: Type mismatch (warning)
+objs.c(906): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(906): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(926): Warning! W102: Type mismatch (warning)
+objs.c(926): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(926): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(945): Warning! W102: Type mismatch (warning)
+objs.c(945): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(945): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(964): Warning! W102: Type mismatch (warning)
+objs.c(964): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(964): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(984): Warning! W102: Type mismatch (warning)
+objs.c(984): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(984): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1003): Warning! W102: Type mismatch (warning)
+objs.c(1003): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1003): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1024): Warning! W102: Type mismatch (warning)
+objs.c(1024): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1024): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1046): Warning! W102: Type mismatch (warning)
+objs.c(1046): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1046): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1067): Warning! W102: Type mismatch (warning)
+objs.c(1067): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1067): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1089): Warning! W102: Type mismatch (warning)
+objs.c(1089): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1089): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1104): Warning! W102: Type mismatch (warning)
+objs.c(1104): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1104): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1119): Warning! W102: Type mismatch (warning)
+objs.c(1119): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct MobileObject const *__p3)'
+objs.c(1119): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'
+objs.c(1198): Warning! W102: Type mismatch (warning)
+objs.c(1198): Note! I2003: source conversion type is 'void (*)(int __p1,int __p2,struct Object const *__p3)'
+objs.c(1198): Note! I2004: target conversion type is 'void (*)(int __p1,int __p2,void *__p3)'

@@ -1,0 +1,6 @@
+mainmenu.c(120): Warning! W102: Type mismatch (warning)
+mainmenu.c(120): Note! I2003: source conversion type is 'void *'
+mainmenu.c(120): Note! I2004: target conversion type is 'char '
+mainmenu.c(120): Warning! W102: Type mismatch (warning)
+mainmenu.c(120): Note! I2003: source conversion type is 'void *'
+mainmenu.c(120): Note! I2004: target conversion type is 'char '

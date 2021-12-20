@@ -1,0 +1,5 @@
+file cdogs, draw, pics, actors, map, sounds, defs, objs, gamedata, ai
+file triggers, input, prep, hiscores, automap, mission, game, mainmenu
+file password, files, menu
+file joystick, sprcomp, grafx, blit, text, keyboard
+name cdogs

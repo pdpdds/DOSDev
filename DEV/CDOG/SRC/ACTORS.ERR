@@ -1,0 +1,6 @@
+actors.c(54): Warning! W305: Type 'int' assumed in declaration of 'transitionTable'
+actors.c(67): Warning! W305: Type 'int' assumed in declaration of 'delayTable'
+actors.c(961): Warning! E1179: Parameter 5, type qualifier mismatch
+actors.c(961): Note! I2003: source conversion type is 'struct OffsetPic const *'
+actors.c(961): Note! I2004: target conversion type is 'struct OffsetPic *'
+actors.c(1005): Warning! W131: No prototype found for function 'SetShade'

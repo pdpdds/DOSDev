@@ -1,0 +1,5 @@
+file cdogsed, draw, pics, actors, map, sounds, defs, objs, gamedata
+file triggers, input, hiscores, automap, mission
+file files, game, ai, charsed, events
+file joystick, sprcomp, grafx, blit, text, keyboard
+name cdogsed

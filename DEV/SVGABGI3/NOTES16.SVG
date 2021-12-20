@@ -1,0 +1,14 @@
+SuperVGA 16 BGI driver
+Version 1.11
+August 20, 1991
+
+This is the latest version of my 16 color BGI driver.  All functions have
+been implemented (including paging and floodfill), and should work like
+the EGAVGA driver.
+
+	o Fixed getimage bug
+
+	o Added new logical operations to putimage:
+	  XNOR_PUT
+	  NAND_PUT
+	  NOR_PUT

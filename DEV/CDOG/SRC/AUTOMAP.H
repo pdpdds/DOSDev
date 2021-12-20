@@ -1,0 +1,1 @@
+void DisplayAutoMap( int showAll );

@@ -1,0 +1,11 @@
+void TextInit( const char *filename, int offset, int compile, int rle );
+void TextChar( char c );
+void TextString( const char *s );
+void TextGoto( int x, int y );
+void TextStringAt( int x, int y, const char *s );
+int  TextCharWidth( int c );
+int  TextWidth( const char *s );
+int  TextHeight( void );
+void TextCharWithTable( char c, TranslationTable *table );
+void TextStringWithTable( const char *s, TranslationTable *table );
+void TextStringWithTableAt( int x, int y, const char *s, TranslationTable *table );

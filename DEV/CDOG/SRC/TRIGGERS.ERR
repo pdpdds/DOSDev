@@ -1,0 +1,2 @@
+triggers.c(55): Warning! W304: Return type 'int' assumed for function 'RemoveAllTriggers'
+triggers.c(58): Warning! W107: Missing return value for function 'RemoveAllTriggers'

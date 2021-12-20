@@ -1,0 +1,347 @@
+DJGPP DOS GAME PROGRAMMERS FAQ V1.0
+___________________________________
+
+The intention of this FAQ is to provide the basic technical information 
+required to do all the good stuff that you can do with other DOS based
+compilers. It shows how to access most hardware such as video, sound,
+controllers, timers, interrupts under various OS's like DOS, Windows,
+OS/2. (though in a DOS session)
+
+This FAQ does not show you how to write games, nor is it a library
+of functions, though it will hopefully provide enough information for 
+most people with programming experience to convert one of the many 
+existing libraries available for other compilers.
+
+I am open to corrections, improvements and expansion of this FAQ. A lot
+of this information has come from my own experimentation with the 
+compiler and hardware.
+
+I hope you find it useful. Let me know how y'all get on!
+
+S.Hull@bradford.ac.uk
+Stu Hull.
+_______________________________________________________________________
+
+Q. What is DGJPP?
+
+DGJPP is a popular port of GNU C by DJ Delorie. It is a full 32-bit
+compiler with DOS extender with a flat memory model, and can access
+128Mb of physical and 128Mb of Virtual (Disk swapped) memory. It is
+distributed under the GNU Licence agreement. It currently has no
+development environment (provide your own text editors!) and only a
+basic debugger, these aside it is a very competent compiler.
+
+Q. Where can I get DJGPP?
+
+Any SimTel site. Try oak.oakland.edu:/pub/msdos/djgpp. Pull the faq in 
+the directory which will explain the minimum files required, and the
+basics of operation.
+
+Q. How do I install DJGPP?
+
+Create a directory (example C:\GCC) and unzip the files required (don't 
+forget the -d switch to build directories), then add the following
+statement to your autoexec file:
+
+  SET DJGPP=C:\GCC\DJGPP.ENV
+  and add C:\GCC\BIN to your PATH statement.
+
+Q. Can I distribute programs compiled with DJGPP?
+
+That would appear to depend upon which libraries you use. As far as I
+understand it none of the following examples use library code that 
+cannot be distributed, and go32 is public domain, but please check 
+before releasing. If you are making a commercial release it is 
+suggested you make an appropriate donation to the developers.
+
+Q. How do I compile/link/include libraries?
+
+Briefly, without going into things like makefiles, there are two 
+steps, compile into object (COFF format) and link. A few examples
+follow:
+
+To compile and link (to 'a.out'):
+
+  gcc [options] {sourcename} [-l{libname}]
+
+Compile (to object):
+  gcc [options] {sourcename} -o {objectname}
+
+Link (to 'a.out'):
+  ld \gcc\lib\crt0.o -L\gcc\lib {objectname(s)} -lgcc -lc [-l{libname}]
+
+Useful compile options include:
+  -Wall  All warning messages displayed.
+  -m486  Optimise for 486.
+
+Q. How do I execute ('a.out')?
+  
+  go32 a.out [arguments]
+
+Q. How do I start the debugger?
+
+# go32 -d edebug32 a.out [arguments]
+(or use ed32-dpmi if running under Windows/OS2 etc).
+
+Q. How do I use the inline assembler?
+
+As you may know, the format used by the GNU assembler differs from
+what Intel uses. Inline assembly is encapsulated with 'asm("...")'
+inside your c code. Follow these rules and you'll be OK:
+
+Typical format is:
+  {instruction} {source}, {dest}    (NOT {dest}, {source}!)
+
+Each instruction is suffixed with the operation size (though this
+can also be assumed from the register size) such as 'b' for byte,
+'w' for word, 'l' for long word.
+
+Registers are prefixed with a '%'.
+
+Numbers are prefixed with '$' and assumed to be decimal unless they
+are of the '0x' format.
+
+Indirect addressing is done by surrounding the term with brackets
+(eg '(%esi)', or '%es:(%edi)' with segment prefix).
+
+Variables are prefixed with _ (underscore) though they cannot be
+local to the procedure (ie they must be defined globally). To 
+access external global variables, you must also surround the name
+with brackets to access it indirectly.
+
+Instructions can be separated with newline or ';'.
+
+Examples:
+  asm("
+   pushw %es
+   movw (_DosSeg), %es
+   movl _offset, %edi
+   movl $4, %eax
+   movb %al, %es:(%edi)
+  
+   rep ; movsl
+  
+  moveloop:
+   decl %ecx
+   jnz  memloop
+  ");
+
+Q. Why are segments registers still used with a flat memory model?
+
+Without going into too much detail about protected mode environments,
+there are no segments as such, but selectors, although they can be
+treated in a similar fashion. When running in protected mode DOS
+memory is assigned a selector, and your code another. This means that
+no matter what address your code tries to access it will not interfere
+with the DOS memory, or any other memory it hasn't been given access
+to. This is the mechanism used by a 32-bit OS preventing one from
+accessing another.
+
+This creates problems when accessing Video memory in the DOS segment.
+'go32' will try to re-map some area's of memory to appear as the DOS
+memory, though under a 32-bit OS it cannot do this. There are ways 
+round this though which I will deal with later.
+
+Q. How do I select graphics modes?
+
+This is the same as real mode, for example to set mode 13h 
+(include <dos.h>):
+
+  union REGS in, out;
+
+  in.x.ax = 0x0013; 
+  int86(0x10, &in, &out);
+
+Q. How to I set mode-x?
+
+Again, this is the same as for real mode.
+
+   [Set mode 13h, as above]
+
+   /* Unchain */
+
+   outportw(0x3c4, 0x0604);
+   outportw(0x3d4, 0xe317);
+   outportw(0x3d4, 0x0014);
+
+   /* Enable all planes */
+
+   outportw(0x3c4, 0x0f02);
+
+Q. How is DOS/video memory accessed?
+
+You could use one of the graphics libraries provided which are intended 
+to make it easier to port code written for other systems, unfortunately 
+they do not work in a protected mode environment (Such as Windows and
+OS2) and are slow.
+
+Your code does not automatically have access to DOS memory, though the
+dosmemput and dosmemget functions will do this for you, example:
+
+   dosmemput("H.e.l.l.o.", 10, 0xb8000);
+
+will put 'Hello' in the top left hand corner of a text screen (don't
+forget to include <pc.h>, <dos.h> and use add the library -lpc).
+
+If you want to access it yourself via asm you need to find out what
+the DOS selector is (selectors are explained elsewhere), and load
+this into a segment register. The same example with inline asm:
+  
+  #include <go32.h>
+   
+  static int dos_seg, length;
+  static char *string;
+
+  main()
+  {
+  dos_seg = _go32_conventional_mem_selector();
+  string  = "H.e.l.l.o.";
+  length  = 10;
+
+  asm ("
+   pushw %es
+ 
+   movw  _dos_seg, %es
+ 
+   movl  _string, %esi
+   movl  $0xb8000, %edi
+  
+   movw  _length, %cx
+ 
+   rep ; movsb 
+ 
+   popw  %es
+  ");
+  }
+
+Q. How do I detect available physical/virtual memory?
+
+The following functions are provided (include <dpmi.h>):
+
+  _go32_dpmi_remaining_physical_memory();
+  _go32_dpmi_remaining_virtual_memory();
+
+Q. How are floating point numbers handled?
+
+By default, DJGPP uses the maths co-processor found on some systems.
+There is an emulator but you must include it your self. I have yet
+to evaluate this.
+
+Q. How do I chain interrupts?
+
+You must provide the offset and selector for the function to be 
+chained. For example, chaining the hardware timer interrupt:
+
+  #include <go32.h>
+
+  void Interrupt(void)
+  {
+   /* Timer interrupt handler */
+  }
+
+  main()
+  {
+   _go32_dpmi_seginfo old_handler, new_handler;
+
+   new_handler.pm_offset   = (int) Interrupt;
+   new_handler.pm_selector = _go32_my_cs();
+
+   _go32_dpmi_get_protected_mode_interrupt(8, &old_handler);
+   _go32_dpmi_chain_protected_mode_interrupt(8, &new_handler);
+
+   /* Interrupt is chained */
+
+   _go32_dpmi_set_protected_mode_interrupt(8, &old_handler);
+
+   /* Interrupt is unchained */
+  }
+
+NOTE: There is a problem when running under DOS however, when you
+get the old interrupt offset/selector you get a bogus value. If you 
+then use this to unchain the interrupt, and later another interrupt
+does occur, you program will crash. I need to find out if there is
+a fix for this. At the moment, I unchain and immediately exit to 
+prevent a crash if run under DOS.
+
+There are also problems under OS/2 and Win which I mention in the 
+sound card DMA example. Either interrupt chaining is buggy or I am
+doing something wrong. I would like to know.
+
+Q. How do I access the FM part of a soundcard?
+
+Since all FM access can be done with hardware ports this is the 
+same as in real mode.
+
+Q. How do I play digital sounds via DMA?
+
+This is probably the least well documented subject in the PC world,
+so I have included in the examples some code to play mono .WAV files
+of any length. The following is a description of how it is done:
+
+The basic idea goes like this, you set up a DOS memory buffer for 
+the DMA transfer, any size, but tell the sound card it will be the
+full 64Kb. You then tell the DMA to transfer the buffer in cycle
+mode, which basically resends the same chunk of memory all the time.
+When the sound card creates and interrupt to say 64Kb has been
+transferred, you tell it to take another 64Kb. This way DMA does
+not have to be set up again, and reduces clicking to almost
+non existent.
+
+To play a sound bigger than the buffer size you need to keep a
+track of where the DMA transfer is, and while one half is being
+played, fill the other half with the next part of the sound. The
+buffer must also be filled with silence in-between samples. The
+example chains the hardware timer to do this.
+
+When writing this code I noticed a problem which I call interrupt
+miss. Sometimes you don't get a timer interrupt or sound card
+interrupt in protected mode. The program only seems to get 
+notified of an interrupt if it occurs while the processor is 
+executing your segment. Do a function like printf, which runs
+in the DOS segment, and you will not get notified.
+
+To prevent this being a problem with the DMA code I have done
+two things, made the buffer large enough to tolerate a timer
+interrupt miss before the sound becomes looped, and also made
+the code that reads the DMA count make sure the it has changed
+since last time, otherwise the DMA transfer is restarted.
+
+There was a problem with OS/2 2.1 that prevented the DMA from
+being in cycle mode, though it would work with the DMA transfer
+detection above would sound choppy, though this seems to have
+been put right in OS/2 WARP.
+
+Allocation of DOS memory for a DMA buffer:
+
+  int AllocateBuffer()
+  {
+  unsigned int address, page;
+  _go32_dpmi_seginfo memory;
+
+  /* Allocate memory, return zero if fails */
+
+  memory.size = (DMA_SIZE * 2) / 16;
+  if (_go32_dpmi_allocate_dos_memory(&memory)) return(0);
+
+  /* What is the 20 bit address? */
+
+  address = memory.rm_segment << 4;
+
+  /* Does it cross a 64K boundary? */
+
+  page = address & 0xffff;
+  if ((page + DMA_SIZE) > 0xffff) address = (address - page) + 0x10000;
+
+  /* Return the address of the buffer */
+
+  return(address);
+  }
+
+Q. How do I write a keyboard handler?
+There may be a problem with interrupt miss though I haven't tried 
+this yet. Still in progress.
+
+Q. How do I read from mouse?
+There is a library of functions available, and these may be good 
+for cross platform compatibility, but the usual 'int86()' calls
+will work fine.

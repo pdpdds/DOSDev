@@ -1,0 +1,14 @@
+map.c(106): Warning! W137: Extern function 'ItemsCollide' redeclared as static
+map.c(106): Note! I2002: 'ItemsCollide' defined in: map.h(87)
+map.c(643): Warning! E1179: Parameter 5, type qualifier mismatch
+map.c(643): Note! I2003: source conversion type is 'struct OffsetPic const *'
+map.c(643): Note! I2004: target conversion type is 'struct OffsetPic *'
+map.c(644): Warning! E1179: Parameter 6, type qualifier mismatch
+map.c(644): Note! I2003: source conversion type is 'struct OffsetPic const *'
+map.c(644): Note! I2004: target conversion type is 'struct OffsetPic *'
+map.c(684): Warning! E1179: Parameter 5, type qualifier mismatch
+map.c(684): Note! I2003: source conversion type is 'struct OffsetPic const *'
+map.c(684): Note! I2004: target conversion type is 'struct OffsetPic *'
+map.c(737): Warning! E1179: Parameter 5, type qualifier mismatch
+map.c(737): Note! I2003: source conversion type is 'struct OffsetPic const *'
+map.c(737): Note! I2004: target conversion type is 'struct OffsetPic *'

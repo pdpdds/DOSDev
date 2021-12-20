@@ -1,0 +1,1529 @@
+
+                     TDE, the Thomson-Davis Editor
+                             Version 3.0
+                             June 5, 1993
+                              Frank Davis
+
+
+Description:
+
+  TDE is a simple, public domain, multi-file/multi-window binary and text
+  file editor written for IBM PCs and close compatibles.  TDE is suitable
+  for editing batch files, binary files, text files, and various computer
+  language source code files.  The only limit on the number and size of
+  files that TDE can handle is the amount of conventional memory.
+  Likewise, the only limit on the number of windows is the amount of
+  conventional memory.  There is no preset maximum number of files or
+  windows that may be open at any one time.
+
+
+Introduction:
+
+  I work with data files, computer source code, and various text files quite
+  a bit.  Most of the features in TDE are related, in some way, to handling
+  those types of files.  The various window and cursor commands in TDE are
+  really nice for comparing and editing source code or output files.  A
+  good collection of block commands is available for use on source code
+  and formatted data files.  For what little word processing I do, TDE has
+  a few simple commands for formatting text and paragraphs.  In short, TDE
+  contains most of the features that I use most of the time in an easy to
+  use, easy to remember, and easy to configure editor.  I hope you find
+  TDE as easy to use for most of your routine editing as me.
+
+
+Usage:
+
+  At the command line type:
+
+        tde [ [-f search_pattern] file name(s)]
+
+        tde [ [-g regular_expression] file name(s)]
+
+        tde [ [-b] file name]
+
+  For example:
+
+        tde
+        tde foo.bar
+        tde c:\c70\TDE\main.c
+        tde *.c  \qc25\TDE\*.h
+        tde foo.bar  foobar  f*  foo.*  f??b??
+
+      * * *  to search files for a pattern or reg ex and load matches  * * *
+
+        tde  -f  find_me_load_me  foo.*
+        tde  -f  find_me_load_me  foo.*  *.bar
+
+new ==> tde  -g  "this|that"      foo.*      <=== finds "this" or "that"
+        tde  -g  [a-zA-Z0-9_]+\(  foo.bar    <=== finds C functions
+
+        Note: If the '|' symbol is needed in a regular expression on
+              the command line, the search string needs to be enclosed
+              in quotes, or the MSDOS command interpreter will interpret '|'
+              as the pipe operator rather than the 'or' symbol.
+
+      * * * to edit binary files * * *
+
+        tde -b tde.exe
+        tde -b80 tde.exe
+
+
+  If you don't enter a file name on the command line, TDE will prompt you
+  for a file name.  If the file does not exist, TDE starts out with an
+  empty file with the file name you just entered.  Or, pressing <Enter>
+  twice will pop-up a directory list.
+
+
+What's new:
+
+  Management policy at Simtel20 forbids encryption/decryption functions in
+  programs, no matter how simple.  ROT13 was taken out of version 3.0
+  before it was sent to Simtel20, but ROT13 is available in this version.
+  ROT13 is a simple encryption method, also known as a Caesar cypher.
+  As the name implies, Caesar cyphers have been around since the ancient
+  Romans.  Incidentally, Caesar used ROT3.
+
+
+                      New features in TDE 3.0 include:
+
+                  FindRegX                 = #F7
+                  RepeatFindRegX           = F7
+                  RepeatFindRegXBackward   = @F7
+                  DefineRegXGrep           = ^F12
+                  Renamed the SearchAndSeize functions to Grep
+
+
+  The main feature in this version of TDE is a regular expression search
+  function.  I don't need regular expressions very often, but they do come
+  in handy.  For instance, our mainframe has a "compare" and a "compair"
+  function.  After years of using those functions, I have forgotten which
+  is the correct spelling.  With a regular expression function, I can
+  search for "comp(are|air)".  The '|' symbol, which is the or operator,
+  is very useful for finding several different or similar patterns at once.
+  Recently, I needed to delete all blank lines in a data file.  With a simple
+  macro, a regular expression search really simplified the job.
+
+  Unfortunately, the regular expression search function can be very slow --
+  the worst case is really bad.  Searching for .*abc can take several minutes
+  in a small file (on a 486/33).  Press Control-Break to break-out of a long
+  running reg ex find.  In all actuallity, I never need to search for worst
+  case patterns.
+
+
+          Here's the macro I used to delete all blank lines in a file:
+
+        Shift-F7  = FindRegX  (find a blank line before recording the macro)
+                    ^$
+
+        Alt-F3    = turn macro record on
+        Alt-5     = assign macro to Alt-5
+        F7        = RepeatFindRegX - next blank line
+        Alt-D     = delete line
+        Up        = move cursor up a line (just in case current line is blank)
+        Alt-5     = call the macro we just recorded
+        Alt-F3    = turn macro record off
+
+        Press Alt-5 to delete all blank lines.
+
+
+  The SearchAndSeize function was renamed to Grep.  I didn't want to call
+  the old function Grep, because that implies the ability to search for
+  regular expressions.  Now, there is a choice between a very fast, but
+  limited, DefineGrep or a slow, but very flexible, DefineRegXGrep for
+  greping around.
+
+
+                   Regular Expression operator precedence:
+                   (based on the table in Dr. Aho's book)
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³   c = char    s = string    r = regular expression   ³
+          ÃÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+          ³  c      ³  any non-operator character  ³  Felis      ³
+          ³  \:c    ³  predefined macro:           ³  \:c*(ie|ei)³
+          ³         ³     \:a  - alphanumeric      ³             ³
+          ³         ³     \:b  - white space       ³             ³
+          ³         ³     \:c  - alphabetic        ³             ³
+          ³         ³     \:d  - decimal           ³             ³
+          ³         ³     \:h  - hex               ³             ³
+          ³         ³     \:l  - lower alpha       ³             ³
+          ³         ³     \:u  - upper alpha       ³             ³
+          ³  \c     ³  c literally and C escapes   ³  catus\.    ³
+          ³  .      ³  any character but newline   ³  c.t        ³
+          ³  ^      ³  beginning of line           ³  ^cat       ³
+          ³  $      ³  end of line                 ³  cat$       ³
+          ³  [s]    ³  any character in s          ³  [a-z0-9]   ³
+          ³  [^s]   ³  any character not in s      ³  [^AEIOU]   ³
+          ³  r*     ³  zero or more r's            ³  ca*t       ³
+          ³  r+     ³  one or more r's             ³  ca[b-t]+   ³
+          ³  r?     ³  zero or one r               ³  c.?t       ³
+          ³  r1r2   ³  r1 then r2                  ³  ^$         ³
+          ³  r1|r2  ³  r1 or r2                    ³  kitty|cat  ³
+          ³  (r)    ³  r                           ³  (c)?(a+)t  ³
+          ÀÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+  TDE only checks for valid syntax in a regular expression, which basically
+  means that parens and brackets are balanced and that consecutive operators
+  '*', '+', '?', and '|' are not allowed.  For example, either ^$ or $^ will
+  find blank lines.  TDE does not check for regular expressions that create
+  null loops in the pattern matching machine.  If TDE can compile a regular
+  expression, TDE will try to find it.  Here are some examples of good and
+  bad regular expressions in TDE:
+
+            will find (good):             chokes on null loops (bad):
+
+                (a|b)*                            (a*|b)*
+                a*(ba*)*                          (a*b*)*
+                (a*b)*                            (a*b*)+
+                (a+)*                             (a*)+
+                a*|b                              (a?)*
+
+  TDE will correctly compile all of the above regular expressions, but it
+  just can't find the "bad" regular expressions.  If TDE does choke on
+  null loops, a harmless "nfa choked" message is displayed in the status bar
+  at the bottom of the screen.  TDE never tries to predict whether a given
+  regular expression will produce null loops.
+
+  Null loops are created when a regular expression has zero or more occur-
+  rences of zero or more occurrences, e.g. (a*)*.  The nondeterministic
+  finite state pattern matching machine in TDE will choke trying to find
+  an infinite number of zero occurrences of 'a'.
+
+
+
+                      New features in TDE 2.2 include:
+
+        Dirty Line color        = Config file
+        NextDirtyLine           = @F5
+        PrevDirtyLine           = @F6
+        Right margin justify    = ^F7
+        Stable Quicksort        = replaced the old insertion sort
+        Customize overscan      = config utility
+        Put support for two-key combo's back in, e.g. ^KQ
+        Edit text and binary files
+        + Source code may now be compiled w/ MSC 7.0, QuickC 2.51, and BC 3.1
+        + Make file supports MSC 7.0, QuickC 2.5, and BC 3.1
+        + autoload <LF>, <CRLF>, and some BIN (binary) files
+        + added signatures to structures changed by the config utility
+        + assertions in source code to find my many design flaws,
+            programming mistakes, and logic errors
+
+
+  In this version, the big text buffer was replaced by a double linked
+  list.  In general, many functions are faster.  However, this version
+  will not handle files quite as large as previous versions.  On the
+  other hand, this version will edit binary files.  I think just about
+  any ASCII or Extended ASCII character may be edited in any file.  Also
+  notice in the file header that the offset is displayed for files
+  opened in binary mode.
+
+  When I added support for binary files, I wanted the ability to edit
+  some of the files produced by our lab equipment.  The data collectors
+  dump data in a fixed record size.  The record size varies among the
+  machines, so TDE needs to handle various fixed record formats.  The
+  default record length for binary files is 64.  The default record
+  size may be overridden on the command line with the /b switch.  Just
+  add the size of the desired fixed length record to the /b, e.g.
+
+                           tde -b128 nmr.dat
+                           tde -b80  hplc.dat
+                           tde -b54  rs232.dat
+
+  Now, whenever a line is changed, the line changes color.  The dirty
+  line color can be set in the config utility.  Incidentally, the dirty
+  line color can be set to the same color as regular text, which effectively
+  turns off this feature.  After using this feature for a while, I really
+  needed another function to move the cursor to dirty lines.  During the
+  day, I get interrupted quite a bit and forget what I just changed.  The
+  NextDirtyLine and PrevDirtyLine functions are really useful for finding
+  the changes I made.  Other times, I forget what I just did.  Often, I
+  forget what I just did five minutes ago.  I vaguely remember changing
+  something, but I can't remember what or where.  The NextDirtyLine and
+  PrevDirtyLine functions come in handy for those with bad memories, like
+  me.
+
+  A minor feature was added to the word processing functions:  right margin
+  justification.  The SetRightMargin function asks whether or not to
+  justify the right margin.  In the ruler, a '<' indicates the right margin
+  is jagged and a 'Ã' indicates the right margin is smooth.
+
+  The simple insertion sort was replaced by the much faster Quicksort.  The
+  SortBoxBlock function works the same -- just faster.  Computer science
+  types seem to have a fixation on sorting and searching.
+
+  In the DTE 5.1 editor, Doug supported the WordStar/Turbo X command
+  convention.  TDE now supports two-key commands in a generic way.  The first
+  key must be a recognized function key and the second key can be anything,
+  even a repeat of the first key.  The one restriction with two-key commands
+  is that macros cannot be assigned to two-key combo's.
+
+  Now that I own both Microsoft C 7.0 and Borland C 3.1, the source was
+  changed so both compilers can compile TDE.
+
+
+                     New features in TDE 2.1 include:
+
+        SetLtabs                = ^Tab
+        SetPtabs                = ^Tab, prompts for both Ltabs and Ptabs
+        BlockCompressTabs       = #@C
+        BlockIndentTabs         = #@I
+        ToggleTabInflate        = #@T
+        DefineDiff              = #F11
+        RepeatDiff              = F11
+        -f pattern files        = command line option to define grep
+        DefineGrep              = #F12
+        RepeatGrep              = F12
+        SwapBlock               = #@S
+        Sort sequence           = Config file
+
+
+                             Renamed functions:
+
+        ReplaceString           == ReplaceForward || ReplaceBackward
+        PanUp                   == FixedScrollUP
+        PanDown                 == FixedScrollDn
+        PanLeft                 == ScrollLeft
+        PanRight                == ScrollRight
+
+
+
+  At work, we may have several versions of one program.  For me, I find it
+  hard to remember which changes were made to which source files.  There
+  are several diff utilities that can point out differences, but I
+  probably need the edit those differences anyway.  The diff options I
+  find most useful are: setting the diff start, ignore leading space,
+  ignore all space, ignore blank lines, and ignore end of line.  The new
+  diff function in TDE prompts for the windows and the starting diff
+  options.  Once the diff is defined, press the RepeatDiff key at any time
+  to find the next diff.  With cursor sync turned on, it's easy to move
+  the cursors to begin the next diff.  Any two visible windows may be
+  diffed.  You may even diff windows in the same file, which is really
+  nice for comparing similar functions, data, or text in separate areas of
+  a file.
+
+  Sort sequences were added for non-English languages: English, Esperanto,
+  Finnish, French, German, and Swedish.  You may customize the sort
+  sequence in tde.cfg.  This function is based on a program by Pierre
+  Jelenc, pcj1@columbia.edu.  Pierre's sort program will handle a much
+  wider range of alphabets and languages than TDE.
+
+  The new SwapBlock function works only with BOX blocks.  Every once in a
+  while, I need to swap rows of numbers or areas of text.  The width of
+  the swap area assumed to be the width of the BOX.
+
+
+                   New features in TDE 2.0e include:
+
+                      BlockRot13           = #@<
+                      BlockFixUUE          = #@>
+                      BlockEmailReply      = #@?
+
+  ROT13 is an informal, voluntary standard used on the networks to send
+  text that some may consider inappropriate.  ROT13 is a convenient way
+  that allows one to choose whether or not to read the material.  To read
+  the material, one has to make a conscious and deliberate effort to
+  convert the text into a readable form.  ROT13 is also used to hide
+  answers to questions, puzzles, etc...  BlockRot13 alternately converts
+  ROT13 alpha characters into normal text and hides normal alpha
+  characters in ROT13.
+
+  The most common default for sending large binary files across network
+  nodes and gateways uses UUencoding; however, some characters in the
+  UUencode set do not make the trip correctly.  On IBM mainframes, the
+  EBCDIC to ASCII translation don't do right.  Although I don't fully
+  understand why, but, three characters need to be fixed when receiving
+  text e-mail files, which include UUencoded files, from IBM mainframes.
+  BlockFixUUE will fix the three characters in a marked block.  The three
+  characters that need to be fixed in text (as opposed to binary) e-mail
+  files received from IBM mainframes are:
+
+                  Hex               Decimal             ASCII
+
+       1)     5d  ==>  7c         93  ==>  124        ]  ==>  |
+       2)     d5  ==>  5b        223  ==>   91        Õ  ==>  [
+       3)     e5  ==>  5d        229  ==>   93        å  ==>  ]
+
+
+  When sending a reply to an e-mail, it is customary to prepend any lines
+  from the original e-mail with the ">" character.  BlockEmailReply
+  prepends "> " to the original line in an e-mail and prepends ">" to all
+  replies to replies in a LINE block.
+
+
+
+                   New features in TDE 2.0 include :
+
+         DateTimeStamp                           = ^2 or Control-@ sign
+         SortBoxBlock, ascending or descending   = @S
+         ToggleSmartTabs                         = @Tab
+         Dynamic left margin for writers         = @V
+         Pause, useful with macros               = ^P
+         Recursive macros
+         Support for Control-Break to stop recursive macros,
+              sorting, search/replacing, some block operations,
+              formatting text or paragraph, and printing.
+         Support for lines as long as 1040 characters.
+         Improved undo buffer management.  There is now room for
+              the last 10 by 1040  or  130 by 80 deleted lines.
+         Gathered all prompts into one header file to aid translation
+              of prompts and documentation into other languages.
+         Configuration file, option 6 in tdecfg.exe.
+
+
+  The date-time stamp was added to TDE because some users talk with field
+  units over the phone and the event needs to be date and time stamped.
+  Users may customize the date to local preferences, eg MM-DD-YY or
+  DD-MM-YY.  The time stamp may use either 12 hour or 24 hour form.
+
+  Every once in a while, I need to sort data, names, etc..., in some of my
+  files.  The SortBoxBlock function was added to sort lines according to
+  the keys in a box block.  The keys may be sorted ascending or
+  descending, while the IGNORE/MATCH toggle determines whether case is
+  significant.  To sort multiple columns, start the sort with the least
+  significant key first.
+
+  I also wrote a handler for the Control-Break interrupt, 0x1B.  On IBM
+  compatible PCs, the Control-Break key generates an interrupt via
+  hardware.  By writing a Control-Break interrupt handler, a user can
+  immediately gain control of a run-a-way recursive macro, printing job,
+  most box block operations, expanding tabs, trimming space from line
+  blocks, formatting a paragraph or text, search/replace, or a sort
+  operation.  Although one may trap Control-C, which is a software
+  generated interrupt, there is no telling when the operating system will
+  turn control over to a Control-C handler.  One may gain immediate
+  control with the Control-Break key, however.
+
+  The undo-buffer space and management was greatly enhanced.  There is now
+  room for over 200 deleted lines in the buffer.  Users may now get back
+  entire functions that may have been deleted.
+
+  All of the prompts in TDE were gathered into one header file to aid the
+  translation of documentation as well as the user prompts into other
+  languages.  Pierre Jelenc, pcj1@columbia.edu and a member of the Foreign
+  Language Education Forum (FLEFO) on CompuServe, has translated the
+  documentation and has created configuration files for several languages.
+  If you need a non-English version of TDE, contact Pierre to find out if
+  he has a version of TDE for you.
+
+  A configuration file was added so that users may define all function
+  keys, modes, and colors from a configuration file.  Users may also
+  define macros in the configuration file.  Those who need to assign ASCII
+  and Extended ASCII character to unused function keys will find this
+  extremely useful.  Some alphabets need letters with all kinds of accent
+  marks.
+
+
+                   New features in TDE 1.5 include :
+
+                    Ruler                     = @R
+                    Block trim trailing       = @T
+                    User defined macros:
+                       Record macro           = @F3
+                       Save macros to file    = #F1
+                       Load macros from file  = #F3
+                       Clear macro buffer     = ^ESC
+                    Critical error handler
+
+  If by accident you forget to put a diskette in a floppy drive and try to
+  save a file or if you forget to turn on the printer before printing a
+  block or file, a critical error occurs.  That kind of error is the
+  infamous Abort, Retry, Ignore thing.  A routine was written to give some
+  information on the kind and the location of those errors when they
+  occur.  The TDE critical error handler gives you all kinds of info and
+  then prompts you for a response.  The timeout for critical errors varies
+  quite a bit.  Some timeouts may take a couple of minutes.
+
+  When I "work" at the USDA, I often need to create or massage formatted
+  data files.  Also, a lot of engineers and scientists at the USDA program
+  in FORTRAN and the source code needs to be in a certain format.  When
+  working with those types of files, it is really useful to have a ruler
+  that explicitly shows which column the cursor is in.  The new ruler in
+  TDE shows margins, column numbers, and a column pointer.
+
+
+
+                   New features in TDE 1.4 include :
+
+              Split screen vertically            = F8
+              Number box block                   = Alt+N
+              Directory list                     = Alt+F1
+
+  Also added in tdecfg was a choice of cursor styles and a switch for .bak
+  files.  Both of those options are in the mode section of tdecfg.
+
+
+
+
+Editor fields and information lines:
+
+
+                               Sample TDE screen
+
+
+         ÚÄÄÄ File number - each window opened to same file has same number
+         ³ ÚÄÄÄ Window letter
+         ³ ³
+         ³ ³    ÚÄÄÄ Dirty file indicator - asterisk
+         ³ ³    ³ ÚÄÄÄ File name
+         ³ ³    ³ ³                    ÚÄÄÄÄ File attributes
+         ³ ³    ³ ³                    ³    ÚÄÄÄÄ Total number of lines in file
+         ³ ³    ³ ³                    ³    ³    ÚÄÄÄ CR, CRLF, BIN mode
+         ³ ³    ³ ³                    ³    ³    ³             ÚÄÄÄ line:column
+                                                        
+      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      ³    The first line on the screen contains file information    ³
+      ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      ³........1.....     Optional ruler line    ......7........8³
+      ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      ³                                                              ³
+      ³                                                              ³
+      ³                          File area                           ³
+      ³                                                              ³
+      ³                                                              ³
+      ³                                                              ³
+      ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      ³                 Editor modes and information                 ³
+      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+                                                         Insert
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ³  ³    ³     ÀÄ Overwrite
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ³  ³    ÀÄÄÄÄÄ ^Z at eof?
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ³  ÀÄÄÄÄÄ trim trailing
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ³   space at eol, T = TRUE
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ³
+        ³   ³    ³    ³    ³    ³    ³     ³     ³   ÀÄÄÄ character under cursor
+        ³   ³    ³    ³    ³    ³    ³     ³     ÀÄÄÄÄÄ CRLF or LF at eol?
+        ³   ³    ³    ³    ³    ³    ³     ÀÄÄÄÄÄ word wrap indicator
+        ³   ³    ³    ³    ³    ³    ÀÄÄÄÄÄ Sync cursor in all windows?
+        ³   ³    ³    ³    ³    ÀÄÄÄÄÄ Ignore / Match search case?
+        ³   ³    ³    ³    ÀÄÄÄÄÄ Indent mode?
+        ³   ³    ³    ÀÄÄÄÄÄ Tab modes = Smart/Fixed, In/Deflate, and ptabs
+        ³   ³    ÀÄÄÄÄÄ Available memory for editing files
+        ³   ÀÄÄÄÄÄ Total number of windows, including hidden windows
+        ÀÄÄÄÄÄ Total number of open files
+
+
+
+Multiple keys:
+
+  I use the following abbreviated key definitions throughout this file:
+
+                ^ = Control       # = Shift       @ = Alt
+
+  For example, ^F5 means press and hold the Control key and then press F5
+  while holding down the Control key.
+
+
+Cursor movement:
+
+                            101 Keyboard overview
+
+            Cursor keys                               Keypad keys
+        ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿                ÚÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄ¿
+        ³ Ins ³Home ³PgUp ³                ³NumLock³Grey / ³Grey * ³Grey - ³
+        ÃÄÄÄÄÄÅÄÄÄÄÄÅÄÄÄÄÄ´                ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄ´
+        ³ Del ³ End ³PgDn ³                ³ Home  ³  Up   ³ Pg Up ³ Grey  ³
+        ÀÄÄÄÄÄÁÄÄÄÄÄÁÄÄÄÄÄÙ                ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄ´   +   ³
+                                           ³ Left  ³Center ³ Right ³       ³
+              ÚÄÄÄÄÄ¿                      ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄ´
+              ³ Up  ³                      ³  End  ³ Down  ³ Pg Dn ³ Grey  ³
+        ÚÄÄÄÄÄÅÄÄÄÄÄÅÄÄÄÄÄ¿                ÃÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄ´       ³
+        ³Left ³Down ³Right³                ³     Ins       ³  Del  ³ Enter ³
+        ÀÄÄÄÄÄÁÄÄÄÄÄÁÄÄÄÄÄÙ                ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÙ
+
+                                                          
+    If you like using these grey                   With Num Lock off,
+     cursor keys, these function               you can probably guess most
+      assignments are for you.                of these function assignments.
+
+          Grey cursor keys                            Keypad keys
+
+ Up     - move cursor up                    Home   - toggle col 1 & beg of line
+ Down   - move cursor down                 ^Home   - first line in window
+ Left   - move cursor left                  Pg Up  - page up
+ Right  - move cursor right                ^Pg Up  - goto first page in file
+^Up     - scroll cursor up                  Center - move to center of window
+^Down   - scroll cursor down               ^Center - line to center of window
+^Left   - cursor to previous word           End    - last character in line
+^Right  - cursor to next word              ^End    - last line in window
+@Up     - pan up                            Pg Dn  - page down
+@Down   - pan down                         ^Pg Dn  - goto last page in file
+@Left   - pan left                          Ins    - toggle insert mode
+@Right  - pan right                         Del    - delete character
+@PgUp   - horizontal page left             ^Del    - stream delete character
+@PgDn   - horizontal page right             Grey - - scroll screen up
+^#Left  - pan left                          Grey + - scroll screen down
+^#Right - pan right                        ^Grey - - pan up
+                                           ^Grey + - pan down
+                                             Enter - Insert line and move down
+                                            #Enter - 1st char in next line
+                                            ^Enter - column 1 in next line
+
+
+Function Keys:
+
+  I tried to use some logical order when I assigned functions to the
+  function keys.  I use a 101 keyboard most of the time, so it should be
+  easy to see the logical function grouping with it.  The function keys
+  on a 101 keyboard are placed along the top of the keyboard.  Functions
+  are arranged as follows:
+
+
+        Help    File              Find/Replace            Window
+              Functions              &  Diff             Commands
+         F1  F2  F3  F4          F5  F6  F7  F8          F9  F10  F11  F12
+
+
+   F1 = Instantaneous Help
+
+  @F1 = Directory List
+        List the contents of a directory or matching files.  At the
+        prompt, press enter to list all files in the current directory or
+        enter any valid subdirectory name, file name, or wild card
+        characters.  You don't have to put a *.* at the end of a
+        subdirectory name; the directory list function adds those wild
+        card characters to subdirectory names as a default.  A '\' is
+        added to the end of subdirectory names in the file list.  To list
+        files in other directories, just move the cursor to the desired
+        subdirectory name and press enter.  When you see ..\ in the
+        directory list, the double periods represent the parent of the
+        current directory.  The .\ represents the current directory.  You
+        may move up and down the directory tree by selecting the parent or
+        childrens of the current directory.
+
+
+File Functions:
+
+   F2 = Save file
+        Saves all changes made to file.  Existing file is overwritten by
+        the new file.  It does not prompt for a new file name -
+        automatically assumes you want to overwrite the old file.
+
+   F3 = Quit file
+        Abandons any changes made in the file and closes or kicks the file
+        out of the current window.  If you are editing multiple files or
+        have multiple windows, TDE searches for any invisible files to
+        display in the current window.  If no invisible windows are found,
+        TDE combines windows.  If this is the only file being edited, F3
+        quits TDE.  If you made any changes to the file, it asks you if
+        you want to abandon them.  You can create an invisible window when
+        you load in a file over the current file.  Nothing happens to the
+        invisible file or window - you just can't see it.
+
+        When I added vertical windows, this routine became a LOT more
+        complicated.  To keep things reasonably sane, let's only close
+        windows that have three common edges, eg.
+ 
+                        ÚÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿
+                        ³      ³    no    ³
+                        ³      ÃÄÄÄÄÄÂÄÄÄÄ´
+                        ³      ³yes1 ³yes1³
+                        ³  no  ÃÄÄÄÄÄÁÄÄÄÄ´
+                        ³      ³   yes2   ³
+                        ³      ÃÄÄÄÄÄÄÄÄÄÄ´
+                        ³      ³   yes2   ³
+                        ÀÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÙ
+ 
+        Windows with 'no' cannot be closed.  Windows with 'yes' can be
+        combined with windows that have the same yes number.
+
+
+   F4 = File (save and quit)
+        This function is a combination of Save and Quit (F2 & F3 above).
+
+   #F2 = Save as
+        If you don't want to overwrite the original file but you want to
+        save the contents of the current file, you may save the file under
+        a different file name.  This function prompts you for a file name
+        to save the changes (press escape to abort).
+
+   #F4 = Edit new file
+        To bring another file into the editor, use this function.  It
+        loads the file into the current window and previous window becomes
+        invisible.  You can even load several copies of the same file.  I
+        like this because I often need to refer back to the original
+        unchanged file on disk.  When I make a booboo in a file, which is
+        quite often, I don't necessarily want to quit and start over; I
+        just want to get back the part that I messed up.  It is really
+        easy to mark the original text in a block and copy it to the place
+        where I made a booboo.  Each time a file is loaded into TDE, it is
+        treated as a different file.
+
+   @F2 = Set file attributes
+        Change the attributes of a file.  Attributes are:  A = Archive,
+        S = System, H = Hidden, R = Read-Only.  You can change the
+        attributes of a file so that read-only files can be edited.  To
+        edit a read-only file:  1) edit the file, 2) change the file
+        attributes to archive, 3) save the changes made in the file, 4)
+        change the file attributes back to read-only.
+
+   @F4 = Edit next file
+        If you type multiple file names or type wildcard characters on the
+        command line, press this key to bring in the next file or the next
+        matching file into the editor.
+
+   -f pattern file(s)         (Command line DefineGrep)
+   -g pattern file(s)         (Command line DefineRegXGrep)
+       or
+   ^F12 = DefineRegXGrep
+   #F12 = DefineGrep
+        Grep will search files for a pattern and only load those files that
+        contain pattern.  The command line Define Grep works a little
+        differently than the function key Grep.  On the command line, spaces
+        are interpreted by DOS as delimiters.  Therefore, the search pattern
+        on the command line can not have any embedded spaces.  On the other
+        hand, the Fkey Grep search pattern may contain most any character.
+
+        Defining Grep also defines the search pattern.  When a file is
+        loaded, press RepeatFind to go to the next occurrence of pattern.
+        There are actually two find structures - one for the standard
+        search function and one for Grep.   Defining Grep also defines
+        the search function.  However, redefining the standard search
+        structure has no effect on the Grep pattern.  The Grep pattern
+        remains defined until another Grep redefines it.
+
+    F12 = RepeatGrep
+        After Grep has been defined, press this key to search the next file
+        for pattern.
+
+
+Macros:
+
+   @F3 = Macro record
+        This key toggles macro record off and on.  A flashing "Recording"
+        is displayed in the lite bar, so it shouldn't be too difficult to
+        tell when record is on.  This function assigns a keystroke or a
+        series of keystrokes to an unused function key.  Keystrokes are
+        played back for some prompts.  Prompts that require the user to
+        input a name or pattern are played back.  Prompts that require the
+        user to enter a choice, "Overwrite existing file (y/n)?" for
+        example, are not played back.
+
+        There is room for 1024 keystrokes in the macro buffer.  There are
+        no restrictions on the length of a single macro.  If you want, you
+        may define one macro that contains 1024 keystrokes.  When TDE
+        terminates, all macros definitions disappear.  Macro definitions
+        are temporary.  If you want to reuse macros that are defined
+        during an editing session, they need to be saved before you exit
+        TDE.
+
+                             Recursive Macros
+
+        "Recursive" macros are supported.  Only one level of recursion is
+        supported in TDE.  Here's a simple example of a recursive macro:
+
+                        Alt-F3    = turn macro record on
+                        Alt-5     = assign the recording to Alt-5
+                        Down      = move cursor down a line
+                        Alt-5     = call the macro we just defined
+                        Alt-F3    = turn macro record off
+
+        Enter this macro and press Alt-5 to see what a recursive macro
+        does.  Recursive macros repeatedly execute themselves until an
+        error condition occurs, which usually happens when the end of file
+        is reached.  I often use recursive macros to delete certain lines
+        in a file or to rearrange the fields of a formatted data file.
+
+        Each editor function in TDE returns a code to the macro processor
+        that indicates whether or not an error occurred.  Here are some
+        conditions that generate an error:  attempting to move the cursor
+        past the end of file or behind the start of the file, trying to
+        add too many characters in a line, attempting block operations
+        with no marked block, etc...
+
+        One interesting phenomenon about recursive macros is that a macro
+        can be defined that never terminates.  The simplest
+        non-terminating macro definition in TDE is:
+
+                  Alt-F3  = turn macro record on
+                  Alt-7   = assign the recording to Alt-7
+                  Alt-7   = call the macro we just defined
+                  Alt-F3  = turn macro record off
+
+        This a+7 macro carries out no instructions.  The only thing this
+        macro does is call itself.  In a perfect world, this macro will
+        execute forever.  There are lots of ways to create non-terminating
+        recursive macros.  Be creative and try creating a few non-
+        terminating recursive macros yourself.  With several different
+        sizes and shapes of horizontal and vertical windows on the screen
+        and with cursor sync toggled on, you can create some really neat
+        macros using cursor movement keys.  If you get tired of waiting
+        for forever, just press Control-Break to stop any macro.
+
+                      A Really Neat Recursive Macro
+
+        Here's a really neat recursive macro that you might try with
+        cursor sync turned off.  Edit a fairly large file, one with at
+        least a 1000 lines, and move the cursor to line 500 or the half
+        way point.  Then, split the screen into several vertical windows
+        with about 15 columns in each window , e.g.:
+
+                ÚÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄ¿
+                ³       ³       ³        ³       ³       ³
+                ³       ³       ³        ³       ³       ³
+                ³       ³       ³        ³       ³       ³
+                ³       ³       ³ start  ³       ³       ³
+                ³       ³       ³        ³       ³       ³
+                ³       ³       ³        ³       ³       ³
+                ³       ³       ³        ³       ³       ³
+                ÀÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÙ
+
+        With cursor sync turned off and macro record turned on, define a
+        macro that 1) moves the cursor down in one window, 2) goes to the
+        next window and moves the cursor up, 3) goes to the next window
+        and moves the cursor down, 4) when the cursor finally makes it
+        back to the starting window, make the macro recursive.  Suppose
+        the cursor is in the window labeled "start" in the sample screen
+        above.  Here's the way the keystrokes in this macro would be
+        recorded:
+
+
+                Alt-F3    = turn macro record on
+                Alt-8     = assign this macro to Alt-8
+                Down      = move cursor down in "start" window
+                F10       = next window
+                Up        = move cursor up
+                F10       = next window
+                Down      = move cursor down
+                F10       = next window
+                Down      = move cursor down
+                F10       = next window
+                Up        = move cursor up
+                F10       = next window - cursor is now in "start"
+                Alt-8     = call the macro just defined. it's now recursive.
+                Alt-F3    = turn macro record off
+
+        Press Alt-8 and watch a really neat recursive macro.
+
+
+   #F1 = Save macro file
+        Saves all macro definitions to a file.  TDE prompts for the macro
+        file name.
+
+   #F3 = Load macro file
+        Prompts for a search pattern or file name.  I can never remember
+        macro file or path names, so this function uses a file pick list.
+
+   ^ESC = Clear macros
+        Resets or clears all macros.
+
+   ^P  = Pause
+        When this function is part of a macro, press any key to continue
+        the macro or press ESC to halt or break the macro.
+
+
+Find and Search/Replace:
+
+   TDE uses the Boyer-Moore search algorithm for finding strings.  Typically,
+   the longer the search pattern the faster the search.  So, if you want to
+   speed up searches, try searching for longer patterns, e.g. phrases.
+
+   ^F5 = Toggle search case
+        You can toggle the case of the search flag at any time, even
+        after you define the search pattern.
+
+   #F5 = find forward
+        To define the search pattern, use this function.  It prompts you
+        for the search pattern.  The pattern is defined, across files,
+        until changed.
+
+   #F6 = find backward
+        Same as find forward except search backward in file.
+
+   F5 = Repeat find forward
+        Once the search pattern has been defined (Shift F5 or Shift F6),
+        you can press this key at any time in any file to find the next
+        occurrence of pattern.  I decided to use two sets of functions to
+        perform searches.  Once I found a pattern, I might do some editing
+        and then find the next occurrence.  I hate to define the search
+        pattern over and over or set the search direction over and over.
+        This function does a wrap search - when it reaches the eof it
+        starts over at the beginning of the file.
+
+   F6 = Repeat find backward
+        Like repeat find forward, you can press this key at anytime once
+        the search pattern has been defined.
+
+   Repeat find forward2
+        Like F5 except the cursor is not repositioned to the middle of the
+        screen.  This function is useful when working with data files.
+
+   Repeat find backward2
+        Like F6 except the cursor is not repositioned to the middle of the
+        screen.
+
+   #F8 = Replace String
+        This function prompts you for the search pattern and the
+        replacement text.  It also prompts for the replace direction.  If
+        you want to match the search case, remember to toggle the search
+        flag, which can be done at any time.  You can either do prompt or
+        no prompt replacing.   Regardless of prompt or no prompt
+        replacing, this function actually moves the cursor to the pattern
+        and displays it on the screen and replaces the text. If you are
+        using TDE on a slow machine, you can see the search/replace taking
+        place.  I implemented the function this way because I just like to
+        see what the search/replace function is doing.  Press
+        Control-Break to stop no prompt replacing.
+
+   #F7  = FindRegX
+        Prompts for regular expression to find.  Press F1 for a help table.
+
+   F7 = RepeatFindRegX
+        Once a regular expression is defined, find next regular expression.
+
+   @F7 = RepeatFindRegXBackward
+        Once a regular expression is defined, find previous reg ex.
+
+
+Diff Functions:
+
+   #F11 = DefineDiff
+        This function initializes diff.  It prompts for the window number
+        and letter to diff, ignore leading space, ignore all space, ignore
+        blank lines, ignore case, and ignore end of line.  Any two windows
+        may be diffed.  Diff only requires that the windows be visible.
+
+                               Diff prompts
+
+      DIFF:  Enter first window number and letter (e.g. 1a) :
+      DIFF:  Enter next window number and letter (e.g. 2a) :
+      DIFF:  Start diff at (B)eginning of file or (C)urrent position? (b/c)
+      DIFF:  Ignore leading spaces (y/n)?
+      DIFF:  Ignore all space (y/n)?
+      DIFF:  Ignore blank lines (y/n)?
+      DIFF:  Ignore end of line (useful with reformatted paragraphs) (y/n)?
+
+    F11 = RepeatDiff
+        Once the diff has been defined, press RepeatDiff to find the next
+        diff.
+
+
+Window Functions:
+
+   F8 = Split window vertically
+        Splits the screen at the current cursor location.  The current
+        file is displayed in multiple windows.  Changes to a file are
+        echoed in all windows opened to the same copy of that file.  You
+        can also see any marked blocks in the same copy of the file in
+        different windows.  There has to be at least 15 columns in any
+        window, so the number of visible windows is limited by the display
+        screen.
+
+   F9 = Split window horizontally
+        Splits the screen at the current cursor location.  There has to be
+        at least 1 text line in any window, so the number of visible
+        windows is limited by the display screen.
+
+   #F9 = Resize window
+        Sometimes there is a need to concentrate on the contents of one
+        window.  Use the up and down arrow keys to adjust the current
+        window to desired size.  Changing the size of the top window is
+        not allowed.
+
+   ^F9 = Zoom window
+        Makes the current window fill the whole screen.  All windows
+        except the current window become invisible.
+
+   F10 = Next window
+        If more than one window is displayed, you can press one key to
+        move to the next window.
+
+   #F10 = Previous window
+        Move to previous window - opposite of next window.
+
+   ^F10 = Next Hidden Window
+        Displays "hidden" or "invisible" windows in the same place as the
+        current window.  The current window then becomes invisible.
+
+
+Block Commands:
+
+  Block operations can be done within or between files.  Operations on
+  line blocks that move text are carried out on the line immediately
+  below the cursor.  Operations on box or stream blocks that move text
+  begin at the column of the cursor.  Press Control-Break to stop most Box
+  operations.  Nearly all Line and Stream operations happen so fast that
+  you can't stop them once they are started.
+
+   @B - Mark Box Block
+        This key is used to mark both the beginning and ending corner of
+        a box block.
+
+   @L - Mark Line Block
+        This key is similar to the operation of the box block, but entire
+        lines are marked.
+
+   @X - Mark Stream Block
+        All the text between the beginning and ending column, sorta like a
+        stream of characters, is marked.  Useful with sentences.
+
+   @U - Unmark Block
+        If you make a booboo when marking blocks, press @U to unmark the
+        block and start over.  After certain block operations, the block
+        may remain marked.
+
+   @G - Group Delete block
+        Sorta self explanatory.  This function deletes the text in the
+        marked block.
+
+   @M - Move block
+        Move the cursor to the desired location and press @M to move the
+        marked block.  In line mode, the text is moved to the line
+        immediately below the cursor.  In box and stream mode, the block
+        is moved to the column of the cursor.
+
+   @C - Copy block
+        With line blocks, the block is copied to the line below the
+        cursor.  With box and stream blocks, the block is copied
+        beginning at the column of the cursor.  If you try to copy a
+        Line block within itself, the block copy starts at the first
+        line immediately after the marked block.
+
+   @K - Kopy block
+        Same as copy block except block stays marked.  It's sorta like a
+        poor man's cut-and-paste buffer.
+
+   @O - Overlay block
+        You can only overlay Box blocks.  The original block stays marked
+        after the operation.
+
+   @F - Fill box block
+        Fills the marked Box block with character.  This function is
+        useful for filling in a column of periods for tables and such.
+
+   @N - Number box block
+        TDE prompts you for the starting number, the increment, and
+        whether to left or right justify the numbers.  TDE only handles
+        integers  -  no floating point numbers are allowed.  I felt that
+        there were too many things involved in real numbers, eg. number
+        of significant places to left of decimal, to right of decimal,
+        exponents, engineering form, scientific form, etc....  If you
+        want real numbers, just use a combination of the number box
+        and fill box functions.  Use the fill box function to make a
+        column of decimals and the number box function to number the left
+        and right side of the decimal.
+
+   @P - Print block
+        Prints the block to the PRN device.  I haven't tried redirecting
+        the PRN, but it should work.  This function prompts for block or
+        file to print.  Press Control-Break to stop printing.
+
+   @S - Sort box block
+        Lines are sorted, ascending or descending, using the contents of
+        the box block as the sort keys.  The Ignore/Match toggle
+        determines whether case of the keys is significant.  To sort
+        multiple columns, sort the least significant column first.  Press
+        Control-Break to stop.
+
+  #@S - Swap block
+        Swap block only works with BOX blocks.  The area to be swapped
+        is assumed to be the width of the BOX block.  Make sure the
+        cursor is at the top left corner of the area to swap before
+        swapping.
+
+   @W - Write block to file
+        Writes the marked block to a file.  TDE prompts for the file
+        name.
+
+   @E - Block expand tabs
+        Expands the tabs in the marked block, which must be a LINE block,
+        using the current tab setting.  Press Control-Break to stop.
+
+   @T - Block trim trailing
+        Trims trailing space, if any, at the end of each line in a LINE
+        block.  Press Control-Break to stop.
+
+   @< - Block upper case
+        Convert all lower case characters in the block to upper case.
+        Our old IBM mainframe line printers can only print upper case.
+
+   @> - Block lower case
+        Convert all upper case characters in the block to lower case.
+
+   @? - Block strip high bit
+        Strip the high bit off all characters in the block.  This function
+        is useful when editing files produced by WordStar.
+
+   #@< - BlockRot13
+        Convert all alpha characters in a block using ROT13.
+
+   #@> - BlockFixUUE
+        Fixes the EBCDIC to ASCII problem with text e-mail.
+
+   #@? - BlockEmailReply
+        Prepends the customary "> " or ">" to e-mail replies to lines in a
+        LINE block.
+
+
+Word Processing Commands:
+
+   @V - toggle word wrap
+        Toggle word wrap between off, Fixed Wrap, and Dynamic Wrap.  In
+        Fixed Wrap mode, the left margin is explicitly determined by the
+        left margin setting.  In Dynamic Wrap mode, the left margin is
+        determined by the indentation of the current line.  Writers may
+        find the Dynamic Wrap mode easier to use.  If the cursor is
+        somewhere in the line, words are pushed to the next line.
+
+        In TDE, other than margins, word wrap and format paragraph or
+        format text have nothing to do with each other.  Word wrap is
+        used to push characters or the cursor to the next line when the
+        right margin is violated.  Format paragraph and format text can
+        be used at any time - they do not depend on the state of the
+        WordWrap flag.
+
+  ^F6 - Set Left margin
+        May be set to any column equal to or greater than 1 and less than
+        the right margin.
+
+  ^F7 - Set Right margin
+        May be set to any column greater than the left margin and less
+        than the maximum line length or 1040.
+
+  ^F8 - Set Paragraph margin
+        The paragraph margin may be set to any column less than the right
+        margin.
+
+  format paragraph - not currently assigned to a key
+        Text is formatted from the beginning of the paragraph according
+        to the current left, right, and paragraph margins.  If the cursor
+        is not on the beginning line of a paragraph, TDE searches for
+        start of the paragraph and formatting starts there.  The entire
+        paragraph is formatted according to the margins.
+
+  ^B - Format Text
+        Text is formatted from the cursor onward.  This function does not
+        search for the beginning of the paragraph to start the format.
+
+  @F8 - Left justify
+        Beginning of current line is adjusted to start at left margin
+
+  @F9 - Right justify
+        End of current line is adjusted so it ends at the right margin
+
+ @F10 - Center justify
+        Current line is centered between the left and right margins.
+
+
+Tabs:
+
+   Tab
+        If in insert mode, insert the appropriate number of spaces for a
+        tab and move the cursor left.  If in overwrite mode, just move
+        the cursor left w/o inserting text.
+
+  #Tab
+        Move cursor to previous tab.
+
+  ^Tab
+        Set ptabs and ltabs.
+
+  @Tab
+        Toggle smart tab mode.  Smart tab positions are determined by
+        looking for the first, previous, non-blank line above the cursor
+        and then positioning the cursor at the beginning of the next or
+        previous word from the column of the cursor.  It's useful for
+        building tables and formatted data files.
+
+   #@T
+        Toggle TabInflate mode.  In TabInflate mode, tabs are not
+        physically expanded.  Tabs are filled with space to give the
+        illusion of physical expansion.
+
+
+Toggles:
+
+   ^F1
+        Toggle cursor sync.  Only cursor movement commands are synced.
+        Commands that change text are not synced.
+
+   ^F2
+        Toggle eol display.  A special character is displayed in the
+        column of the actual new line.
+
+   ^F3
+        Toggle writing <CR><LF>, <LF>, or nothing at end of line.  TDE
+        will read a text file with lines that end in either method;
+        however, you may want to write the file in a different method.
+        I think *nix systems only want a <LF> of the end of line.
+
+   ^F4
+        Toggle trimming trailing space at the end of line.  A 'T' is
+        displayed in the bottom right of the mode line to indicate
+        trailing space is trimmed.
+
+   ^F5 = Toggle search or sort case
+        You can toggle the case flag at any time, even after you define
+        the search pattern.
+
+   Ins
+        Toggle between insert and overwrite mode.
+
+   @I
+        Toggle between indent and no indent mode.  In indent mode, TDE
+        searches for the first non-blank character on previous lines and
+        places the cursor on that column when a carriage return is
+        pressed.  When backspacing in indent mode, TDE lines up the
+        indentation with the first non-blank character of the previous
+        line(s).
+
+   @R - Toggle ruler
+        Toggle display of ruler in all visible windows.
+
+   @V - toggle word wrap
+        Toggle word wrap between Off, Fixed Wrap, and Dynamic Wrap.
+
+   @Z
+        Toggle writing Control Z at the end of file.  Some programs may
+        misbehave if a Control Z is not at the end of the file.
+
+
+Other keys:
+
+   Enter
+        Insert a newline at the cursor.  If the cursor is in the middle of
+        a line, the line is split at the cursor.  Indentation is matched
+        if the editor is in the Indent mode.
+
+   #Enter
+        Move the cursor down a line.  The cursor is placed on the first
+        non-blank character in the next line.  No lines are added to the
+        file.
+
+   ^Enter
+        Move the cursor down a line.  The cursor is placed on column 1 in
+        the next line.  No lines are added to the file.
+
+   Up (arrow)
+        Move cursor up.
+
+   Down (arrow)
+        Move cursor down.
+
+   Left (arrow)
+        Move cursor left.
+
+   Right (arrow)
+        Move cursor right.
+
+   Home
+        Toggles between the first non-blank character and column zero.
+
+   End
+        Move cursor to the end of line character.
+
+   Page Up
+        Move cursor up one page.
+
+   Page Down
+        Move cursor down one page.
+
+   ^Right
+        Move cursor one word right.
+
+   ^Left
+        Move cursor one word left.
+
+   ^#Right   (Control+Shift+Right)
+        Pan the screen one character to the right.
+
+   ^#Left    (Control+Shift+Left)
+        Pan the screen one character to the left.
+                                                
+   ^Home
+        Move cursor to first line on screen.
+
+   ^End
+        Move cursor to last line on screen.
+
+   ^Page Up
+        Move cursor to first page in file.
+
+   ^Page Down
+        Move cursor to last page in file.
+
+   Zip to line
+        Move to line number.  TDE prompts for line number.  Press Escape
+        to abort.
+
+   Center
+        The cursor is moved to the center of the current window.
+
+  ^Center
+        The line the cursor is on is moved to the center of the current
+        window.
+
+   Grey -  (on the key pad) or
+   ^Down
+        Scroll window up with cursor staying on same line in file.
+
+   Grey +  (on the key pad) or
+   ^Up
+        Scroll window down with cursor staying on same line in file.
+
+  @Grey Up (the arrow in the cursor/control cluster) or
+  ^Grey -  (grey - on keypad)
+        Cursor stays on same line of the screen as the file scrolls up.
+
+  @Grey Down (the arrow in the cursor/control cluster) or
+  ^Grey +  (grey + on keypad)
+        Cursor stays on same line of the screen as the file scrolls down.
+
+  @Grey PgUp
+        Horizontal page left.
+
+  @Grey PgDn
+        Horizontal page right.
+
+   ESC - undo line
+        Get back the original unchanged line.  When cursor is moved off a
+        line, all changes to the file are made and there is no way to get
+        back the contents of a line.
+
+   Del
+        Delete the character, if any, under the cursor.
+
+   ^Del
+        Delete the characters in the file as if they were a stream.
+        Lines will be joined at the cursor and eventually every
+        character in the file may be deleted.
+
+   Backspace
+        Delete the character to the left of the cursor and move left.  If
+        the cursor is on the first column of a line, the current line is
+        joined with the line above.  If in indent mode and the cursor is
+        on the first non-blank character, TDE matches the indentation of
+        the previous line(s).
+
+   @=
+        Duplicates the current line.
+
+   @-
+        Deletes the text from the cursor to the end of line.
+
+   ^Y
+        Deletes current line, cursor does not move.
+
+   @D
+        Deletes current line, cursor does not move (exactly same as ^Y).
+
+   @Y  or  ^U
+        Undelete the most recently deleted line.  The undelete buffer has
+        room for 200 lines of deleted text.  If more than 200 lines are
+        deleted, the oldest line(s) are pushed out before the new one is
+        added.  You may press ^U repeatedly to undelete all lines in the
+        buffer.
+
+        Deleted lines from line delete, delete to end of line, word
+        delete, join line, and backspace are stored in the undelete
+        buffer.
+
+   @A
+        Add a blank line below cursor.
+
+   ^_  or Control underline
+        Split line at column of cursor.  If in indent mode, the split line
+        is autoindented.
+
+   @J
+        Join the current line with the line below.
+
+   ^]
+        Paren Balance.
+
+   @1 - @3
+        Set a file marker.  Each file may have up to 3 markers.
+
+   #@1 - #@3    (Shift+Alt+1 thru Shift+Alt+3)
+        Goto a previously defined file marker.
+
+
+   ^@  (Control+At sign -- not Control+Alt.  Control+At sign is the first
+          character in the ASCII character set, Control+2 on many keyboards)
+        Writes the current system date and time at the column of the
+        cursor.  Use tdecfg to set the desired year and time format.
+
+   Control-Break
+        In TDE, Control-Break will stop printing, sorting,
+        search/replacing, and recursive macros.
+
+
+
+WordStar style commands:
+
+  A limited number of WordStar style commands are implemented in TDE.  I
+  have no plans, whatsoever, to implement any additional WordStar style
+  commands.  This implementation may not correspond exactly to the
+  WordStar command convention.  WordStar is a trademark of WordStar
+  International.
+
+   ^A - word left
+   ^B - format text
+   ^C - screen down
+   ^D - character right
+   ^E - line up
+   ^F - word right
+   ^G - delete character
+   ^H - backspace
+   ^I - tab
+   ^J - help
+   ^K - n/a
+   ^L - n/a
+   ^M - return (carriage control, enter)
+   ^N - add line below cursor
+   ^O - n/a
+   ^P - n/a
+   ^Q - n/a
+   ^R - page up
+   ^S - character left
+   ^T - word delete
+   ^U - undelete line
+   ^V - toggle insert mode
+   ^W - scroll up line
+   ^X - line down
+   ^Y - delete line
+   ^Z - scroll line down
+   ^\ - redraw screen
+
+
+Editor command summary:
+
+   Function                      Description
+
+Help                    Display instantaneous help screen
+Rturn                   Insert newline and move down while matching indentation
+NextLine                Move cursor to first character in next line
+BegNextLine             Move cursor to first column in next line
+LineDown                Move cursor down a line
+LineUp                  Move cursor up a line
+CharRight               Move cursor right one character
+CharLeft                Move cursor left one character
+PanRight                Pan screen one character right
+PanLeft                 Pan screen one character left
+WordRight               Move cursor to beginning of next word
+WordLeft                Move cursor to beginning of previous word
+ScreenDown              Page screen down
+ScreenUp                Page screen up
+EndOfFile               Move to the last page in a file
+TopOfFile               Move to the first page in a file
+BotOfScreen             Move cursor to bottom of current window
+TopOfScreen             Move cursor to top of current window
+EndOfLine               Move cursor to end of line
+BegOfLine               Move cursor to first character in line or column 1
+JumpToLine              Move cursor to line entered by user
+CenterWindow            Move cursor to center of current window
+CenterLine              Move current line and cursor to center of window
+HorizontalScreenRight   Page screen right
+HorizontalScreenLeft    Page screen left
+ScrollDnLine            Scroll screen down 1 line and cursor moves with line
+ScrollUpLine            Scroll screen up 1 line and cursor moves with line
+PanUp                   Scroll screen up 1 line and cursor does not move
+PanDn                   Scroll screen down 1 line and cursor does not move
+ToggleOverWrite         Toggle insert/overwrite mode and cursor changes shape
+ToggleSmartTabs         Toggle smart tab mode on/off
+ToggleIndent            Toggle indent mode on/off
+ToggleWordWrap          Toggle word wrap on/off
+ToggleCRLF              Toggle CRLF/LF at eol when writing file to disk
+ToggleTrailing          Toggle trim trailing space at eol
+ToggleZ                 Toggle writing ^Z at eof
+ToggleEol               Toggle display of eol character
+ToggleSync              Toggle cursor sync
+ToggleRuler             Toggle ruler display
+ToggleTabInflate        Toggle expanding tabs in display
+SetTabs                 Set file tabs
+SetLeftMargin           Set left margin
+SetRightMargin          Set right margin
+SetParagraphMargin      Set paragraph margin
+FormatParagraph         Format the entire paragraph according to margins
+FormatText              Format from the cursor line to end of paragraph
+LeftJustify             Left justify a line
+RightJustify            Right justify a line
+CenterJustify           Center justify a line
+Tab                     Move cursor to next tab and add spaces if insert mode
+BackTab                 Move cursor to previous tab and delete if insert mode
+ParenBalance            Match (), {}, or [] under the cursor
+BackSpace               Delete previous character
+DeleteChar              Delete current character, but do not join lines
+StreamDeleteChar        Delete current character and join lines if at eol
+DeleteLine              Delete current line
+DelEndOfLine            Delete from the cursor to the eol
+WordDelete              Delete from the cursor to the end of word
+AddLine                 Insert a blank line under the cursor
+SplitLine               Split the current line at the cursor
+JoinLine                Join next line with current line at the cursor
+DuplicateLine           Duplicate the current line
+AbortCommand            Abort editor functions
+UndoLine                Get back the original contents of a line
+UndoDelete              Get back up to the last 200 lines deleted text
+ToggleSearchCase        Toggle match/ignore search case or sort case
+FindForward             Prompt for pattern and search forward
+FindBackward            Prompt for pattern and search backward
+RepeatFindForward1      Repeat find forward and adjust cursor if needed
+RepeatFindForward2      Repeat find forward and do not adjust cursor
+RepeatFindBackward1     Repeat find backward and adjust cursor if needed
+RepeatFindBackward2     Repeat find backward and do not adjust cursor
+ReplaceString           Search and replace pattern forward/backward
+DefineDiff              Define starting diff options
+RepeatDiff              Find the next diff
+MarkBox                 Mark start or end of a box block
+MarkLine                Mark start or end of a line block
+MarkStream              Mark start or end of a stream block
+UnMarkBlock             Unmark a block
+FillBlock               Fill a box block with prompted character
+NumberBlock             Fill a box block with starting number using increment
+CopyBlock               Copy a block to cursor and unmark block
+KopyBlock               Copy a block to cursor and leave block marked
+MoveBlock               Move a block to cursor and unmark block
+OverlayBlock            Overlay a box block
+DeleteBlock             Delete a block
+SwapBlock               Swap contents of BOX block w/ cursor
+BlockToFile             Write a marked block to a file
+PrintBlock              Print a block or file
+BlockExpandTabs         Expand tabs in marked LINE block using tab setting
+BlockCompressTabs       Compress space to tabs in LINE block
+BlockIndentTabs         Compress leading space to tabs in LINE block
+BlockTrimTrailing       Trim trailing space from all lines in a line block
+BlockUpperCase          Convert all lower case in block to upper case
+BlockLowerCase          Convert all upper case in block to lower case
+BlockRot13              Rotate alpha characters by 13
+BlockFixUUE             Fix the ASCII-EBCDIC translation problem
+BlockEmailReply         Prepend '>' to included mail blocks
+BlockStripHiBit         Strip the high bit from all characters in block
+SortBoxBlock            Sort line according to keys in box block
+DateTimeStamp           Insert system time and date
+EditFile                Editor prompts for file to edit
+DirList                 List matching files in subdirectories
+File                    Save file and quit window
+Save                    Save file
+SaveAs                  Save file under a new file name
+SetFileAttributes       Set current file attributes
+EditNextFile            Edit next file on command line
+DefineGrep              Initial simple pattern and search files
+RepeatGrep              Search and load next file that contains pattern
+RedrawScreen            Redraw the screen
+SizeWindow              Change size of current window
+SplitHorizontal         Split current window horizontally
+SplitVertical           Split current window vertically
+NextWindow              Move to next window
+PreviousWindow          Move to previous window
+ZoomWindow              Make current window the maximum window size
+NextHiddenWindow        Switch to next hidden window
+SetMark1                Set a file marker
+SetMark2
+SetMark3
+GotoMark1               Move cursor to previously defined marker
+GotoMark2
+GotoMark3
+RecordMacro             Record keystrokes
+PlayBack                Used in config file - play back keystrokes
+SaveMacro               Save macro to a file
+LoadMacro               Load macro from a file
+ClearAllMacros          Clear the macro buffer
+Pause                   Pause a macro
+Quit                    Quit current window and file and abandon changes
+NextDirtyLine           Move cursor to next dirty line, if it exists.
+PrevDirtyLine           Move cursor to previous dirty line, if it exists.
+FindRegX                Prompt for regular expression to find
+RepeatFindRegX          Find next regular expression
+RepeatFindRegXBackward  Find previous regular expression
+DefineRegXGrep          Initialize grep function

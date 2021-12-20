@@ -1,0 +1,135 @@
+**************************************************************
+COPYRIGHT 1991, JORDAN HARGRAPHIX SOFTWARE
+PORTIONS COPYRIGHT JOHN BRIDGES, 1990
+		   CHRISTOPHER MORGAN, 1984
+**************************************************************
+
+Here it is! The SuperVGA/Tweak BGI drivers you have all been waiting for! ;->
+
+  These drivers support a wide range of VGA cards, and should work on
+all major brands.
+
+Card types supported: (SuperVGA drivers)
+  Ahead, ATI, Chips & Tech, Everex, Genoa, Paradise, Trident (both 8800 
+and 8900), Tseng (both 3000 and 4000 chipsets) and Video7.
+  These drivers will also work on video cards with VESA capability.
+  The tweaked drivers will work on any register-compatible VGA card.
+
+I have not tested these drivers on all these card types, so I can not guarantee
+perfect operation with your card.  I have tested them extensively
+on Trident, Tseng and ATI cards, and have had no problems. (Trident 8800
+cards occasionally have problems, especially older models)
+
+Modes currently supported:
+  SuperVGA 16-color
+   0) Standard EGA/VGA 320x200x16
+   1) Standard EGA/VGA 640x200x16
+   2) Standard EGA/VGA 640x350x16
+   3) Standard VGA 640x480x16
+   4) SuperVGA/VESA 800x600x16
+   5) SuperVGA/VESA 1024x768x16
+
+  SuperVGA 256-color
+   0) Standard VGA/MCGA 320x200x256
+   1) 256k Svga/VESA 640x400x256
+   2) 512k Svga/VESA 640x480x256
+   3) 512k Svga/VESA 800x600x256
+   4) 1024k Svga/VESA 1024x768x256
+
+  Tweaked 16-color
+   0) 704x528x16
+   1) 720x540x16
+   2) 736x552x16
+   3) 752x564x16
+   4) 768x576x16
+   5) 784x588x16
+   6) 800x600x16
+
+  Tweaked 256-color
+   0) 320x400x256
+   1) 320x480x256
+   2) 360x480x256
+   3) 376x564x256
+   4) 400x564x256
+   5) 400x600x256
+
+----------------------------------------------------------------------------
+INSTALLATION:
+  Using the driver in existing programs is easy. (If you have the source)
+
+  Check the files INITSVGA.C and INITSVGA.PAS for examples of installation
+into C and Pascal programs.
+
+----------------------------------------------------------------------------
+NOTE: 
+
+ - The mouse cursor may not work in all modes of my driver.  This is because
+   most mouse drivers do not support SuperVGA/Tweak modes.
+
+ - The registerbgidriver(*) function does not work. This is due to a limitation
+   in the BGI kernel, which checks the linked in driver with a list of the
+   standard BGI drivers (CGA,EGAVGA,etc..), and if it is not one of those,
+   will not use the linked in driver.
+
+ * However, registerfarbgidriver DOES work properly with C/C++... (8/1/91)
+   Check INITSVGA.C and the makefile for examples of how to use.
+
+ - Imagesize does not work. (the kernel does not call the driver to do this)
+   Use the following formula:
+    * imsize = ((xwid >> 1)+1)*ywid+4; 	(16-color)
+    * imsize = xwid*ywid+4; 		(256-color)
+
+----------------------------------------------------------------------------
+WARNING: The drivers do not test to see if the card installed is
+actually a VGA card (If the Svga drivers do not detect a SuperVGA card, they 
+treat the card as a standard VGA), so DO NOT use the drivers if you do not 
+have a VGA card installed.
+
+-------------------------------------------------------------------------
+REGISTRATION:
+  I have decided to release these drivers free of charge,
+although donations would be greatly appreciated and certainly
+expedite the release of future versions. :->
+  The drivers have not been crippled in any way, though beta releases of new
+drivers may have some functions yet unimplemented.  
+
+Registration fees:
+
+	SuperVGA 256 			$20
+	SuperVGA 16			$20
+	Tweak 16			$20
+	Tweak 256			$20
+
+	Any two:			$30
+	All 4:				$50
+
+With donations of $20 and up, you will be considered a registered user.
+Registered users get the full source code and upgrades on future releases.
+
+From September 1-May 8, please send checks/money to:
+	Jordan Hargrave
+	1000 Morewood Ave, Box #3277
+	Pittsburgh, PA 15213
+	(412) 268-4493
+
+From May 8-September 1, send to:
+	Jordan Hargrave
+	1615 Burnley Road
+	Charlotte, NC 28210
+	(704) 553-2332
+
+
+I have started working on a new graphics library that will support resolutions
+from 160x200 (Ick! ;->) all the way up to 1280x1024, and from 1-bit color
+to 24-bit color.  It will support a wide range of cards and I need testers
+for XGA/8514/Hercules Graphics Station cards.
+
+*===============================*===========================================*
+| Jordan Powell Hargrave	|   Internet:	jh5y@andrew.cmu.edu	    |
+| 1000 Morewood Ave, Box #3277  |     Bitnet:	jh5y%andrew.cmu.edu@cmccvb  |
+| Pittsburgh, PA 15213		|       UUCP:	uunet!andrew.cmu.edu!jh5y   |
+| (412) 268-4493	 	|    Prodigy:	HXNJ79A			    |
+|			  	| Compuserve:	[72510,1143]		    |
+*===============================*===========================================*
+
+
