@@ -1,0 +1,114 @@
+Publics by module
+
+BOX256  	size = 117
+	_box256                         
+
+COMPOSIT	size = 142
+	_composition                    
+
+FILLBOX 	size = 122
+	_fill_box                       
+
+GETCOM  	size = 107
+	_getcomposition                 
+
+GETIMAGE	size = 209
+	_getimage256                    
+
+GETPIXEL	size = 26
+	_getpixel256                    
+
+IMAGESI 	size = 186
+	_imagesize256                   
+
+LINE256 	size = 365
+	_line256                        
+
+LOADPCX 	size = 5279
+	_B_                               _Fade_In
+	_Fade_Out                         _G_
+	_ImageHeight                      _ImageWidth
+	_InstallPCXFilePalette            _PCXData
+	_R_                               _ReadPCXFileHdr
+	_brightCtrl                       _displaypccfile
+	_displaypccfile2                  _displaypcxbuf
+	_displaypcxfile                   _get1DACR
+	_getNDACR                         _getvgapalette256
+	_greyCtrl                         _loadrgb
+	_loadrgb2                         _readpcxfilebuf
+	_rgb_check                        _savergb
+	_savergb2                         _set1DACR
+	_setNDACR                         _setRGBPalette
+	_setvgapalette256                 _setvgapalette2562
+
+MEMTOMEM	size = 74
+	_memtomem                       
+
+MONITOR 	size = 14
+	_monitor_onoff                  
+
+PUTIMAGE	size = 175
+	_putimage256                    
+
+PUTPIXEL	size = 29
+	_putpixel256                    
+
+SBLIB   	size = 151
+	_reset_dsp                        _speaker_off
+	_speaker_on                       _write_data
+
+SBSND   	size = 685
+	_SOUND_DEV                        _VoiceData
+	_VoiceDataBytePoint               _VoiceDataSize
+	_VoiceFlag                        _oldRTC
+	_onePulsGen                       _readvocfile
+	_sayVoice                         _silentVoice
+
+SCANADD 	size = 32
+	_setscanaddress                 
+
+SETVMODE	size = 12
+	_setvmode                       
+
+SMTOSM  	size = 32
+	_smemtosmem                     
+
+SYNTHETI	size = 140
+	_synthetic                      
+
+UISWAP  	size = 40
+	_uiswap                         
+
+V256HAN 	size = 2046
+	_engfont                          _engimgbuf
+	_hancolor                         _hanend
+	_hanfont1                         _hanfont2
+	_hanfont3                         _hanimgbuf
+	_hanxy                            _inithan
+	_putimg                           _xposi
+	_xsi__ze__                        _yposi
+	_ysi__ze__                      
+
+V256KEY 	size = 490
+	_ALT                              _CTRL
+	_DOWN                             _ESC
+	_LEFT                             _LSHIFT
+	_RIGHT                            _SPACE
+	_UP                               _handler
+	_oldhandler                       _resetkeyint
+	_setkeyint                      
+
+VERTICAL	size = 23
+	_vertical_retrace               
+
+VIRGETIM	size = 207
+	_getimagevirtual                
+
+VIRTUAL 	size = 223
+	_virtualscreen                  
+
+VIRTUAL2	size = 132
+	_virtualscreen2                 
+
+XORPIXEL	size = 42
+	_xorputpixel256                 
