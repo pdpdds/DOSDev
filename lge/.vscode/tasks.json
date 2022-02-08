@@ -7,7 +7,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\lge",
+                "cd dosdev\\lge",
                 "-c",
                 "make.bat"
             ],
@@ -22,7 +22,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\lge",
+                "cd dosdev\\lge",
                 "-c",
                 "play.exe"
             ],

@@ -7,7 +7,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\tetris2",
+                "cd dosdev\\tetris2",
                 "-c",
                 "bc /b tetris.prj"
             ],
@@ -22,7 +22,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\tetris2",
+                "cd dosdev\\tetris2",
                 "-c",
                 "bc /d tetris.prj",
                 "-display2"

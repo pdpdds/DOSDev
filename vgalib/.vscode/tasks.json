@@ -7,7 +7,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\vgalib",
+                "cd dosdev\\vgalib",
                 "-c",
                 "bc /b vgalib.prj"
             ],
@@ -22,7 +22,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dev\\vgalib",
+                "cd dosdev\\vgalib",
                 "-c",
                 "bc /d vgalib.prj",
                 "-display2"
