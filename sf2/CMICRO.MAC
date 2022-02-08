@@ -1,0 +1,177 @@
+    .XLIST
+    PAGE    58,132
+
+; File that supports LATTICE macros But generates Microsoft C 
+; segments or variables memX variable is declared in version.inc
+
+
+
+    IFDEF   memS
+LDATA   EQU 0
+LPROG   EQU 0
+    ENDIF
+    IFDEF   memM
+LDATA   EQU 0
+LPROG   EQU 1
+    ENDIF
+    IFDEF   memC
+LDATA   EQU 1
+LPROG   EQU 0
+    ENDIF
+    IFDEF   memL
+LDATA   EQU 1
+LPROG   EQU 1
+    ENDIF
+    IFDEF   memH
+LDATA   EQU 1
+LPROG   EQU 1
+    ENDIF
+
+
+;**
+;
+; The following symbols are established via LPROG and LDATA as follows:
+;
+;   S8086   set for small model (small prog, small data)
+;   D8086   set for model with large data, small prog
+;   P8086   set for model with large prog, small data
+;   L8086   set for large model
+;
+;**
+;    IF  (LPROG EQ 0) AND (LDATA EQ 0)
+;S8086   EQU 1
+;D8086   EQU     0
+;P8086   EQU 0
+;L8086   EQU 0
+;    ENDIF
+;
+;    IF  (LPROG EQ 0) AND (LDATA NE 0)
+;S8086   EQU 0
+;D8086   EQU 1
+;P8086   EQU 0
+;L8086   EQU 0
+;    ENDIF
+;
+;    IF  (LPROG NE 0) AND (LDATA EQ 0)
+;S8086   EQU 0
+;D8086   EQU 0
+;P8086   EQU 1
+;L8086   EQU 0
+;    ENDIF
+;
+;    IF  (LPROG NE 0) AND (LDATA NE 0)
+;S8086   EQU 0
+;D8086   EQU 0
+;P8086   EQU 0
+;L8086   EQU 1
+;    ENDIF
+
+
+;**
+;
+; The DSEG and PSEG macros are defined to generate the appropriate GROUP
+; and SEGMENT statements for the memory model being used.  The ENDDS and
+; ENDPS macros are then used to end the segments.
+;
+;**
+
+DSEG    MACRO   
+DGROUP  GROUP   _DATA
+_DATA   SEGMENT WORD PUBLIC 'DATA'
+    ASSUME  DS:DGROUP, SS:DGROUP
+    ENDM
+ENDDS   MACRO
+_DATA   ENDS
+    ENDM
+
+
+PSEG    MACRO   modname
+
+    IF  LPROG
+modname&_TEXT   SEGMENT WORD PUBLIC 'CODE'
+    ASSUME  CS:modname&_TEXT
+    ELSE
+_TEXT   SEGMENT WORD PUBLIC 'CODE'
+    ASSUME  CS:_TEXT
+    ENDIF
+    ENDM
+
+ENDPS   MACRO   modname
+    IF  LPROG
+modname&_TEXT   ENDS
+    ELSE
+_TEXT   ENDS
+    ENDIF
+    ENDM
+
+
+;**
+;
+; The BEGIN and ENTRY macros establish appropriate function entry points
+; depending on whether NEAR or FAR program addressing is being used.  The
+; only difference between the two is that BEGIN generates a PROC operation
+; to start a segment. 
+;
+BEGIN   MACRO   NAME            ; begin a function
+    PUBLIC  NAME
+    IF  LPROG
+NAME    PROC    FAR
+    ELSE
+NAME    PROC    NEAR
+    ENDIF
+    ENDM
+
+ENTRY   MACRO   NAME
+    PUBLIC  NAME
+    IF  LPROG
+NAME    LABEL   FAR
+    ELSE
+NAME    LABEL   NEAR
+    ENDIF
+    ENDM
+
+;**
+;
+; The following symbols are defined to help set up a STRUC defining the
+; stack frame:
+;
+;   CPSIZE -> code pointer size (2 or 4)
+;   DPSIZE -> data pointer size (2 or 4)
+;
+; These wouldn't be necessary if it were possible to use macros or even
+; conditionals within a STRUC.
+;
+    IF  LPROG
+CPSIZE  EQU 4
+    ELSE
+CPSIZE  EQU 2
+    ENDIF
+    IF  LDATA
+DPSIZE  EQU 4
+    ELSE
+DPSIZE  EQU 2
+    ENDIF
+
+
+penter  MACRO   dyns            ; used when we enter a procedure
+    push    BP          ; save context register
+    IF  dyns NE 0
+    sub SP, dyns        ; local variables on stack
+    ENDIF
+    mov BP, SP          ;
+    push    DI          ; for register variables (MICROSOFT 'C' 3.0)
+    push    SI          ;
+    ENDM                ;
+
+pleave  MACRO   dyns            ; used when we leave a procedure
+    pop SI          ;
+    pop DI          ;
+    IF  dyns NE 0
+    add SP, dyns        ;
+    ENDIF
+    pop BP          ;
+    ret             ;
+    ENDM                ;
+
+
+    .LIST
