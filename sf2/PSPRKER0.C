@@ -21,36 +21,16 @@
 
 extern unsigned char *_EBF ; //  encoding data temporary save buffer
 
-int cError ( char ms1 [], char ms2 [], int m );
-
-void asmDecode ( unsigned char far *s , unsigned char far *d , unsigned int l );
-
-void pCTrpRImg0 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg1 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg2 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg3 ( int x , int y , unsigned char far *p , int xs , int ys );
-
-
-/* PSPRKER0.C */
-//encoding data temporary save buffer void initImg ( Image img [], int n );
-void freeImg ( Image img [], int n );
-int loadImgSpr ( char IdFn [], Image img [], Sprite spr [], int flag );
-void pPutRLESprMode ( int x , int y , Sprite *spr , Image *img , int m );
-void pPutSprMode ( int x , int y , Sprite *spr , Image *img , int m );
-void pCTrpSpr0 ( int x , int y , Sprite *spr , Image *img );
-void pCTrpSpr1 ( int x , int y , Sprite *spr , Image *img );
-void pCTrpSpr2 ( int x , int y , Sprite *spr , Image *img );
-void pCTrpSpr3 ( int x , int y , Sprite *spr , Image *img );
-void initImg(Image img[], int n);
-
 /**
   initialize image data structure
   input img : Image Data structure
-	  n : initialized image size
+          n : initialized image size
 
   ‹aŸ± •A·¡Èa Š¹¡µA¬á ‹aŸ± Í¡·¥Èá ¦¦…·i Á¡‹¡ÑÁ Ðe”a.
 **/
-void initImg(Image img[], int n)
+void initImg(img,n)
+Image img[] ;
+int n ;
 {
    int i ;
 
@@ -89,7 +69,7 @@ int n ;
   .ID ÑÁ·©·¡a .IDE ÑÁ·©¡ ¦Èá ‹aŸ±, ¯aÏaœa·¡Ëa ¸÷¥¡Ÿi ·ª“e”a.
 
 **/
-int loadImgSpr(IdFn,img,spr,flag)
+loadImgSpr(IdFn,img,spr,flag)
 char IdFn[] ;
 Image img[] ;
 Sprite spr[] ;
@@ -233,7 +213,7 @@ int m ;
 /**
   plane mode Normal put Sprite in Current active page
   input x,y : put locate of x,y
-	spr : Sprite Data Structure
+        spr : Sprite Data Structure
         img : Image Data Structure
 **/
 void pCTrpSpr0(x,y,spr,img)
@@ -311,4 +291,4 @@ Image *img  ;
    }
 }
 
-
+

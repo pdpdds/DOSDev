@@ -9,49 +9,11 @@
 
 #include <dos.h>
 #include <string.h>
-//#include <malloc.h>
+#include <malloc.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "grker0.h"
 #include "animate0.h"
-/* PGRKER0.C */
-//¥¡·¡“e Àw Ëi ·Š¬â¹ÁÎa ˆt //( int _XL , int _YL );
-int vgaTextMode ( void );
-void setStAdd ( unsigned int st );
-void actPage ( int p );
-void planeMode ( void );
-void writeMode ( unsigned char mode );
-void pBox2 ( int x1 , int y1 , int x2 , int y2 , int c );
-void pBoxL ( int x , int y , int xl , int yl , int c );
-void pPutImgMode ( int x , int y , unsigned char far *p , int xs , int ys , int m );
-void pCTrpRImg0 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg1 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg2 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pCTrpRImg3 ( int x , int y , unsigned char far *p , int xs , int ys );
-void pImgCpLU ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int xs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs );
-void pSprCp ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int xs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs );
-void pSprCpUD ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int xs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs );
-void pSprCpMir ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int xs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs );
-void pSprCpMirUD ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int xs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs );
-void imgHFill ( unsigned int seg , unsigned int off , unsigned int xs , unsigned int color );
-void pImgVFill ( unsigned int seg , unsigned int off , unsigned int scs , unsigned int ys , unsigned int color );
-void pBytePut ( unsigned int seg , unsigned int off , unsigned int color );
-void pImgHFill ( unsigned int seg , unsigned int x1 , unsigned int x2 , unsigned int color );
-void pImgFill ( unsigned int seg , unsigned int x1 , int scs , unsigned int x2 , int ys , unsigned int color );
-void pBitImgCp ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs , unsigned int color );
-void fPBitImgCp ( unsigned int sseg , unsigned int soff , unsigned int scs , unsigned int ys , unsigned int dseg , unsigned int doff , unsigned int dcs , unsigned int color );
-void get1DACR ( unsigned int i , unsigned char *r , unsigned char *g , unsigned char *b );
-void getNDACR ( unsigned int s , int n , unsigned char *r , unsigned char *g , unsigned char *b );
-void set1DACR ( unsigned int i , unsigned int r , unsigned int g , unsigned int b );
-void setNDACR ( unsigned int s , int n , unsigned char *r , unsigned char *g , unsigned char *b );
-void brightCtrl ( unsigned int s , int n , unsigned char *r , unsigned char *g , unsigned char *b , int factor );
-void greyCtrl ( unsigned int s , int n , unsigned char *r , unsigned char *g , unsigned char *b , int factor );
-void setRGBPalette ( void );
-void asmDecode ( unsigned char far *s , unsigned char far *d , unsigned int l );
-
-void pCTrpSpr0 ( int x , int y , Sprite *spr , Image *img );
-
 
 /* ·±¯¡ 16 by 16 dot §¡Ëa “ ¤áÌá */
 unsigned int far _bm[16]     ; // temporary font bitmap buffer
@@ -88,7 +50,9 @@ unsigned char far *_ECBITMAP ; // english bitmap buffer pointer
     bitmap : Ðe‹i ‹i¸a §¡Ëa “
     Ðe‹i Í¡ •·e Ëb® Í¡ •·a¡¬á ‹¡¹¥· µÅ¬÷Ñw,¹¡ÐsÑw‰Á“e ”aŸa”a.
 ***/
-int HCode2Bitmap(unsigned char f, unsigned char m, unsigned char l, int bitmap[16])
+HCode2Bitmap(f,m,l,bitmap)
+unsigned char f,m,l ;
+int bitmap[16] ;
 {
    int f0,m0,l0,fo,mo,lo,i ;
    unsigned int fm,mm,lm ;
@@ -128,16 +92,16 @@ int HCode2Bitmap(unsigned char f, unsigned char m, unsigned char l, int bitmap[1
 
    Í¥Ëa ÑÁ·©·i ·ª“e”a.
 ***/
-int loadFont(char *fn)
+loadFont(char *fn)
 {
-   FILE * fp=fopen(fn,"rb") ;
+   FILE *fp ;
 
+   fp=fopen(fn,"rb") ;
    if (fp==NULL) return(-1) ;
    _FCBITMAP=malloc(190*32) ; if (_FCBITMAP!=NULL) fread(_FCBITMAP,190,32,fp) ;
    _MCBITMAP=malloc( 84*32) ; if (_MCBITMAP!=NULL) fread(_MCBITMAP, 84,32,fp) ;
    _LCBITMAP=malloc(108*32) ; if (_LCBITMAP!=NULL) fread(_LCBITMAP,108,32,fp) ;
    _ECBITMAP=malloc(1504)   ; if (_ECBITMAP!=NULL) fread(_ECBITMAP,1,1504,fp) ;
-
    fclose(fp) ;
    return(0) ;
 }
@@ -145,10 +109,10 @@ int loadFont(char *fn)
 /**
   fast plane mode put text bitmap
   input x,y  : locate of x,y
-	str  : print string
-	mode : not used
-	fc   : character foreground color
-	bc   : not used
+        str  : print string
+        mode : not used
+        fc   : character foreground color
+        bc   : not used
 
   str is special format of Street Fighter ][
 
@@ -158,7 +122,9 @@ int loadFont(char *fn)
   ‰¡­¢ §¡Ëa “ ÏaE¡¡—a Â‰b žË¥ ( §¡Ëa “ •A·¡Èa—i· 4§¡Ëaˆa ŒáŽ¡ –A´á´¡ Ðq )
   ˆa¡ ¹ÁÎa“e 4· ¤®·¡´á´¡ Ðe”a. ( ÏiE¡¡—a Ëb¬÷·i ‹a”¡ ·¡¶wÐa‹¡ ˜¢… )
 **/
-void fPText (unsigned int x, unsigned int y, unsigned char str[], unsigned char mode, unsigned char fc, unsigned char bc)
+void fPText(x,y,str,mode,fc,bc)
+unsigned int x,y ;
+unsigned char str[],mode,fc,bc ;
 {
    unsigned int i,p ;
    unsigned char c,f,m,l,t ;
@@ -218,7 +184,8 @@ Image *IMG ;
      {
        if (j==4) continue ;
        if (f&(0x80>>j)) pCTrpSpr0(x+dx[j]*xt,y,FC,IMG) ;
-		else    pCTrpSpr0(x+dx[j]*xt,y,BC,IMG) ;
+                else    pCTrpSpr0(x+dx[j]*xt,y,BC,IMG) ;
      }
    }
 }
+

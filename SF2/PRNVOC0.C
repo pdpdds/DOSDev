@@ -5,7 +5,6 @@
 ********************************************************/
 
 #include <dos.h>
-#include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,8 +20,6 @@
 
 unsigned char *VoiceData,VoiceFlag=IDLE ;
 unsigned int VoiceDataSize,VoiceDataBytePoint,TimerTick ;
-int silentVoice(void);
-int sayVoice(unsigned char fn[]);
 
 #define TIMERINTVECT0 0x8  /* Èa·¡ á ·¥ÈáœóËa ¥BÈá **/
 void interrupt (*TimerInt0x8)(void) ; /* Èa·¡ á ·¥Èé¤áËa Ðq® Í¡·¥Èá */
@@ -47,7 +44,8 @@ void interrupt onePulsGen(void) /* º‹¡¸â·a¡ ÐeÌé¯a “e žË¥ */
 }
 
 /* ·q¬÷ÑÁ·© fn·i Â‰bÐa“e žË¥ */
-int sayVoice(unsigned char fn[])
+sayVoice(fn)
+unsigned char fn[] ;
 {
    FILE *fp ;
 
@@ -72,7 +70,7 @@ int sayVoice(unsigned char fn[])
    VoiceFlag=BUSY ; /* ·q¬÷ Â‰bº— */
 }
 
-int silentVoice(void)
+silentVoice()
 {
    if (VoiceFlag==IDLE) return(0) ; /* ·q¬÷·¡ µeºº—·¡ ´a“¡¡e {‘ */
    disable() ;
@@ -84,7 +82,7 @@ int silentVoice(void)
    VoiceFlag=IDLE ; /* ·q¬÷ Â‰b·i ´eÐe”a. */
 }
 
-void main(argc,argv)
+main(argc,argv)
 int argc ;
 char **argv ;
 {
@@ -94,3 +92,4 @@ char **argv ;
 
 
 
+

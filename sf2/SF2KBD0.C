@@ -4,10 +4,6 @@
 
    ¯aÌa2¶w Ç¡¥¡—a ·³b žË¥ 
 ****/
-#include <dos.h>
-#include <stdio.h>
-#include <ctype.h>
-
 
 /* Ç¡¥¡—a ¯aÅE Å¡—a ¸÷· */
 
@@ -249,7 +245,7 @@ void interrupt keyStatusCheck(void)
 /** Ç¡¥¡—aˆa ’‰œá»¥ ¯¡ˆe·i ¸…”a. (1/18.2 Á¡ˆe‰b·a¡) */
 void interrupt sync(void)
 {
-   register int i ;
+   int i ;
 
    Timer++ ;
 
@@ -274,7 +270,7 @@ void interrupt sync(void)
 }
 
 /* ·¥ÈáœóËa žË¥·i ¬³‰A Ði”wÐe”a */
-int setNewSystemInt(void)
+setNewSystemInt()
 {
    oldKBD   = getvect(KBDINTVECT) ;
    oldTimer = getvect(TIMERINTVECT) ;
@@ -285,7 +281,7 @@ int setNewSystemInt(void)
 }
 
 /* ¶¥œ· ·¥ÈáœóËa žË¥·a¡ ­AË·Ðe”a */
-int setOldSystemInt(void)
+setOldSystemInt()
 {
    setvect(KBDINTVECT,oldKBD) ;
    setvect(TIMERINTVECT,oldTimer) ;
@@ -293,7 +289,8 @@ int setOldSystemInt(void)
 }
 
 /* ¯aÌa2 ÑÅ‰w ¬é¸÷ ÑÁ·©·i ·ª“e”a */
-int loadConfig(char fn[])
+loadConfig(fn)
+char fn[] ;
 {
    FILE *fp ;
    int i,lp ;
@@ -304,9 +301,9 @@ int loadConfig(char fn[])
    if (fp!=NULL)
    {
      fscanf(fp,"%u %u %u %u %u %u %u %u %u %u",&LK.U,&LK.L,&LK.R,&LK.D,
-		&LK.a,&LK.b,&LK.c,&LK.x,&LK.y,&LK.z) ;
+                &LK.a,&LK.b,&LK.c,&LK.x,&LK.y,&LK.z) ;
      fscanf(fp,"%u %u %u %u %u %u %u %u %u %u",&RK.U,&RK.L,&RK.R,&RK.D,
-		&RK.a,&RK.b,&RK.c,&RK.x,&RK.y,&RK.z) ;
+                &RK.a,&RK.b,&RK.c,&RK.x,&RK.y,&RK.z) ;
      fscanf(fp,"%d %d %d",&lp,&COMTYPE,&SOUND_DEV) ;
      fclose(fp) ;
    }
@@ -321,7 +318,8 @@ int loadConfig(char fn[])
 }
 
 /* ÏiA·¡´áµA Ði”w–E Ç¡µA»¡ ¤áÌáŸi »¡¶…”a. */
-int flushKey(CTRLKEY *K)
+flushKey(K)
+CTRLKEY *K ;
 {
    unsigned char far *p ;
    int i ;
@@ -332,10 +330,10 @@ int flushKey(CTRLKEY *K)
 }
 
 /** ·©¸÷ ¯¡ˆe •·´e ‹¡”aŸ¥”a **/
-void waitSec(int t)
+waitSec(int t)
 {
    Timer=0 ;
-   for ( ; Timer!=t ; )
-   	;
+   for ( ; Timer!=t ; ) ;
 }
 
+

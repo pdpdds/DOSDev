@@ -6,19 +6,17 @@
     Source Code Bolarnd C++ 2.0
     BC++ 2.0 Compiler option is -ml -f -w- -B
 
-    ¯aÌa2 ¡A·¥ Ïa¡‹aœ‘ 
+    ¯a?2 ¡A·¥ ?¡‹aœ‘ 
     ¶¥¸b : CAPCOM
     IBM PC VERSION : ¸÷µw”â
-    Ïa¡‹aœ‘ ‹¡®‰ ¸÷•¡ : 1990.1 ®º…
-    ­¡¯a Å¡—a : ¥©œe—a C++ 2.0
+    ?¡‹aœ‘ ‹¡®‰ ¸÷•¡ : 1990.1 ®º…
+    ?¯a Å¡—a : ¥©œe—a C++ 2.0 
 ****/
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <alloc.h>
-#include <time.h>
 #include <dos.h>
-#include <conio.h>
 
 unsigned extern _stklen=20000U ;
 
@@ -128,7 +126,7 @@ int cError ( char ms1 [], char ms2 [], int m );
 void systemDown ( void );
 
 /* PGRKER0.C */
-//¥¡·¡“e Àw Ëi ·Š¬â¹ÁÎa ˆt //( int _XL , int _YL );
+//¥¡·¡“e Àw ? ·Š¬â¹Á? ˆt //( int _XL , int _YL );
 int vgaTextMode ( void );
 void setStAdd ( unsigned int st );
 void actPage ( int p );
@@ -220,7 +218,7 @@ static UpdateFNums ( int voice );
 static int BoardInstalled ( void );
 unsigned OutFreq ( int voice , int pitch , int bend , int keyOn );
 int playMusic ( char *fn );
-int offMusic ( void );
+void offMusic ( void );
 
 /* PSPRKER0.C */
 //encoding data temporary save buffer void initImg ( Image img [], int n );
@@ -241,7 +239,10 @@ int sayVoice(unsigned char fn[]);
 void allocVoiceMem(void);
 int silentVoice(void);
 
-int main(int argc, char **argv)
+
+main(argc,argv)
+int argc ;
+char **argv ;
 {
    int bk,ret ;
 
@@ -265,18 +266,16 @@ int main(int argc, char **argv)
      }
    }
    systemDown() ;
-
-   return(0);
 }
 
-int systemCheck(void)
+systemCheck()
 {
    if (isVga256K()==0)   cError("","This Program Require VGA 256K adapter",0) ;
    if (mem520KFree()==0) cError("","This Program Require 520K Free Memory.",0) ;
    return(0) ;
-}
+} ;
 
-int isVga256K(void)
+isVga256K()
 {
    union REGS r ;
 
@@ -286,26 +285,26 @@ int isVga256K(void)
    return(1) ;
 }
 
-/* ¡A¡¡Ÿ¡ˆa Â—¦…Ðeˆa ˆñ¬a */
-int mem520KFree(void)
+/* ¡A¡¡Ÿ¡ˆa Â—¦…?ˆa ˆñ¬a */
+mem520KFree()
 {
    if (coreleft()<430000L) return(0) ;
    return(1) ;
 }
 
-/* ÉB¯aËa ¡‰¡ Â‰b ¦¦… */
-int textLogo(void)
+/* ?¯a? ¡‰¡ Â‰b ¦¦… */
+textLogo()
 {
    FILE *fp ;
-   unsigned char far *p=(unsigned char far *) 0x417 ;
-   *p=0 ;
+   unsigned char far *p ;
+   p=(unsigned char far *) 0x417 ; *p=0 ;
 
    fp=fopen("tlogo.sf2","rb") ;
    fread((int far *)0xb8000000,80,50,fp) ;
    fclose(fp) ;
    getch() ;
    return(0) ;
-}
+} ;
 
 #define NO_VOICE      0
 #define PC_SPEAKER    1
@@ -315,7 +314,7 @@ int textLogo(void)
 #define COLOR_LPT1_PORT 0x378
 #define MONO_LPT1_PORT  0x3bc
 
-int systemWakeUp(void)
+systemWakeUp()
 {
    delay(1) ;
    randomize() ;
@@ -323,9 +322,7 @@ int systemWakeUp(void)
    loadFont("sf2w.fnt") ;
    loadConfig("sf2.cfg") ;
    if (SOUND_DEV!=NO_VOICE) allocVoiceMem() ;
-//MOON
    if (SOUND_DEV==SOUND_BLASTER) { reset_dsp() ; speaker_on() ; }
-
    vga320Mode() ;
    setRGBPalette() ;
    getNDACR(0,256,R_,G_,B_) ;
@@ -336,7 +333,7 @@ int systemWakeUp(void)
    return(0) ;
 }
 
-int loadFileConfig(fn)
+loadFileConfig(fn)
 char fn[] ;
 {
    FILE *fp ;
@@ -362,7 +359,7 @@ char fn[] ;
    return(0) ;
 }
 
-int setInitialValue(ENV,LP,RP)
+setInitialValue(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -382,7 +379,7 @@ PLAYER *LP,*RP ;
    return(0) ;
 }
 
-int viewWarn(void)
+viewWarn()
 {
    FILE *fp ;
    unsigned char far *p ;
@@ -402,7 +399,7 @@ int viewWarn(void)
    return(0) ;
 }
 
-int demo(GENV,LP,RP)
+demo(GENV,LP,RP)
 GameENV *GENV ;
 PLAYER *LP,*RP ;
 {
@@ -429,11 +426,13 @@ PLAYER *LP,*RP ;
    }
 }
 
-int loadDemoResource(char info[][80])
+loadDemoResource(info)
+char info[][80] ;
 {
    int i ;
-   FILE *fp=fopen("charact.sf2","r") ;
+   FILE *fp ;
 
+   fp=fopen("charact.sf2","r") ;
    for ( i=0 ; ; i++ )
    if (fscanf(fp,"%s",info[i])!=1) break ;
    fclose(fp) ;
@@ -453,7 +452,7 @@ int loadDemoResource(char info[][80])
    return(0) ;
 }
 
-int demo1(void)
+demo1()
 {
    int i,vp,y,vy ;
 
@@ -486,7 +485,7 @@ int demo1(void)
    return(CONTINUE) ;
 }
 
-int meetChar(Spr,info)
+meetChar(Spr,info)
 Sprite *Spr ;
 char info[][80] ;
 {
@@ -516,7 +515,7 @@ char info[][80] ;
    return(CONTINUE) ;
 }
 
-int gameSelect(ENV,LP,RP)
+gameSelect(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -560,17 +559,17 @@ PLAYER *LP,*RP ;
      if (_KE[K->x]||_KE[K->y]||_KE[K->z]||_KE[K->a]||_KE[K->b]||_KE[K->c])
        if (s==2)
        {
-	 setOption(ENV,LP,RP) ;
-	 fadeOut() ;
-	 page2PageCp(3,p) ; actPage(p) ;
-	 writeMode(0) ; pCTrpRImg0(50,14,ImgL[20].p,229,131) ;
-	 page2PageCp(p,2) ;
-	 writeMode(0) ; pBarL(s*96+16,158,96,21,3) ;
-	 fPText(20,161,"SIDMA@JE@ SA@AU@ DNHLU@JE@ SA@AU@ SJDAGU   JEHMEU",0,0,0) ;
-	 fPText(20,160,"SIDMA@JE@ SA@AU@ DNHLU@JE@ SA@AU@ SJDAGU   JEHMEU",0,245,245) ;
-	 viewPage(p) ;
-	 fadeIn() ;
-	 flushKey(K) ;
+         setOption(ENV,LP,RP) ;
+         fadeOut() ;
+         page2PageCp(3,p) ; actPage(p) ;
+         writeMode(0) ; pCTrpRImg0(50,14,ImgL[20].p,229,131) ;
+         page2PageCp(p,2) ;
+         writeMode(0) ; pBarL(s*96+16,158,96,21,3) ;
+         fPText(20,161,"SIDMA@JE@ SA@AU@ DNHLU@JE@ SA@AU@ SJDAGU   JEHMEU",0,0,0) ;
+         fPText(20,160,"SIDMA@JE@ SA@AU@ DNHLU@JE@ SA@AU@ SJDAGU   JEHMEU",0,245,245) ;
+         viewPage(p) ;
+         fadeIn() ;
+         flushKey(K) ;
        }
        else break ;
 
@@ -587,7 +586,7 @@ PLAYER *LP,*RP ;
    return(CONTINUE) ;
 }
 
-int setOption(ENV,LP,RP)
+setOption(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -661,7 +660,7 @@ PLAYER *LP,*RP ;
    return(0) ;
 }
 
-int macroEnv(L,R,v,l,u,i)
+macroEnv(L,R,v,l,u,i)
 unsigned char L,R ;
 int *v,l,u,i ;
 {
@@ -673,7 +672,7 @@ int *v,l,u,i ;
    return(0) ;
 }
 
-int drawOpt(void)
+drawOpt()
 {
    unsigned char *p,*p2 ;
    int i,r,d ;
@@ -717,7 +716,7 @@ int drawOpt(void)
    return(0) ;
 }
 
-int select(GENV,LP,RP)
+select(GENV,LP,RP)
 GameENV *GENV ;
 PLAYER *LP,*RP ;
 {
@@ -737,7 +736,7 @@ unsigned char cy[8]  = { 44,18 ,60 ,2  ,34 , 8,10,38 } ;
 unsigned char cx0[8] = { 99,127,156,184,99,127,156,184 } ;
 unsigned char cy0[8] = { 116,116,116,116,148,148,148,148 } ;
 
-int loadSelectResource(ENV)
+loadSelectResource(ENV)
 GameENV *ENV ;
 {
    int i,x,y ;
@@ -768,7 +767,7 @@ GameENV *ENV ;
    return(0) ;
 }
 
-int selectMode(ENV,LP,RP)
+selectMode(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -823,7 +822,7 @@ PLAYER *LP,*RP ;
    return(CONTINUE) ;
 }
 
-int selectCtrl(ENV,PL,x,y)
+selectCtrl(ENV,PL,x,y)
 GameENV *ENV ;
 PLAYER *PL ;
 int *x,*y ;
@@ -844,7 +843,7 @@ int *x,*y ;
      if (ty<0) ty=1 ;
      if (ty>1) ty=0 ;
      if (_KE[K->x]||_KE[K->y]||_KE[K->z]||_KE[K->a]||_KE[K->b]||_KE[K->c])
-	PL->pl = ty*4 + tx ;
+        PL->pl = ty*4 + tx ;
   }
 
   if (PL->pl==NOTSELECT && PL->ctrl==COMPU)
@@ -861,7 +860,7 @@ int *x,*y ;
   return(0) ;
 }
 
-int moveAirplane(x1,y1,x2,y2,p)
+moveAirplane(x1,y1,x2,y2,p)
 int x1,y1,x2,y2,p ;
 {
    int dx,dy,x,y,i,m,tn,ct ;
@@ -892,7 +891,7 @@ int x1,y1,x2,y2,p ;
    return(0) ;
 }
 
-int vsScreen(LP,RP)
+vsScreen(LP,RP)
 PLAYER *LP,*RP ;
 {
    char tmp[100] ;
@@ -910,7 +909,9 @@ PLAYER *LP,*RP ;
    return(0) ;
 }
 
-int game(GENV,LP,RP)
+
+
+game(GENV,LP,RP)
 GameENV *GENV ;
 PLAYER *LP,*RP ;
 {
@@ -932,7 +933,7 @@ PLAYER *LP,*RP ;
    return(r) ;
 }
 
-int drawWinner(ENV,LP,RP)
+drawWinner(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -968,7 +969,7 @@ PLAYER *LP,*RP ;
    return(r) ;
 }
 
-int drawLoser(int pl)
+drawLoser(int pl)
 {
    int i ;
 
@@ -988,7 +989,7 @@ int drawLoser(int pl)
 }
 
 
-int loadGameResource(ENV,LP,RP)
+loadGameResource(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -1007,7 +1008,7 @@ PLAYER *LP,*RP ;
    return(0) ;
 }
 
-int convertCharacterColor(Img,n)
+convertCharacterColor(Img,n)
 Image Img[] ;
 int n ;
 {
@@ -1025,7 +1026,7 @@ int n ;
    return(0) ;
 }
 
-int ConvertImageColor(s,l,lookup)
+ConvertImageColor(s,l,lookup)
 unsigned char *s,lookup[] ;
 int l ;
 {
@@ -1041,7 +1042,7 @@ int l ;
    return(dp) ;
 }
 
-int loadBkimg(fn,xs,ys2)
+loadBkimg(fn,xs,ys2)
 char *fn ;
 unsigned int xs,ys2 ;
 {
@@ -1076,7 +1077,7 @@ int r1End,HIT,NewPlayer ;
 #define KO_END   1
 #define TIME_END 2
 
-int playGame(ENV,LP,RP)
+playGame(ENV,LP,RP)
 GameENV *ENV ;
 PLAYER *LP,*RP ;
 {
@@ -1147,7 +1148,7 @@ PLAYER *LP,*RP ;
    return(CONTINUE) ;
 }
 
-int newPlayerComeIn(PL)
+newPlayerComeIn(PL)
 PLAYER *PL ;
 {
    CTRLKEY *K ;
@@ -1161,7 +1162,7 @@ PLAYER *PL ;
    }
 }
 
-int startScene(LP,RP,ENV,off,moff,bks,t)
+startScene(LP,RP,ENV,off,moff,bks,t)
 PLAYER *LP,*RP ;
 GameENV *ENV ;
 int off,bks,t ;
@@ -1186,7 +1187,7 @@ int off,bks,t ;
    return(0) ;
 }
 
-int endScene(LP,RP,off,moff,bks,t,p)
+endScene(LP,RP,off,moff,bks,t,p)
 PLAYER *LP,*RP ;
 int off,bks,t,p ;
 {
@@ -1216,19 +1217,19 @@ int off,bks,t,p ;
      if (COMTYPE) viewPage(p) ;
      drawScoreBoard(LP,RP,t) ;
      if (b>30) fPText(76,70,tmp,0,255,255)  ;
-	else delay(100) ;
+        else delay(100) ;
    }
    return(0) ;
 }
 
 
-int viewInfo(LP,RP)
+viewInfo(LP,RP)
 PLAYER *LP,*RP ;
 {
    char tmp[50] ;
 
    sprintf(tmp,"$LPOS %3d,%3d|%3d|%d  RPOS %3d,%3d|%3d|%d\0",
-		LP->x,LP->y,LP->ar,LP->mirr,RP->x,RP->y,RP->ar,RP->mirr) ;
+                LP->x,LP->y,LP->ar,LP->mirr,RP->x,RP->y,RP->ar,RP->mirr) ;
    fPText(0,50,tmp,0,255,255) ;
    sprintf(tmp,"$LTxy %3d,%3d  RTxy %3d,%3d\0",LP->x2,LP->y2,RP->x2,RP->y2) ;
    fPText(0,70,tmp,0,255,255) ;
@@ -1268,7 +1269,7 @@ PLAYER *LP,*RP ;
 #define RMARGIN 310
 #define END_OF_ACTION 253
 
-int initPlayer(P,x,y,mirr)
+initPlayer(P,x,y,mirr)
 PLAYER *P ;
 int x,y,mirr ;
 {
@@ -1280,7 +1281,7 @@ int x,y,mirr ;
    return(0) ;
 }
 
-int setPostition(LP,RP,off,moff)
+setPostition(LP,RP,off,moff)
 PLAYER *LP,*RP ;
 int *off,moff ;
 {
@@ -1360,7 +1361,7 @@ int *off,moff ;
    return(0) ;
 }
 
-int creatTempAction(RP)
+creatTempAction(RP)
 PLAYER *RP ;
 {
    int an ;
@@ -1373,7 +1374,7 @@ PLAYER *RP ;
    return(0) ;
 }
 
-int pullControl(xl,xr,off,moff)
+pullControl(xl,xr,off,moff)
 int *xl,*xr,off,moff ;
 {
    if (abs((*xl)-(*xr))>109) return(0) ;
@@ -1384,7 +1385,7 @@ int *xl,*xr,off,moff ;
    return(0) ;
 }
 
-int setWinnerOrLoserAction(PL,PR)
+setWinnerOrLoserAction(PL,PR)
 PLAYER *PL,*PR ;
 {
    if (PL->end) return(0) ;
@@ -1405,7 +1406,7 @@ PLAYER *PL,*PR ;
    return(0) ;
 }
 
-int setTempPosition(LP)
+setTempPosition(LP)
 PLAYER *LP ;
 {
    int xl,yl,aL,ansizeL ;
@@ -1429,7 +1430,7 @@ PLAYER *LP ;
    return(0) ;
 }
 
-int is2568Action(LP,RP)
+is2568Action(LP,RP)
 PLAYER *LP,*RP ;
 {
    if (LP->ann==6)
@@ -1447,7 +1448,7 @@ PLAYER *LP,*RP ;
    return(0) ;
 }
 
-int drawBackground(scr,off,xs)
+drawBackground(scr,off,xs)
 int scr,off,xs ;
 {
    writeMode(0) ; imgHFill(_PSEG[0],0,32*80-scr*80,0) ;
@@ -1456,7 +1457,7 @@ int scr,off,xs ;
    return(0) ;
 }
 
-int drawActor(LP,RP,scr)
+drawActor(LP,RP,scr)
 PLAYER *LP,*RP ;
 int scr ;
 {
@@ -1488,7 +1489,7 @@ int scr ;
    return(0) ;
 }
 
-int drawTempActor(PL)
+drawTempActor(PL)
 PLAYER *PL ;
 {
 
@@ -1503,7 +1504,7 @@ PLAYER *PL ;
    return(0) ;
 }
 
-int drawScoreBoard(LP,RP,t)
+drawScoreBoard(LP,RP,t)
 PLAYER *LP,*RP ;
 int t ;
 {
@@ -1538,7 +1539,7 @@ int t ;
    return(0) ;
 }
 
-int setPlayerActor(PL,ann,ani,ar,i)
+setPlayerActor(PL,ann,ani,ar,i)
 PLAYER *PL ;
 int ann,ani,*ar ;
 unsigned int *i ;
@@ -1551,7 +1552,7 @@ unsigned int *i ;
    return(0) ;
 }
 
-int setNextAction(MP,EP)
+setNextAction(MP,EP)
 PLAYER *MP,*EP ;
 {
    int r ;
@@ -1580,7 +1581,7 @@ PLAYER *MP,*EP ;
 #define KO_DAMAGE 79
 #define CHICKEN_DAMAGE 80
 
-int damageCheck(MP,EP)
+damageCheck(MP,EP)
 PLAYER *MP,*EP ;
 {
    if (isOverLap(MP,MP->AR[MP->ar].sp,MP->x,MP->y,MP->mirr,
@@ -1593,11 +1594,11 @@ PLAYER *MP,*EP ;
      return(1) ;
    }
    setDamageAction(MP,EP,DAMAGE_ACTION+damageAction(EP->i),
-		   attackPower(EP->i),0) ;
+                   attackPower(EP->i),0) ;
    return(1) ;
-}
+} ;
 
-int waveDamageCheck(MP,EP)
+waveDamageCheck(MP,EP)
 PLAYER *MP,*EP ;
 {
    int a,b,xl,xr,dxl,dxr ;
@@ -1629,7 +1630,7 @@ PLAYER *MP,*EP ;
    return(1) ;
 } ;
 
-int setDamageAction(MP,EP,da,power,flag)
+setDamageAction(MP,EP,da,power,flag)
 PLAYER *MP,*EP ;
 int da,power,flag ;
 {
@@ -1695,7 +1696,7 @@ int sL,xl0,yl0,lm,sR,xr0,yr0,rm ;
 }
 */
 
-int isOverLap(MP,sL,xl0,yl0,lm,EP,sR,xr0,yr0,rm)
+isOverLap(MP,sL,xl0,yl0,lm,EP,sR,xr0,yr0,rm)
 PLAYER *MP,*EP ;
 int sL,xl0,yl0,lm,sR,xr0,yr0,rm ;
 {
@@ -1737,7 +1738,7 @@ int sL,xl0,yl0,lm,sR,xr0,yr0,rm ;
    return(0) ;
 }
 
-int specialAttack(PL)
+specialAttack(PL)
 PLAYER *PL ;
 {
    int code ;
@@ -1749,7 +1750,7 @@ PLAYER *PL ;
    return(1) ;
 }
 
-int getSpecialCode(KR,KB,ctrl,san)
+getSpecialCode(KR,KB,ctrl,san)
 KEYRULE *KR ;
 KEYBUFF *KB ;
 int ctrl ;
@@ -1785,7 +1786,7 @@ char san ;
    return(0) ;
 }
 
-int patternMatch(str1,str2)
+patternMatch(str1,str2)
 char *str1,*str2 ;
 {
    int i ;
@@ -1797,7 +1798,7 @@ char *str1,*str2 ;
    return(1) ;
 }
 
-int combAttack(MP,EP)
+combAttack(MP,EP)
 PLAYER *MP,*EP ;
 {
    int lc,i,kc,ak,xmin,xmax,clc,dm ;
@@ -1843,7 +1844,7 @@ PLAYER *MP,*EP ;
    return(0) ;
 }
 
-int normalAttack(MP,EP)
+normalAttack(MP,EP)
 PLAYER *MP,*EP ;
 {
    int mc,ac,nr,mr,an ;
@@ -1874,7 +1875,7 @@ PLAYER *MP,*EP ;
 
 #define DUMY_ACTION 109
 
-int replaceAction(PL,ac,ann,ani,mask)
+replaceAction(PL,ac,ann,ani,mask)
 PLAYER *PL ;
 int ac,ann,ani,mask ;
 {
@@ -1911,7 +1912,7 @@ int ac,ann,ani,mask ;
    return(0) ;
 }
 
-int getIndex(PL)
+getIndex(PL)
 PLAYER *PL ;
 {
    int i,y,ar,anp,ans ;
@@ -1930,7 +1931,7 @@ PLAYER *PL ;
 }
 
 
-int getAttackCode(K,ctrl)
+getAttackCode(K,ctrl)
 CTRLKEY *K ;
 int ctrl ;
 {
@@ -1951,8 +1952,8 @@ int ctrl ;
 #define HEAD_DEFENCE_ACTION 9
 #define FOOT_DEFENCE_ACTION 10
 
-/* ÏiA·¡´áŸi ¶‘»¢·¥”a */
-int movePlayer(PL,EP)
+/* ?A·¡´áŸi ¶‘»¢·¥”a */
+movePlayer(PL,EP)
 PLAYER *PL,*EP ;
 {
    int key,mc,defence ;
@@ -1973,8 +1974,8 @@ PLAYER *PL,*EP ;
    return(0) ;
 }
 
-/* •·¸b·i ¬é¸÷Ðe”a */
-int setAction(PL,act)
+/* •·¸b·i ¬é¸÷?”a */
+setAction(PL,act)
 PLAYER *PL ;
 int act ;
 {
@@ -1983,8 +1984,8 @@ int act ;
    return(0) ;
 }
 
-/* ¶‘»¢·± Ç¡·¡ ¬wÈŸi ´è“e”a */
-int getMoveCode(K,mirr,ctrl)
+/* ¶‘»¢·± Ç¡·¡ ¬w?Ÿi ´è“e”a */
+getMoveCode(K,mirr,ctrl)
 CTRLKEY *K ;
 int mirr,ctrl ;
 {
@@ -2010,7 +2011,7 @@ int mirr,ctrl ;
 }
 
 /* key ÑÁ·©·i ·ª´á¬á ¤áÌáµA ¸á¸w */
-int loadAttackRule(fn,nr,PKR,PCR,PL)
+loadAttackRule(fn,nr,PKR,PCR,PL)
 char fn[] ;
 int *nr ;
 KEYRULE *PKR ;
@@ -2047,8 +2048,8 @@ PLAYER *PL ;
    return(0) ;
 }
 
-/* seqÑÁ·©·i ·ª´á¬á seq¤áÌáµA ¸á¸wÐe”a */
-int loadSeq(fn,AN,AR)
+/* seqÑÁ·©·i ·ª´á¬á seq¤áÌáµA ¸á¸w?”a */
+loadSeq(fn,AN,AR)
 char fn[] ;
 ACTION *AN ;
 ACTOR  *AR ;
@@ -2090,7 +2091,7 @@ ACTOR  *AR ;
    return(n) ;
 }
 
-int field(ch,str,f)
+field(ch,str,f)
 char ch,str[] ;
 unsigned int *f ;
 {
@@ -2103,8 +2104,8 @@ unsigned int *f ;
    return(0) ;
 }
 
-/* ¸ñ¸ñ ÑÁ¡e·i ¤j‰A Ðe”a */
-int fadeIn(void)
+/* ¸ñ¸ñ ÑÁ¡e·i ¤j‰A ?”a */
+fadeIn()
 {
    int i ;
    for ( i=0 ; i<=100 ; i+=10 )
@@ -2116,8 +2117,8 @@ int fadeIn(void)
    return(0) ;
 }
 
-/* ¸ñ¸ñ ÑÁ¡e·i ´á–“‰A Ðe”a */
-int fadeOut(void)
+/* ¸ñ¸ñ ÑÁ¡e·i ´á–“‰A ?”a */
+fadeOut()
 {
    int i ;
 
@@ -2131,8 +2132,10 @@ int fadeOut(void)
    return(0) ;
 }
 
-/* µAœá Â‰bÐa‰¡ •¡¯a¡ ¨a¹aaµ± */
-int cError(char ms1[], char ms2[], int m )
+/* µAœá Â‰b?‰¡ •¡¯a¡ ¨a¹aaµ± */
+cError(ms1,ms2,m)
+char ms1[],ms2[] ;
+int m ;
 {
    if (m)
    {
@@ -2147,7 +2150,7 @@ int cError(char ms1[], char ms2[], int m )
    return(0) ;
 }
 
-/* ‰A·±·¡ ¹·ža¯¡ ¯¡¯aÉQ ¶¥¬w ¥¢Šá */
+/* ‰A·±·¡ ¹·ža? ?¯a? ¶¥¬w ¥¢Šá */
 void systemDown(void)
 {
    offMusic() ;
@@ -2158,6 +2161,4 @@ void systemDown(void)
    printf("Thanks for Hitel Members\n") ;
    printf("Presented By Jung Y.D. & Game Association of Hitel\n") ;
    exit(0) ;
-}
-
-
+} ;

@@ -103,11 +103,11 @@
 #define KBDINTVECT 0x9  /* Ç¡·¡¥¡—a ·¥ÈáœóËa ¤åÑ¡     */
 
 /** 
-  Ç¡·¡¥¡—a ¯aÅEÅ¡—a ¸÷¥¡Ÿi ”q“e ¤µi
+  Ç¡·¡¥¡—a ¯aÅEÅ¡—a ¸÷¥¡Ÿi ”q“e ¤µi 
   µ) ¶áÑÁ¬iÎa Ç¡·¡ˆa ’‰œá»¥ ¬wÈ·¡¡e ¯aÅEÅ¡—aˆa 77 ·¡£a¡ _KS[77]·¡ 1·¡ –E”a.
-		      ˜é´á»¥ ¬wÈ·¡¡e                      _KS[77]·¡ 0·¡ –E”a.
-**/
-static unsigned char _KS[128] =
+                      ˜é´á»¥ ¬wÈ·¡¡e                      _KS[77]·¡ 0·¡ –E”a.
+**/    
+unsigned char _KS[128] =
 {
    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -121,7 +121,7 @@ static unsigned char _KS[128] =
   ‹¡Èa ‰A·±µA¬á Á··i ±©˜“e ’‰œá»¥ ¬wÈµA¬á ‰­¢ ¤i¬i–A¡e ´e–A£a¡ ’‰œá»¥ 
   ®…ˆeµA ¤i¬a–A‹¡ ¶áÐaµa ¬a¶w–S“¡”a.
 **/
-static unsigned char _KE[128] =
+unsigned char _KE[128] =
 {
    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -129,14 +129,14 @@ static unsigned char _KE[128] =
    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 } ;
 
-/**
-  ´a¢Ç¡·¡a ’‰œá»¥ ¬wÈ¡e ‹a˜ ’‰œá»¥ Ç¡·¡· ¯aÅEÅ¡—aˆt·¡ ‹¡¢–S“¡”a.
+/** 
+  ´a¢Ç¡·¡a ’‰œá»¥ ¬wÈ¡e ‹a˜ ’‰œá»¥ Ç¡·¡· ¯aÅEÅ¡—aˆt·¡ ‹¡¢–S“¡”a. 
   Hit Any key to start—wµA ¬a¶w
 **/
 unsigned char _KBHIT=0 ;
 
 /** ´a¢Ç¡·¡ˆa ’‰œá»©˜ Œa»¡ ”‹¡Ðe”a. ***/
-#define KBDWAIT  for ( _KBHIT=0 ; !_KBHIT ; ) ; _KBHIT=0 ;
+#define KBDWAIT  for ( _KBHIT=0 ; !_KBHIT ; ) ; _KBHIT=0 ; 
 
 /** ‹¡¹¥· Ç¡¥¡—a ·¥ÈáœóËa žË¥ Ðq® Í¡·¥Èá **/
 void interrupt far (*oldKBD)(void) ;
@@ -173,7 +173,7 @@ void interrupt keyStatusCheck(void)
 }
 
 /** Ç¡·¡¥¡—a ·¥ÈáœóËa žË¥·i ¬¡¶…ˆõ·a¡ ¤aŽ…”a. **/
-int setNewKBDInt(void)
+setNewKBDInt()
 {
    oldKBD   = getvect(KBDINTVECT) ;
    setvect(KBDINTVECT,keyStatusCheck) ;
@@ -181,13 +181,13 @@ int setNewKBDInt(void)
 }
 
 /** Ç¡·¡¥¡—a ·¥ÈáœóËa žË¥·i ¶¥œ”¡ ¤aŽ…”a. **/
-int setOldKBDInt(void)
+setOldKBDInt()
 {
    setvect(KBDINTVECT,oldKBD) ;
    return(0) ;
 }
 
-int main(void)
+main()
 {
    int x,y,shoot ;
 
@@ -199,7 +199,7 @@ int main(void)
    x=0 ; y=0 ; shoot=0 ;
 
    /** ¤wÐ· ÑÁ¬iÎaÇ¡Ÿi ¶‘»¢·± Ç¡·¡¡ ¬é¸÷
-	¯aÍA·¡¯a Ç¡·¡Ÿi Á·±¡“e Ç¡·¡¡ ¬é¸÷ **/
+        ¯aÍA·¡¯a Ç¡·¡Ÿi Á·±¡“e Ç¡·¡¡ ¬é¸÷ **/
 
    for ( ; ; )
    {
@@ -214,9 +214,7 @@ int main(void)
    }
 
    setOldKBDInt() ;
-
-   return(0);
 }
-
+  
 
 

@@ -4,28 +4,19 @@
 #include  <string.h>
 #include  <ctype.h>
 #include  <dos.h>
-#include  <io.h>
-
-#include  "adlib.h"
-
-void Clk_uninstall(void);
-void Clk_install(void);
-void StartTimeOut( unsigned delay );
-void SetClkRate( unsigned count );
-unsigned DelayLeft(void);
 
 #define  TURBOC
 #define  MAX_VOICES 20
 #define  UCHAR unsigned char
 #define  INT_METHOD
-#define  nbLocParam		14
+#define nbLocParam		14
 
 #define prmKsl			0
 #define prmMulti		1
-#define prmFeedBack		2			/* use for opr. 0 only */
+#define prmFeedBack	2			/* use for opr. 0 only */
 #define prmAttack		3
 #define prmSustain		4
-#define prmStaining		5			/* Sustaining ... */
+#define prmStaining	5			/* Sustaining ... */
 #define prmDecay		6
 #define prmRelease		7
 #define prmLevel		8
@@ -37,9 +28,9 @@ unsigned DelayLeft(void);
 
 /* globals parameters: */
 #define prmAmDepth		14
-#define prmVibDepth		15
+#define prmVibDepth	15
 #define prmNoteSel		16
-#define prmPercussion		17
+#define prmPercussion	17
 
 /* melodic voice numbers: */
 #define vMelo0			0
@@ -53,15 +44,15 @@ unsigned DelayLeft(void);
 #define vMelo8			8
 
 /* percussive voice numbers: */
-#define BD			6
-#define SD			7
+#define BD				6
+#define SD				7
 #define TOM			8
 #define CYMB			9
 #define HIHAT			10
 
 
 #define MAX_VOLUME		0x7f
-#define LOG2_VOLUME		7			/* log2( MAX_VOLUME) */
+#define LOG2_VOLUME	7			/* log2( MAX_VOLUME) */
 #define MAX_PITCH		0x3fff
 #define MID_PITCH		0x2000
 
@@ -82,11 +73,24 @@ int init_success = 1;        /* Flag of Initilization Success */
 extern int current_vol [MAX_VOICES];
 extern int volume_flag;
 
+int SoundColdInit( unsigned port );
+void SoundWarmInit( void );
+void SetMode( int mode );
+void SetPitchRange( unsigned pR );
+void SetGParam( int amD, int vibD, int nSel );
+void SetVoiceTimbre( unsigned voice, unsigned * paramArray );
+void SetVoiceVolume( unsigned voice, unsigned volume );
+void SetVoicePitch( unsigned voice, unsigned pitchBend );
+void NoteOn( unsigned voice, int pitch );
+void NoteOff( unsigned voice );
+void offMusic(void);
+void Midi_End (void);
 
 /*-------------------------------------------------------------------------
    Enable or disable the volume, but continue playing the song.
 */
-void Volume_OnOff (int flag)
+Volume_OnOff (flag)
+   int flag;
 {
    int n;
    if (flag != volume_flag) {
@@ -138,71 +142,11 @@ static char    end_of_data;            /* != 0 if end of data */
 static char    clock_in = 0;           /* != 0 if installed */
 
 /* Prototypes */
-//static SetUp_Data (UCHAR *);
-//static Start_Melo ();
-//static unsigned  Do_Event ();
+static SetUp_Data (UCHAR *);
+static Start_Melo ();
+static unsigned  Do_Event ();
 
 extern UCHAR *buf;
-
-/* SF2ADL.c */
-void Volume_OnOff ( int flag );
-void Midi_Init ( void );
-int Midi_Play ( UCHAR *dataPtr );
-void Midi_End ( void );
-int static unsigned Get_Word ( UCHAR *ptr );
-static long Get_Long ( UCHAR *ptr );
-static void SetUp_Tracks ( int trcks , UCHAR *chunk );
-static long Get_Length ( void );
-static void SetUp_Data ( UCHAR *dataPtr );
-static void Start_Melo ( void );
-void Stop_Melo ( void );
-void Set_Original_Clock ( void );
-void Set_Tempo ( unsigned tickQnote , long usec );
-static unsigned Get_Next_Delay ( void );
-static void myNoteOn ( int voice , int note , int volume );
-static void Midi_Event ( unsigned event );
-static void AdLib_Specific ( int code , unsigned char *data );
-static void Meta_Event ( void );
-static void Sysex_Event ( UCHAR event );
-unsigned TimeOut ( void );
-static unsigned Do_Event ( void );
-unsigned TimeOut ( void );
-static unsigned Do_Event ( void );
-int Test_Event ( void );
-
-#if 0
-int SoundColdInit ( unsigned port );
-int SoundWarmInit ( void );
-int SetMode ( int mode );
-int SetWaveSel ( int state );
-int SetPitchRange ( unsigned pR );
-int SetGParam ( int amD , int vibD , int nSel );
-int SetVoiceTimbre ( unsigned voice , unsigned *paramArray );
-int SetVoiceVolume ( unsigned voice , unsigned volume );
-int SetVoicePitch ( unsigned voice , unsigned pitchBend );
-int NoteOn ( unsigned voice , int pitch );
-int NoteOff ( unsigned voice );
-static InitSlotParams ( void );
-int SetASlotParam ( int slot , int param , int val );
-static SetSlotParam ( unsigned slot , unsigned *param , unsigned waveSel );
-int SetCharSlotParam ( unsigned slot , unsigned char *cParam , unsigned waveSel );
-static SndSetPrm ( int slot , int prm );
-static SndSetAllPrm ( int slot );
-static SndSKslLevel ( int slot );
-static SndSNoteSel ( void );
-static SndSFeedFm ( int slot );
-static SndSAttDecay ( int slot );
-static SndSSusRelease ( int slot );
-static SndSAVEK ( int slot );
-static SndSAmVibRhythm ( void );
-static SndWaveSelect ( int slot );
-static UpdateFNums ( int voice );
-static int BoardInstalled ( void );
-unsigned OutFreq ( int voice , int pitch , int bend , int keyOn );
-#endif
-
-int playMusic ( char *fn );
-int offMusic ( void );
 
 #ifdef INT_METHOD
    unsigned TimeOut ();
@@ -212,7 +156,7 @@ int offMusic ( void );
 /*-------------------------------------------------------------------------
 	Install the clock interrupt routine.
 */
-void Midi_Init(void)
+Midi_Init()
 {
 	if (clock_in) return;
 	Clk_install();
@@ -226,7 +170,8 @@ void Midi_Init(void)
    events.
    Returns 0 if interrupt routine not installed, else returns 1.
 */
-Midi_Play (UCHAR *dataPtr)
+Midi_Play (dataPtr)
+   UCHAR *dataPtr;
 {
    if (!clock_in) return (0);
    SetUp_Data (dataPtr);
@@ -247,7 +192,8 @@ void Midi_End (void)
 
 /*-------------------------------------------------------------------------
    Get word value from data.  Value is stored MSB first. */
-int static unsigned Get_Word (UCHAR *ptr)
+static unsigned Get_Word (ptr)
+   UCHAR *ptr;
 {
    unsigned n;
    n = *ptr++;
@@ -257,7 +203,8 @@ int static unsigned Get_Word (UCHAR *ptr)
 
 
 /* Get long value from data.  Value is stored MSB to LSB. */
-static long Get_Long (UCHAR *ptr)
+static long Get_Long (ptr)
+   UCHAR *ptr;
 {
    long l = 0L;
    int n;
@@ -270,7 +217,7 @@ static long Get_Long (UCHAR *ptr)
 /*-------------------------------------------------------------------------
    Set up trkPtrs, which is an array of pointers, to point to the track
    chunks. Does not modify musPtr. */
-static void SetUp_Tracks (trcks, chunk)
+static SetUp_Tracks (trcks, chunk)
    int trcks;
    UCHAR *chunk;
 {
@@ -290,7 +237,7 @@ static void SetUp_Tracks (trcks, chunk)
    Reads a variable length value from the MIDI file data and advances the
    data pointer.  */
 
-static long Get_Length (void)
+static long Get_Length ()
 {
    long value;
    UCHAR c, *data;
@@ -309,7 +256,8 @@ static long Get_Length (void)
 
 /*-------------------------------------------------------------------------
   Set up all of the data structures used in playing a MIDI file. */
-static void SetUp_Data (UCHAR *dataPtr)
+static SetUp_Data (dataPtr)
+   UCHAR *dataPtr;
 {
    long length;
    int i, j;
@@ -345,9 +293,9 @@ static void SetUp_Data (UCHAR *dataPtr)
 /*-------------------------------------------------------------------------
 	Start playing a melody. Set some global pointers and the tempo.  Start
 	the clock driver with the first delay (>= 1) */
-static void Start_Melo (void)
+static Start_Melo ()
 {
-//	extern StartTimeOut (int);
+	extern StartTimeOut (int);
 
 	musPtrPtr = trkPtrs;
 	status = trkStats;
@@ -360,7 +308,7 @@ static void Start_Melo (void)
 
 /*-------------------------------------------------------------------------
    Stop playing the melody. Reset the clock frequency to normal (18.2 Hz). */
-void Stop_Melo(void)
+Stop_Melo()
 {
 	musRunning = 0;
 	Set_Original_Clock ();
@@ -371,7 +319,7 @@ void Stop_Melo(void)
    Set clock rate to its original interrupt rate. Note that the clock rate
    has been saved at 10 times its real value in order to preserve some
    accuracy. */
-void Set_Original_Clock (void)
+Set_Original_Clock ()
 {
    SetClkRate (0);
 }
@@ -385,7 +333,7 @@ void Set_Original_Clock (void)
 
 	If tempo is zero, reprogram the counter for 18.2 Hz.
 */
-void Set_Tempo (tickQnote, usec)
+Set_Tempo (tickQnote, usec)
 	unsigned tickQnote;         /* ticks per quarter note */
 	long     usec;              /* micro-seconds per quarter note */
 {
@@ -411,7 +359,7 @@ void Set_Tempo (tickQnote, usec)
    event and sets the running status for that track as well.
    Returns number of ticks until next event. */
 
-static unsigned  Get_Next_Delay (void)
+static unsigned  Get_Next_Delay ()
 {
    long delta;
    int n, min;
@@ -432,7 +380,7 @@ static unsigned  Get_Next_Delay (void)
 	  /* end of data condition for all tracks */
 	  end_of_data = 1;
 	  Stop_Melo ();
-	  SetUp_Data(buf);
+          SetUp_Data(buf);
           Start_Melo();
           delta = 0L;
    }
@@ -449,8 +397,7 @@ static unsigned  Get_Next_Delay (void)
 }
 
 /*-------------------------------------------------------------------------*/
-static void myNoteOn (voice, note, volume)
-   int voice, note, volume;
+static myNoteOn (int voice, int note, int volume)
 {
    if (!volume) {
 	  /* A note-on with a volume of 0 is equivalent to a note-off. */
@@ -471,7 +418,7 @@ static void myNoteOn (voice, note, volume)
    Process a regular MIDI event.  Which routine to call is determined by
    using the 3 LSB's of the high nibble. */
 
-static void Midi_Event (event)
+static Midi_Event (event)
    unsigned event;
 {
    /* Table of # of data bytes which follow a regular midi status byte */
@@ -511,14 +458,14 @@ static void Midi_Event (event)
 /*-------------------------------------------------------------------------
    Process an Ad Lib specific meta-event. */
 
-static void AdLib_Specific (code, data)
+static AdLib_Specific (code, data)
    int code;
    unsigned char *data;
 {
    if (code == 1) {
 	  /* Instrument change code.  First byte of data contains voice number.
 		 Following bytes contain instrument parameters.  */
-//	  extern SetVoiceTimbre (unsigned, unsigned *);
+	  //extern SetVoiceTimbre (unsigned, unsigned *);
 	  int n;
 	  unsigned int params [28];
 	  for (n=0; n < 28; n++) params [n] = data [n+1] & 0xff;
@@ -526,7 +473,7 @@ static void AdLib_Specific (code, data)
    }
    else if (code == 2) {
 	  /* Melo/perc mode code.  0 is melodic, !0 is percussive. */
-//	  extern SetMode (int);
+	  //extern SetMode (int);
 	  SetMode ((int) data [0]);
    }
    else if (code == 3) {
@@ -539,7 +486,7 @@ static void AdLib_Specific (code, data)
 /*-------------------------------------------------------------------------
    Process meta-event.  All events other than end-of-track and tempo events
    are ignored.  */
-static void Meta_Event (void)
+static Meta_Event ()
 {
    /* musPtr points to the event type byte which follows the 0xff. */
    if (*musPtr == END_OF_TRACK) {
@@ -578,7 +525,7 @@ static void Meta_Event (void)
 
 
 /*-------------------------------------------------------------------------*/
-static void Sysex_Event (event)
+static Sysex_Event (event)
    UCHAR event;
 {
    long len = Get_Length ();
@@ -603,7 +550,7 @@ static void Sysex_Event (event)
 	Return to caller the number of clock ticks to wait for before
 	the next call.
 */
-unsigned TimeOut(void)
+unsigned TimeOut()
 {
 	if (! musRunning)
 		/* Music has not started or has been stopped, so wait the minimum delay ... */
@@ -611,7 +558,7 @@ unsigned TimeOut(void)
 	else return (Do_Event ());
 }
 
-static unsigned  Do_Event (void)
+static unsigned  Do_Event ()
 {
 	unsigned delay;
 	do {
@@ -665,7 +612,7 @@ static char timer_signal = 0;
    This routine, and all others called by, must be compiled
    without stack-overflow checking, since the SS has changed!!!
 */
-unsigned TimeOut(void)
+unsigned TimeOut()
 {
    timer_signal = 1;
    return (0x7fff);
@@ -676,7 +623,7 @@ unsigned TimeOut(void)
    occurs.
    'musPtr' always points to the first byte AFTER the timing byte.
 */
-static unsigned  Do_Event (void)
+static unsigned  Do_Event ()
 {
 	unsigned delay;
 	timer_signal = 0;
@@ -706,18 +653,15 @@ static unsigned  Do_Event (void)
 	  else return (delay);
 }
 
-int  Test_Event (void)
+int  Test_Event ()
 {
-   extern StartTimeOut (int);
+   //extern StartTimeOut (int);
 
    if (!timer_signal) return;
 
    StartTimeOut (Do_Event ());
 }
 #endif
-
-#if 0
-
 #ifdef TURBOC
 #endif
 
@@ -878,8 +822,8 @@ static const char N_V voicePSlot[] = {
    Function prototypes.
 */
 
-extern SndOutput();	/* in file OUTCHIP.ASM */
-extern SetFreq();	/* in file SETFREQ.ASM */
+extern void SndOutput(unsigned, unsigned);			/* in file OUTCHIP.ASM */
+extern SetFreq();				/* in file SETFREQ.ASM */
 
 static InitSlotParams();
 static SetSlotParam (unsigned, unsigned *, unsigned);
@@ -906,8 +850,8 @@ static int BoardInstalled();
 
 	Returns 0 if hardware not found.
 */
-int SoundColdInit (port)
-	unsigned port;			/* io port address of sound board (0x388) */
+int SoundColdInit( unsigned port )
+	/* io port address of sound board (0x388) */
 	{
 	int hardware;
 
@@ -929,7 +873,7 @@ int SoundColdInit (port)
 	and enable the wave-select parameter.
 -----------------------------------------------
 */
-SoundWarmInit()
+void SoundWarmInit( void )
 	{
 	int i;
 
@@ -965,8 +909,7 @@ SoundWarmInit()
 	to their default timbres.
 ---------------------------------------------
 */
-SetMode (mode)
-	int mode;
+void SetMode( int mode )
 	{
 
 	if (mode){
@@ -1021,8 +964,7 @@ SetWaveSel (state)
 	The change will be effective as of the next call to
 	'SetVoicePitch()'.
 */
-SetPitchRange (pR)
-	unsigned pR;
+void SetPitchRange( unsigned pR )
 	{
 	if (pR > 12)
 		pR = 12;
@@ -1040,8 +982,7 @@ SetPitchRange (pR)
 	The change takes place immediately.
 ----------------------------------------------
 */
-SetGParam (amD, vibD, nSel)
-	int amD, vibD, nSel;
+void SetGParam( int amD, int vibD, int nSel )
 	{
 	amDepth = amD;
 	vibDepth = vibD;
@@ -1084,9 +1025,7 @@ SetGParam (amD, vibD, nSel)
 	format.
 ------------------------------------------------
 */
-SetVoiceTimbre (voice, paramArray)
-	unsigned voice;
-	unsigned * paramArray;
+void SetVoiceTimbre( unsigned voice, unsigned*  paramArray )
 	{
 	unsigned wave0, wave1;
 	unsigned * prm1, * wavePtr;
@@ -1122,8 +1061,7 @@ SetVoiceTimbre (voice, paramArray)
 	0 <= volume <= 127
 --------------------------------------------------
 */
-SetVoiceVolume (voice, volume)
-	unsigned voice, volume;			/* 0 - 0x7f */
+void SetVoiceVolume (unsigned voice, unsigned volume)			/* 0 - 0x7f */
 {
 	unsigned char * slots;
 
@@ -1159,9 +1097,7 @@ SetVoiceVolume (voice, volume)
 	0 <= pitchBend <= 0x3fff, 0x2000 == exact tuning
 -------------------------------------------------
 */
-SetVoicePitch (voice, pitchBend)
-	unsigned voice;
-	unsigned pitchBend;
+void SetVoicePitch (unsigned voice, unsigned pitchBend)
 {
 	if ((!percussion && voice < 9) || voice <= BD) {
 		/* melodic + bass-drum */
@@ -1183,9 +1119,7 @@ SetVoicePitch (voice, pitchBend)
 	0 <= pitch <= 127, 60 == MID_C  (the card can play between 12 and 107 )
 -----------------------------------------------------------
 */
-NoteOn (voice, pitch)
-	unsigned voice;
-	int pitch;			/* 0 - 127 */
+void NoteOn (unsigned voice, int pitch)			/* 0 - 127 */
 	{
 	pitch -=  (MID_C - CHIP_MID_C);
 	if (pitch < 0)
@@ -1225,8 +1159,7 @@ NoteOn (voice, pitch)
 	0 <= voice <= 8	in melodic mode,
 	0 <= voice <= 10 in percussive mode;
 */
-NoteOff (voice)
-	unsigned voice;
+void NoteOff (unsigned voice)
 	{
 	if ((!percussion && voice < 9) || voice < BD) {
 		voiceKeyOn [voice] = 0;
@@ -1566,7 +1499,7 @@ static int BoardInstalled()
 
 	return (t1 & 0xE0) == 0 && (t2 & 0xE0) == 0xC0;
 	}
-#endif
+
 /*----------------------------------------------------------------------*/
 #if 0
 
@@ -1658,7 +1591,8 @@ unsigned  OutFreq (voice, pitch, bend, keyOn)
 
 unsigned char _playMusicFlag=BACK_MUSIC_IDLE ;
 
-int playMusic(char *fn)
+playMusic(fn)
+char *fn ;
 {
    int file ;
    long length,result ;
@@ -1683,12 +1617,12 @@ int playMusic(char *fn)
    if (length != result) { free(buf) ; close(file) ; return(0) ; }
    close (file) ;
 
-   Midi_Init() ;
-   Midi_Play(buf) ;
+   Midi_init() ;
+   Midi_play(buf) ;
    _playMusicFlag=BACK_MUSIC_BUSY ;
 }
 
-int offMusic(void)
+void offMusic(void)
 {
    int i,n ;
 
@@ -1703,6 +1637,5 @@ int offMusic(void)
    free (buf) ;
    _playMusicFlag=BACK_MUSIC_IDLE ;
 }
-
 
 
