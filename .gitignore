@@ -24,7 +24,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -32,3 +31,6 @@
 *.app
 *.swp
 *.sym
+x64
+Debug
+.vs
