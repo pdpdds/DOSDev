@@ -85,7 +85,7 @@ void NoteOn( unsigned voice, int pitch );
 void NoteOff( unsigned voice );
 void offMusic(void);
 void Midi_End (void);
-
+void StartTimeOut (int);
 /*-------------------------------------------------------------------------
    Enable or disable the volume, but continue playing the song.
 */
@@ -156,7 +156,7 @@ extern UCHAR *buf;
 /*-------------------------------------------------------------------------
 	Install the clock interrupt routine.
 */
-Midi_Init()
+void Midi_init(void)
 {
 	if (clock_in) return;
 	Clk_install();
@@ -170,8 +170,7 @@ Midi_Init()
    events.
    Returns 0 if interrupt routine not installed, else returns 1.
 */
-Midi_Play (dataPtr)
-   UCHAR *dataPtr;
+int Midi_play (UCHAR *dataPtr)
 {
    if (!clock_in) return (0);
    SetUp_Data (dataPtr);
@@ -295,7 +294,6 @@ static SetUp_Data (dataPtr)
 	the clock driver with the first delay (>= 1) */
 static Start_Melo ()
 {
-	extern StartTimeOut (int);
 
 	musPtrPtr = trkPtrs;
 	status = trkStats;
@@ -1596,7 +1594,6 @@ char *fn ;
 {
    int file ;
    long length,result ;
-   extern Midi_Play (UCHAR *);
    int n;
 
    if (_playMusicFlag==ADLIB_NOT_FOUND) return(0)  ;
