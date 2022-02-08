@@ -1,0 +1,13 @@
+del  hanio.lib
+tlib hanio+inithan+_inithan+puteng+aputeng+vputeng+puthan+aputhan+vputhan
+tlib hanio+putchhan+xputch+aputch+vputch
+tlib hanio+putshan+cputshan+xputs+nputs+aputs+vputs+naputs+nvputs+vaputs+vbputs+eputs+advputs+cntrputs
+tlib hanio+printf+xprintf+nprintf+aprintf+vprintf+naprintf+nvprintf+vaprintf+vbprintf+eprintf
+tlib hanio+getch23+getchhan+getkey+getyesno+waitkey+getshan+advgets+getnumbr+scanf
+tlib hanio+window+clear+aclear+vclear+clrscr+aclrscr+vclrscr+rndclear+savetext+moditext
+tlib hanio+drawbox+bitbox+varbox+gotoxy+getcordi+attrcolr+mode+default+setchkey+status
+tlib hanio+getbuff+keyflag+hanbase+fontmng+setpath+xscrolup+xscroldn+offset+maxstrln
+tlib hanio+korchi+chhanja+dirbox1+dirbox2+dirbox3+setgr+actpage+choosegr+cursor+settwink
+tlib hanio+vertline+horiline+setchf+setwaitf+keybuff+play+strtrim+isnumber+whatbyte
+tlib hanio+arrngstr+cnvthan+menu+popup+pulldown+error+variable+get2font
+tlib hanio+imagesiz+getimage+putimage

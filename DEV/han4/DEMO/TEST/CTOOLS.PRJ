@@ -1,0 +1,8 @@
+hanio.lib
+hangul.obj
+english.obj
+special.obj
+ctools.c
+ctool-1.c
+mylib.c
+

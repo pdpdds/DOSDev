@@ -1,0 +1,767 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <graphics.h>
+#include <conio.h>
+#include <time.h>
+#include <dir.h>
+
+#include "hanio.h"
+#include "extendio.h"
+#include "keydef.h"
+
+#define UNCALLED 	0
+#define CALLED 		1
+#define UNUSED 		0
+#define USED 		1
+#define USERBACK 	LIGHTBLUE
+#define USERCOVER 	LIGHTGREEN
+#define USERTWIN 	CYAN
+
+int table[4][5][5];
+int rtable[4][5][5];
+int comcolor[6] = { YELLOW, BLUE, LIGHTCYAN, RED, BROWN, MAGENTA };
+int point[16] = { 0, 0, 160, 160, 0, 320, 160, 479, 480, 0, 639, 160, 480, 320, 639, 479 };
+int callloc[8];
+int xtable[5][5] =
+{ 	 { 1, 0, 0, 0, 1 },
+	 { 0, 1, 0, 1, 0 },
+	 { 0, 0, 1, 0, 0 },
+	 { 0, 1 ,0, 1, 0 },
+	 { 1, 0, 0, 0, 1 }
+};
+
+char name[10][21] =
+{ 	 "Jack",
+	 "Smith",
+	 "Yamamoto",
+	 "Brown",
+	 "George",
+	 "Hane",
+	 "C B T",
+	 "L S W",
+	 "Ru-ri",
+	 "Seawoods"
+};
+
+char username[4][21];
+char data[100][9];
+char adata[5], bdata[5];
+char fname[50];
+int used[4][100];
+
+int x[9] = { 00, 11, 22, 33, 44, 40, 31, 13, 04 };
+int callspeed[4];
+int user;
+int count = 0;
+int gspeed = 300;
+int u;
+FILE *fp;
+
+long getfilesize(char fname[]) {
+	struct ffblk found;
+
+	findfirst(fname, &found, 0);
+	return found.ff_fsize;
+}
+
+void swap(int *a, int *b, int n) {
+	void *t = malloc(n);
+	memcpy(t, a, n);
+	memcpy(a, b, n);
+	memcpy(b, t, n);
+	free(t);
+}
+
+void readdata(void) {
+	int i = 0;
+
+	fp = fopen(fname, "r");
+
+	while(1) {
+		fseek(fp, i * 8, SEEK_SET);
+		fgets(data[i], 9, fp);
+		i++;
+		if ( i > getfilesize(fname) / 8 - 1) break;
+	}
+}
+
+void pdata(int x, int y, char data[]) {
+	int i;
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		adata[i] = data[i];
+		bdata[i] = data[4 + i];
+	}
+
+	xprintf_han(x, y, "%-4s", adata);
+	xprintf_han(x, y + 1, "%-4s", bdata);
+}
+
+void lineaddition(void) {
+	int a = 0, k = 0, d = 0;
+
+	for ( a = 0 ; a < 4 ; a++ ) {
+		if ( a == user) {
+			setcolor(GREEN);
+			rectangle(point[user * 4], point[user * 4 + 1], point[user * 4 + 2], point[user * 4 + 3]);
+			for ( k = 1 ; k < 5 ; k++ ) {
+				line( point[user * 4] + 32 * k, point[user * 4 + 1], point[user * 4] + 32 * k, point[user * 4 + 3] );
+				line( point[user * 4], point[user * 4 + 1] + 32 * k , point[user * 4 + 2], point[user * 4 + 1] + 32 * k );
+			}
+		}
+
+		else {
+			setcolor(comcolor[d * 2 + 1]);
+			rectangle(point[a * 4], point[a * 4 + 1], point[a * 4 + 2], point[a * 4 + 3]);
+			for ( k = 1 ; k < 5 ; k++ ) {
+				line( point[a * 4] + 32 * k, point[a * 4 + 1], point[a * 4] + 32 * k, point[a * 4 + 3] );
+				line( point[a * 4], point[a * 4 + 1] + 32 * k , point[a * 4 + 2], point[a * 4 + 1] + 32 * k );
+			}
+		}
+		if ( a != user ) d++;
+	}
+}
+
+void firstlogo(void) {
+	int i;
+
+	draw_box_han(0, 0, 79, 29, BOX_H2V2);
+
+	for ( i = 0 ; i < 15 ; i++ ) {
+		set_vbcolor_han(i, LIGHTGRAY);
+			xprintf_han(3 + i * 5, 1 + i, "Bingo");
+	}
+
+    for ( i = 0 ; i < 15 ; i++ ) {
+		set_vbcolor_han(i, LIGHTGRAY);
+			aprintf_han(3 + i * 5, 10 + i, FONT_VERT_DBL, "Bingo");
+	}
+	aprintf_han(5, 24, FONT_VERT_DBL, "Enjoy Bingo.");
+	aprintf_han(5, 26, FONT_VERT_DBL, "Press Any Key...");
+
+	getch();
+	clrscr_han();
+}
+
+void ending(void) {
+	int i;
+
+	set_vbcolor_han(GREEN, LIGHTGRAY);
+	clrscr_han();
+	draw_box_han(0, 0, 79, 29, BOX_H2V2);
+
+	for ( i = 0 ; i < 15 ; i++ ) {
+		set_vbcolor_han(i, LIGHTGRAY);
+			xprintf_han(3 + i * 5, 1 + i, "Bingo");
+	}
+
+    for ( i = 0 ; i < 15 ; i++ ) {
+		set_vbcolor_han(i, LIGHTGRAY);
+			aprintf_han(3 + i * 5, 10 + i, FONT_VERT_DBL, "Bingo");
+	}
+	aprintf_han(5, 22, FONT_VERT_DBL, "Thank you for using this program.");
+	aprintf_han(5, 24, FONT_VERT_DBL, "Press Any Key...");
+	xprintf_han(50, 26, "Programmed by Choi. B. T.");
+	xprintf_han(50, 27, "Thanks to God.");
+
+	getch();
+	clrscr_han();
+	exit(1);
+}
+
+void maketable( int table[4][5][5] ) {
+	int i, j, k;
+	int a = 0;
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		if ( i == user && u == 25 ) continue;
+		for ( j = 0 ; j < 5 ; j++ ) {
+			if ( i == user && u / 5 > j ) continue;
+			for ( k = 0 ; k < 5 ; k++ ) {
+				if ( i == user && u % 5 > k  && u / 5 >= j ) continue;
+				while(1) {
+					a = random( getfilesize(fname) / 8 );
+					if ( used[i][a - 1] == 0 ) break;
+				}
+				table[i][k][j] = a;
+				used[i][a - 1] = 1;
+			}
+		}
+	}
+}
+
+int makeusertable(void) {
+	int i, n, k = 0;
+	int x = 0, y = 0;
+	int oldx = 0, oldy = 0;
+	int key;
+	char filedata[9];
+
+	setfillstyle(SOLID_FILL, LIGHTGRAY);
+	bar(0, 0, 639, 479);
+	setfillstyle(SOLID_FILL, LIGHTBLUE);
+	bar(0, 320, 160, 479);
+	setcolor(GREEN);
+
+	for ( i = 0 ; i < 6 ; i++ ) {
+		line(0, 320 + 32 * i, 160, 320 + 32 * i);
+	}
+	line(0, 479, 160, 479);
+
+	for ( i = 0 ; i < 6 ; i++ ) {
+		line(32 * i, 320, 32 * i, 479);
+	}
+
+	line(200, 0, 200, 479);
+	line(205, 0, 205, 479);
+
+	n = getfilesize(fname) / 8;
+	set_vbcolor_han(GREEN, LIGHTGRAY);
+
+	for ( i = 0 ; i < n ; i++ ) {
+		xprintf_han(40 + ( i / 25) * 10, i % 25, "%-8s", data[i]);
+	}
+
+	set_vbcolor_han(LIGHTGRAY, GREEN);
+	xprintf_han(40, 0, "%-8s", data[0]);
+
+	while(1) {
+		key = getch_han();
+		if ( key == 0 ) key = getch_han();
+
+		switch(key) {
+			case _ESC  : return k;
+			case _SPACE : if ( used[user][x * 25 + y] == UNUSED ) {
+							  set_vbcolor_han(GREEN, LIGHTGRAY);
+							  xprintf_han(39 +  x * 10, y, "*");
+							  set_vbcolor_han(LIGHTGREEN, LIGHTBLUE);
+							  pdata((k % 5) * 4, 20 + (k / 5) * 2, data[x * 25 + y]);
+							  setcolor(GREEN);
+							  rectangle( (k % 5) * 32, 320 + (k / 5) * 32, (k % 5) * 32 + 32, 320 + (k / 5) * 32 + 32);
+							  if ( (k / 5) == 4 ) line( (k % 5) * 32, 479, (k % 5) * 32 + 32, 479);
+							  used[user][x * 25 + y] = USED;
+							  table[user][k % 5][k / 5] = x * 25 + y;
+							  k++;
+							  if ( k == 25 ) return 25;
+						  }
+						  break;
+			case RIGHT : if ( x == 3 ) x = 0;
+						 else x++;
+						 break;
+			case LEFT : if ( x == 0 ) x = 3;
+						 else x--;
+						 break;
+			case UP : if ( y == 0 ) y = 24;
+						 else y--;
+						 break;
+			case DOWN : if ( y == 24 ) y = 0;
+						 else y++;
+						 break;
+		}
+
+		if ( key == _SPACE ) continue;
+
+		if ( x * 25 + y + 1 > n ) {
+			x = oldx;
+			y = oldy;
+		}
+
+		set_vbcolor_han(GREEN, LIGHTGRAY);
+		xprintf_han(40 + oldx * 10, oldy, "%-8s", data[25 * oldx + oldy]);
+
+		set_vbcolor_han(LIGHTGRAY, GREEN);
+		xprintf_han(40 +  x * 10, y, "%-8s", data[25 * x + y]);
+
+		oldx = x;
+		oldy = y;
+	}
+
+	getch_han();
+}
+
+void drawfirst(void) {
+	int a, b, d = 0;
+
+	setfillstyle(SOLID_FILL, LIGHTGRAY);
+	bar(0, 0, 639, 479);
+	setcolor(BLACK);
+	rectangle(220, 180, 420, 300);
+	set_bkcolor_han(LIGHTGRAY);
+	set_color_han(USERCOVER);
+	xprintf_han(28, 15, "You're playing player %d.", user);
+
+	for ( a = 0 ; a < 4 ; a++ ) {
+		if ( a == user )
+			setfillstyle(SOLID_FILL, USERBACK);
+		else
+			setfillstyle(SOLID_FILL, comcolor[d * 2]);
+
+		bar(point[a * 4], point[a * 4 + 1], point[a * 4 + 2] ,point[a * 4 + 3]);
+		if ( a != user ) d++;
+	}
+
+	d = 0;
+	for ( a = 0 ; a < 4 ; a++ ) {
+    	if ( a == user )
+			setcolor(USERCOVER);
+		else
+			setcolor(comcolor[d * 2 + 1]);
+
+		rectangle(point[a * 4], point[a * 4 + 1], point[a * 4 + 2] ,point[a * 4 + 3]);
+		if ( a != user ) d++;
+	}
+
+	d = 0;
+	for ( a = 0 ; a < 4 ; a++ ) {
+    	if ( a == user )
+			setcolor(USERCOVER);
+		else
+			setcolor(comcolor[d * 2 + 1]);
+		for ( b = 1 ; b < 5 ; b++ )
+			line( point[a * 4] + 32 * b, point[a * 4 + 1], point[a * 4] + 32 * b, point[a * 4 + 3] );
+		if ( a != user ) d++;
+	}
+
+	d = 0;
+	for ( a = 0 ; a < 4 ; a++ ) {
+    	if ( a == user )
+			setcolor(USERCOVER);
+		else
+			setcolor(comcolor[d * 2 + 1]);
+		for ( b = 1 ; b < 5 ; b++ )
+			line( point[a * 4], point[a * 4 + 1] + 32 * b , point[a * 4 + 2], point[a * 4 + 1] + 32 * b );
+		if ( a != user ) d++;
+	}
+}
+
+void printdata(void) {
+	int a = 0;
+	int i = 0, j = 0;
+	int d = 0;
+
+	for ( a = 0 ; a < 4 ; a++ ) {
+		if ( a != user)	set_vbcolor_han(comcolor[d * 2 + 1], comcolor[d * 2]);
+		else set_vbcolor_han(USERCOVER, USERBACK);
+
+		for ( i = 0 ; i < 5 ; i++ ) {
+			for ( j = 0 ; j < 5 ; j++ ) {
+				if ( a == user ) pdata(point[a * 4] / 8 + i * 4, point[a * 4 + 1] / 16 + j * 2, data[table[user][i][j]]);
+				if ( a != user ) xprintf_han(point[a * 4] / 8 + i * 4 + 1, point[a * 4 + 1] / 16 + j * 2 + 1, "?");
+			}
+		}
+
+		if ( a != user ) d++;
+	}
+}
+
+int checkbingo(int n) {
+	int i, j;
+	int k = 0;
+
+	for ( i = 0 ; i < 5 ; i++ ) {
+		for ( j = 0 ; j < 5 ; j++ ) {
+			if ( rtable[n][i][j] == UNCALLED ) break;
+		}
+		if ( j == 5 ) k++;
+	}
+
+	for ( i = 0 ; i < 5 ; i++ ) {
+		for ( j = 0 ; j < 5 ; j++ ) {
+			if ( rtable[n][j][i] == UNCALLED ) break;
+		}
+		if ( j == 5 ) k++;
+	}
+
+	for ( i = 0 ; i < 5 ; i++ ) {
+		if ( rtable [n][i][i] == UNCALLED ) break;
+		if ( i == 4 ) k++;
+	}
+
+	for ( i = 0 ; i < 5 ; i++ ) {
+		if ( rtable[n][4 - i][i] == UNCALLED ) break;
+		if ( i == 4 ) k++;
+	}
+
+	return k;
+}
+
+int checkx(int n) {
+	int i;
+
+	for( i = 0 ; i < 5 ; i++ ) {
+		if ( rtable[n][i][i] == UNCALLED ) return 0;
+		if ( rtable[n][4 - i][i] == UNCALLED ) return 0;
+	}
+
+	return 1;
+}
+
+void comcall(int n) {
+	int a, i, j;
+
+	if ( count < 4 ) {
+		callloc[n * 2] = 2;
+		callloc[n * 2 + 1] = 2;
+		return;
+	}
+
+	if ( checkx(n) == 0 ) {
+		while(1) {
+			a = random(9);
+			if ( rtable[n][x[a] / 10][x[a] % 10] == UNCALLED ) {
+				callloc[n * 2] = x[a] / 10;
+				callloc[n * 2 + 1] = x[a] % 10;
+				rtable[n][x[a] / 10][x[a] % 10] = CALLED;
+				return;
+			}
+		}
+	} else {
+		for ( i = 0 ; i < 5 ; i++ ) {
+			for ( j = 0 ; j < 5 ; j++ ) {
+				if ( rtable[n][i][j] == UNCALLED ) {
+					callloc[n * 2] = i;
+					callloc[n * 2 + 1] = j;
+					return;
+				}
+			}
+		}
+	}
+}
+
+void usercall(int n) {
+	int usercall;
+	int i, j;
+	int x = 0, y = 0;
+	int oldx = 0, oldy = 0;
+	int color = 0;
+	int key;
+
+	while(1) {
+		color = getpixel( point[n * 4] + 32 * oldx + 1, point[n * 4 + 1] + 32 * oldy + 1);
+
+		if ( color == USERBACK ) setfillstyle(SOLID_FILL, USERBACK);
+		if ( color == USERCOVER ) {
+			if ( rtable[n][oldx][oldy] == UNCALLED )
+				setfillstyle(SOLID_FILL, USERBACK);
+			else
+				setfillstyle(SOLID_FILL, USERCOVER);
+		}
+		if ( color == USERTWIN ) setfillstyle(SOLID_FILL, USERCOVER);
+
+		bar( point[n * 4] + 32 * oldx , point[n * 4 + 1] + 32 * oldy, point[n * 4] + 32 * oldx + 32, point[n * 4 + 1] + 32 * oldy + 32 );
+		if ( color == USERCOVER && rtable[n][oldx][oldy] == UNCALLED )
+			pdata(point[n * 4] / 8 + oldx * 4, point[n * 4 + 1] / 16 + oldy * 2, data[table[user][oldx][oldy]]);
+
+		oldx = x;
+		oldy = y;
+
+		color = getpixel( point[n * 4] + 32 * x  + 1, point[n * 4 + 1] + 32 * y + 1);
+
+		if ( color == USERBACK ) {
+			setfillstyle(SOLID_FILL, USERCOVER);
+			bar( point[n * 4] + 32 * x , point[n * 4 + 1] + 32 * y, point[n * 4] + 32 * x + 32, point[n * 4 + 1] + 32 * y + 32 );
+			set_vbcolor_han(LIGHTBLUE,LIGHTGREEN);
+			pdata(point[user * 4] / 8 + x * 4, point[user * 4 + 1] / 16 + y * 2, data[table[user][x][y]]);
+			set_vbcolor_han(LIGHTGREEN, LIGHTBLUE);
+		}
+
+		if ( color == USERCOVER ) {
+			setfillstyle(SOLID_FILL, USERTWIN);
+			bar( point[n * 4] + 32 * x , point[n * 4 + 1] + 32 * y, point[n * 4] + 32 * x + 32, point[n * 4 + 1] + 32 * y + 32 );
+		}
+
+		lineaddition();
+
+		key = getch();
+		if ( key == _ENTER )
+			if ( getpixel( point[n * 4] + 32 * x  + 1, point[n * 4 + 1] + 32 * y + 1) != USERTWIN ) break;
+
+		switch(key) {
+			case _ESC : ending();
+			case 43 : if ( gspeed > 50 ) gspeed -= 50;
+					  break;
+			case 45 : gspeed += 50;
+					  break;
+			case 0 : key = getch();
+				switch(key) {
+					case RIGHT : if ( x == 4 ) x = 0;
+									 else x++;
+									 break;
+					case LEFT  : if ( x == 0 ) x = 4;
+									 else x--;
+									 break;
+					case UP    : if ( y == 0 ) y = 4;
+								 else y--;
+								 break;
+					case DOWN  : if ( y == 4 ) y = 0;
+								 else y++;
+								 break;
+				 }
+		   }
+	}
+
+	callloc[n * 2] = x;
+	callloc[n * 2 + 1] = y;
+	return;
+}
+
+void realprocess(int n) {
+	int i = 0, j = 0, k = 0;
+	int c = 0;
+	int num = table[n][callloc[n * 2]][callloc[n * 2 + 1]];
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		if ( i != n ) {
+			for ( j = 0 ; j < 5 ; j ++ ) {
+				for ( k = 0 ; k < 5 ; k++ ) {
+					if ( num == table[i][j][k] ) {
+						callloc[i * 2] = j;
+						callloc[i * 2 + 1] = k;
+					}
+				}
+			}
+		}
+	}
+
+    set_bkcolor_han(LIGHTGRAY);
+	xprintf_han(30, 10, "                      ");
+	if ( count % 4 == user ) set_color_han(USERCOVER);
+	else {
+		if ( count % 4 > user ) {
+			count--;
+			set_color_han(comcolor[count % 4 * 2 + 1]);
+			count++;
+		}
+		else set_color_han(comcolor[count % 4 * 2 + 1]);
+	}
+
+	xprintf_han(28, 10, "%s called %s", username[n], data[num]);
+	set_bkcolor_han(YELLOW);
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		rtable[i][callloc[i * 2]][callloc[i * 2 + 1]] = CALLED;
+		if ( i == user ) {
+			setfillstyle(SOLID_FILL, USERCOVER);
+			bar(point[i * 4] + 32 * callloc[i * 2], point[i * 4 + 1] + 32 * callloc[i * 2 + 1], point[i * 4] + 32 * ( callloc[i * 2] + 1 ), point[i * 4 + 1] + 32 * ( callloc[i * 2 + 1] + 1 ));
+		}
+		else {
+			setfillstyle(SOLID_FILL, comcolor[c * 2 + 1]);
+			bar(point[i * 4] + 32 * callloc[i * 2], point[i * 4 + 1] + 32 * callloc[i * 2 + 1], point[i * 4] + 32 * ( callloc[i * 2] + 1 ), point[i * 4 + 1] + 32 * ( callloc[i * 2 + 1] + 1 ));
+		}
+
+
+		if ( i != user ) c++;
+	}
+}
+
+int whowin(void) {
+	int k = 0;
+	int i;
+	int bestspeed = 3000;
+	int bingoends[4];
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		if ( i != count % 4 ) {
+			if ( checkbingo( i ) >= 5 ) {
+				bingoends[i] = 1;
+				k++;
+			}
+		}
+	}
+
+	if ( k == 1 ) {
+		for ( i = 0 ; i < 4 ; i++ )
+			if ( bingoends[count % 4] == 1 ) return i;
+	}
+
+	if ( k >= 2 ) {
+		for ( i = 0 ; i < 4 ; i++ ) {
+			if ( bingoends[i] == 1 ) {
+				if ( callspeed[i] != 0 ) {
+					if ( callspeed[i] < bestspeed ) {
+						callspeed[i] = bestspeed;
+						return i;
+					}
+				}
+			}
+		}
+	}
+	return 5;
+}
+
+void startgame(void) {
+	xprintf_han(25, 5, "From now on.");
+	xprintf_han(25, 6, "We'll play.");
+	xprintf_han(25, 7, "Press any key.");
+	getch();
+	set_bkcolor_han(LIGHTGRAY);
+	xprintf_han(25, 5, "            ");
+	xprintf_han(25, 6, "           ");
+	xprintf_han(25, 7, "              ");
+	set_bkcolor_han(YELLOW);
+}
+
+void readgspeed(void) {
+	fp = fopen("bingo.cfg", "r");
+	if (fp == 0) return;
+	fscanf(fp, "%u", &gspeed);
+	fclose(fp);
+}
+
+void readname(void) {
+	int i;
+	FILE *fp = fopen("BINGO.NAM", "r+");
+
+	for ( i = 0 ; i < 10 ; i++ ) {
+		fseek(fp, i * 10, SEEK_SET);
+		fgets(name[i], 11, fp);
+	}
+
+	fclose(fp);
+}
+
+void makeusername(void) {
+	int i = 0, j = 0, k = 0, l = 0;
+
+	randomize();
+	strcpy(username[user], name[0]);
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		if ( i == user ) continue;
+		while(1) {
+			k = random(9) + 1;
+			if ( i == 0 ) break;
+			for ( j = 0 ; j < i ; j++ ) {
+				if ( strcmp( username[j], name[k] ) != 0)
+					l = 1;
+				else {
+					l = 0;
+					break;
+				}
+			}
+			if ( l == 1 ) break;
+		}
+		l = 0;
+		strcpy(username[i], name[k]);
+	}
+}
+
+void printusername(void) {
+	int i, k = 0;
+	int locate[8] = { 1, 11, 1, 18, 61, 11, 61, 18 };
+
+	set_bkcolor_han(LIGHTGRAY);
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		if (i != user) {
+			set_color_han(comcolor[k * 2]);
+			k++;
+		}
+		else set_color_han(USERBACK);
+
+		xprintf_han( locate[i * 2], locate[i * 2 + 1], "%s", username[i]);
+	}
+
+	set_bkcolor_han(YELLOW);
+}
+
+void initforgame(void) {
+	int i, j, k;
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		for ( j = 0 ; j < 5 ; j++ ) {
+			for ( k = 0 ; k < 5 ; k++ ) {
+				rtable[i][j][k] = 0;
+			}
+		}
+	}
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		for ( j = 0 ; j < 100 ; j++ ) {
+			used[i][j] = 0;
+		}
+	}
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		strcpy(username[i], "                    ");
+	}
+}
+
+int main(void)
+{
+	int i;
+	int p;
+	int winner = 5;
+
+	if ( init_han() != OK_HAN) exit(1);
+
+	set_vbcolor_han(GREEN, LIGHTGRAY);
+	clrscr_han();
+	firstlogo();
+	set_vbcolor_han(GREEN, LIGHTGRAY);
+
+	while(1) {
+		dir_box_short(12, 10, "*.DAT", fname);
+		if ( getfilesize(fname) < 200 ) xprintf_han(20, 20, "Sorry. But in this file there too few data.");
+		else break;
+	}
+
+	randomize();
+	readdata();
+	readgspeed();
+	readname();
+	user = random(4);
+
+	while(1) {
+		u = makeusertable();
+		maketable(table);
+		makeusername();
+		randomize();
+		drawfirst();
+		printdata();
+		lineaddition();
+		printusername();
+
+		for ( i = 0 ; i < 4 ; i++ )
+			callspeed[i] = random(2000);
+
+		while(1) {
+			if ( count % 4 == user ) usercall(count % 4);
+			else comcall(count % 4);
+			realprocess(count % 4);
+			lineaddition();
+			if ( checkbingo(count % 4) >= 5 )
+				winner = count % 4;
+			if ( winner != 5 ) break;
+
+			winner = whowin();
+
+			if ( winner != 5 ) break;
+			count++;
+			delay( random(count * gspeed) );
+		}
+        if ( count % 4 == user ) set_color_han(USERCOVER);
+			else {
+				if ( count % 4 > user ) {
+					count--;
+					set_color_han(comcolor[count % 4 * 2 + 1]);
+					count++;
+				}
+				else set_color_han(comcolor[count % 4 * 2 + 1]);
+			}
+		if ( winner == user ) set_vbcolor_han(USERCOVER, LIGHTGRAY);
+		else if ( winner < user ) set_vbcolor_han(comcolor[winner * 2 + 1], LIGHTGRAY);
+		else set_vbcolor_han(comcolor[(winner - 1) * 2 + 1], LIGHTGRAY);
+		xprintf_han(25, 6, "The winner is %s", username[winner]);
+		getch();
+		initforgame();
+		winner = 5;
+	}
+
+	fp = fopen("bingo.cfg", "w");
+	fprintf(fp, "%u", gspeed);
+	fclose(fp);
+	close_han();
+	return(0);
+}

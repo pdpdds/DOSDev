@@ -1,0 +1,11 @@
+
+
+
+msg1 = 09AB:0FB2
+ptr1 = 09AB:0FB2
+msg1[2] = g
+ptr1[2] = g
+msg2 = 09AB:0FBC
+ptr2 = 09AB:0FBC
+msg2[2] = test3
+ptr2[2] = test3

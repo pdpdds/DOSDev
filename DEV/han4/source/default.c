@@ -1,0 +1,83 @@
+/****************************************************************************/
+/*   TITLE              Hangul Library <HAN> 4.1                            */
+/*   SUB-TITLE          default_han_change_func(),                          */
+/*                      default_ins_change_func()                           */
+/*   FILENAME           default.c                                           */
+/*   DATE & TIME        03/11/92(WED) 19:17                                 */
+/*   PROGRAMMER         Lee Hyun-Ho (ID:easyride)                           */
+/****************************************************************************/
+
+#include "hanio.h"
+#include "extendio.h"
+
+/****************************************************************************/
+/*                 Implementation of the library functions                  */
+/****************************************************************************/
+
+void default_han_change_func(void)
+/* –e/µw ∏Â—≈«°àa íâú·ª© òÅ —°¬âñAìe –qÆÅ(êÅ∏˜ñE –qÆÅ) */
+{
+   int attr2, color2, bkcolor2;
+
+   attr2       = attr_han;
+   color2      = color_han;
+   bkcolor2    = bkcolor_han;
+   attr_han    = FONT_INVERSE;
+   color_han   = LIGHTGRAY;
+   bkcolor_han = BLACK;
+
+   if(is_status_on_han)
+   /* ¨w»Å úa∑•∑° ŒaØ°ñA¥· ∑∂∑a°e ¨w»Å úa∑•µA ∑≥ùb ¨w»Åüi ŒaØ° */
+   {
+      if(han_mode)
+      {
+	 put_han_font(3, abs_maxy_han, '–', 'e');	/* "–e" */
+	 put_han_font(5, abs_maxy_han, 'ã', 'i');	/* "ãi" */
+      }
+      else
+      {
+	 put_han_font(3, abs_maxy_han, 'µ', 'w');	/* "µw" */
+	 put_han_font(5, abs_maxy_han, '¢', 'Ö');	/* "¢Ö" */
+      }
+   }
+
+   attr_han    = attr2;
+   color_han   = color2;
+   bkcolor_han = bkcolor2;
+
+   sound(330); delay(50);
+   sound(262); delay(50);
+   nosound();
+}
+
+void default_ins_change_func(void)
+/* ¨s∑≥/ÆÅ∏˜ ∏Â—≈«°àa íâú·ª© òÅ —°¬âñAìe –qÆÅ(êÅ∏˜ñE –qÆÅ) */
+{
+   int attr2, color2, bkcolor2;
+
+   attr2       = attr_han;
+   color2      = color_han;
+   bkcolor2    = bkcolor_han;
+   attr_han    = FONT_INVERSE;
+   color_han   = LIGHTGRAY;
+   bkcolor_han = BLACK;
+
+   if(is_status_on_han)
+   /* ¨w»Å úa∑•∑° ŒaØ°ñA¥· ∑∂∑a°e ¨w»Å úa∑•µA ∑≥ùb ¨w»Åüi ŒaØ° */
+   {
+      if(ins_mode)
+      {
+	 put_han_font(18, abs_maxy_han, '¨', 's');	/* "¨s" */
+	 put_han_font(20, abs_maxy_han, '∑', '≥');	/* "∑≥" */
+      }
+      else
+      {
+	 put_han_font(18, abs_maxy_han, 'Æ', 'Å');	/* "ÆÅ" */
+	 put_han_font(20, abs_maxy_han, '∏', '˜');	/* "∏˜" */
+      }
+   }
+
+   attr_han    = attr2;
+   color_han   = color2;
+   bkcolor_han = bkcolor2;
+}

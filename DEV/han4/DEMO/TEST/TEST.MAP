@@ -1,0 +1,43 @@
+
+ Start  Stop   Length Name               Class
+
+ 00000H 0008AH 0008BH TEST_TEXT          CODE
+ 0008BH 004E2H 00458H INITHAN_TEXT       CODE
+ 004E3H 00660H 0017EH PUTENG_TEXT        CODE
+ 00661H 007B6H 00156H PUTHAN_TEXT        CODE
+ 007B7H 00A70H 002BAH PUTCHHAN_TEXT      CODE
+ 00A71H 00AC4H 00054H PUTSHAN_TEXT       CODE
+ 00AC5H 01AEFH 0102BH HANBASE_TEXT       CODE
+ 01AF0H 01CA0H 001B1H XSCROLUP_TEXT      CODE
+ 01CA1H 01CA1H 00000H VARIABLE_TEXT      CODE
+ 01CA1H 01F6AH 002CAH GET2FONT_TEXT      CODE
+ 01F6BH 05B1FH 03BB5H _TEXT              CODE
+ 05B20H 06324H 00805H _DATA              DATA
+ 06326H 06326H 00000H GRAPH              DATA
+ 06326H 063C5H 000A0H _BSS               BSS
+
+Undefined symbol '_GETCH' in module TEST.C
+Undefined symbol '_DELAY' in module TEST.C
+Undefined symbol '_EXIT' in module TEST.C
+Undefined symbol '_FREE' in module INITHAN
+Undefined symbol '_STRCAT' in module INITHAN
+Undefined symbol '_STRNCPY' in module INITHAN
+Undefined symbol '_STRLEN' in module INITHAN
+Undefined symbol '_MALLOC' in module INITHAN
+Undefined symbol '_NOSOUND' in module PUTCHHAN
+Undefined symbol '_SOUND' in module PUTCHHAN
+Undefined symbol '_FOPEN' in module HANBASE
+Undefined symbol '_FREAD' in module HANBASE
+Undefined symbol '_FCLOSE' in module HANBASE
+Undefined symbol 'LXMUL@' in module GET2FONT
+Undefined symbol 'LXLSH@' in module GET2FONT
+Undefined symbol '_FSEEK' in module GET2FONT
+Undefined symbol '__GRAPHEXIT' in module GRAPHC
+Undefined symbol '__GRAPHGETMEM' in module GRAPHC
+Undefined symbol '__GRAPHFREEMEM' in module GRAPHC
+Undefined symbol 'SCOPY@' in module GRAPHC
+Undefined symbol 'LDIV@' in module GRAPHC
+Undefined symbol 'DGROUP@' in module GRAPH
+Program entry point at 0000:0000
+Warning: no stack
+
