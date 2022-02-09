@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Compile",
+            "command": "dosbox-x",
+            "args": [
+                "-c",
+                "cd dosdev\\sf2jdy",
+                "-c",
+                "compile.bat sf2"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Run",
+            "command": "dosbox-x",
+            "args": [
+                "-c",
+                "cd dosdev\\sf2jdy",
+                "-c",
+                "bc /d sf2jyd.prj",
+                "-display2"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ],
+  }
