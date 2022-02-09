@@ -85,7 +85,7 @@ void NoteOn( unsigned voice, int pitch );
 void NoteOff( unsigned voice );
 void offMusic(void);
 void Midi_End (void);
-void StartTimeOut (int);
+void STARTTIMEOUT (int);
 /*-------------------------------------------------------------------------
    Enable or disable the volume, but continue playing the song.
 */
@@ -159,7 +159,7 @@ extern UCHAR *buf;
 void Midi_init(void)
 {
 	if (clock_in) return;
-	Clk_install();
+	CLK_INSTALL();
 	clock_in = 1;
 }
 
@@ -184,7 +184,7 @@ int Midi_play (UCHAR *dataPtr)
 */
 void Midi_End (void)
 {
-   if (clock_in) Clk_uninstall();
+   if (clock_in) CLK_UNINSTALL();
    clock_in = 0;
 }
 
@@ -299,7 +299,7 @@ static Start_Melo ()
 	status = trkStats;
 	end_of_data = 0;
 	Set_Tempo (0, 500000L);
-	StartTimeOut (Do_Event ());
+	STARTTIMEOUT  (Do_Event ());
 	musRunning = 1;
 }
 
@@ -319,7 +319,7 @@ Stop_Melo()
    accuracy. */
 Set_Original_Clock ()
 {
-   SetClkRate (0);
+   SETCLKRATE (0);
 }
 
 
@@ -346,7 +346,7 @@ Set_Tempo (tickQnote, usec)
 	}
 
 	/* and set the counter: */
-	SetClkRate ((unsigned) count);
+	SETCLKRATE  ((unsigned) count);
 }
 
 
@@ -548,7 +548,7 @@ static Sysex_Event (event)
 	Return to caller the number of clock ticks to wait for before
 	the next call.
 */
-unsigned TimeOut()
+unsigned TIMEOUT()
 {
 	if (! musRunning)
 		/* Music has not started or has been stopped, so wait the minimum delay ... */
@@ -653,11 +653,10 @@ static unsigned  Do_Event ()
 
 int  Test_Event ()
 {
-   //extern StartTimeOut (int);
 
    if (!timer_signal) return;
 
-   StartTimeOut (Do_Event ());
+   STARTTIMEOUT (Do_Event ());
 }
 #endif
 #ifdef TURBOC
@@ -690,8 +689,8 @@ int  Test_Event ()
 -----------------------------------------------------------------
 */
 
-unsigned near genAddr;	/* addr. of sound chip, in DS, used by OUTCHIP.ASM */
-int near 	pitchRange;			/* pitch variation, half-tone [+1,+12] */
+unsigned near GENADDR;	/* addr. of sound chip, in DS, used by OUTCHIP.ASM */
+int near 	PITCHRANGE;			/* pitch variation, half-tone [+1,+12] */
 
 static int	N_V 	modeWaveSel;		/* != 0 if used with the 'wave-select' parameters */
 
@@ -820,8 +819,8 @@ static const char N_V voicePSlot[] = {
    Function prototypes.
 */
 
-extern void SndOutput(unsigned, unsigned);			/* in file OUTCHIP.ASM */
-extern SetFreq();				/* in file SETFREQ.ASM */
+extern void SNDOUTPUT(unsigned, unsigned);			/* in file OUTCHIP.ASM */
+extern SETFREQ();				/* in file SETFREQ.ASM */
 
 static InitSlotParams();
 static SetSlotParam (unsigned, unsigned *, unsigned);
@@ -853,7 +852,7 @@ int SoundColdInit( unsigned port )
 	{
 	int hardware;
 
-	genAddr = port;
+	GENADDR = port;
 	hardware =  BoardInstalled();
 	SoundWarmInit();
 	return hardware;
@@ -876,8 +875,8 @@ void SoundWarmInit( void )
 	int i;
 
 	for (i = 1; i <= 0xF5; i++)
-		SndOutput (i, 0);   /* clear all registers */
-	SndOutput (4, 6);       /* mask T1 & T2 */
+		SNDOUTPUT(i, 0);   /* clear all registers */
+	SNDOUTPUT(4, 6);       /* mask T1 & T2 */
 
 	for (i = 0; i < 9; i++)  {      /* pitch bend for each voice = no detune */
 		vPitchBend [i] = MID_PITCH;
@@ -945,8 +944,8 @@ SetWaveSel (state)
 
 	modeWaveSel = state ? 0x20 : 0;
 	for (i = 0; i < 18; i++)
-		SndOutput (0xE0 + offsetSlot [i], 0);
-	SndOutput (1, modeWaveSel);
+		SNDOUTPUT(0xE0 + offsetSlot [i], 0);
+	SNDOUTPUT(1, modeWaveSel);
 	}   /* SetWaveSel() */
 
 
@@ -968,7 +967,7 @@ void SetPitchRange( unsigned pR )
 		pR = 12;
 	if (pR < 1)
 		pR = 1;
-	pitchRange = pR;
+	PITCHRANGE = pR;
 	}   /* SetPitchRange() */
 
 
@@ -1162,7 +1161,7 @@ void NoteOff (unsigned voice)
 	if ((!percussion && voice < 9) || voice < BD) {
 		voiceKeyOn [voice] = 0;
 		bxRegister [voice] &= ~0x20;
-		SndOutput (0xB0 +voice, bxRegister [voice]);
+		SNDOUTPUT(0xB0 +voice, bxRegister [voice]);
 		}
 	else if (percussion && voice <= HIHAT) {
 		percBits &= ~percMasks [voice - BD];
@@ -1355,7 +1354,7 @@ static SndSKslLevel (slot)
 
 	t1 = 63 - t1;
 	t1 |= GetLocPrm (slot, prmKsl) << 6;
-	SndOutput (0x40 + (int)offsetSlot [slot], t1);
+	SNDOUTPUT(0x40 + (int)offsetSlot [slot], t1);
 }
 
 
@@ -1365,7 +1364,7 @@ static SndSKslLevel (slot)
 */
 static SndSNoteSel()
 {
-	SndOutput (0x08, noteSel ? 64 : 0);
+	SNDOUTPUT(0x08, noteSel ? 64 : 0);
 }	/* SndSNoteSel() */
 
 
@@ -1382,7 +1381,7 @@ static SndSFeedFm (slot)
 		return;
 	t1 = GetLocPrm (slot, prmFeedBack) << 1;
 	t1 |= GetLocPrm (slot, prmFm) ? 0 : 1;
-	SndOutput (0xC0 + (int)voiceMSlot [slot], t1);
+	SNDOUTPUT(0xC0 + (int)voiceMSlot [slot], t1);
 }
 
 
@@ -1395,7 +1394,7 @@ static SndSAttDecay (slot)
 
 	t1 = GetLocPrm (slot, prmAttack) << 4;
 	t1 |= GetLocPrm (slot, prmDecay) & 0xf;
-	SndOutput (0x60 + (int)offsetSlot [slot], t1);
+	SNDOUTPUT(0x60 + (int)offsetSlot [slot], t1);
 }
 
 
@@ -1408,7 +1407,7 @@ static SndSSusRelease (slot)
 
 	t1 = GetLocPrm (slot, prmSustain) << 4;
 	t1 |= GetLocPrm (slot, prmRelease) & 0xf;
-	SndOutput (0x80 + (int)offsetSlot [slot], t1);
+	SNDOUTPUT(0x80 + (int)offsetSlot [slot], t1);
 }
 
 
@@ -1425,7 +1424,7 @@ static SndSAVEK (slot)
 	t1 += GetLocPrm (slot, prmStaining) ? 0x20 : 0;
 	t1 += GetLocPrm (slot, prmKsr) ? 0x10 : 0;
 	t1 += GetLocPrm (slot, prmMulti) & 0xf;
-	SndOutput (0x20 + (int)offsetSlot [slot], t1);
+	SNDOUTPUT(0x20 + (int)offsetSlot [slot], t1);
 }	/* SndSAVEK() */
 
 
@@ -1440,7 +1439,7 @@ static SndSAmVibRhythm()
 	t1 |= vibDepth ? 0x40 : 0;
 	t1 |= percussion ? 0x20 : 0;
 	t1 |= percBits;
-	SndOutput (0xBD, t1);
+	SNDOUTPUT(0xBD, t1);
 }
 
 
@@ -1455,7 +1454,7 @@ static SndWaveSelect (slot)
 		wave = GetLocPrm (slot, prmWaveSel) & 0x03;
 	else
 		wave = 0;
-	SndOutput (0xE0 + offsetSlot [slot], wave);
+	SNDOUTPUT(0xE0 + offsetSlot [slot], wave);
 	}	/* SndWaveSelect() */
 
 
@@ -1465,7 +1464,7 @@ static SndWaveSelect (slot)
 */
 static UpdateFNums (voice)
 	{
-	bxRegister [voice] = SetFreq (voice, voiceNote [voice],
+	bxRegister [voice] = SETFREQ(voice, voiceNote [voice],
 								  vPitchBend [voice], voiceKeyOn [voice]);
 	}
 
@@ -1482,18 +1481,18 @@ static int BoardInstalled()
 	{
 	unsigned t1, t2, i;
 
-	SndOutput (4, 0x60);    /* mask T1 & T2 */
-	SndOutput (4, 0x80);    /* reset IRQ */
-	t1 = inportb(genAddr);     /* read status register */
-	SndOutput (2, 0xff);    /* set timer-1 latch */
-	SndOutput (4, 0x21);    /* unmask & start T1 */
+	SNDOUTPUT(4, 0x60);    /* mask T1 & T2 */
+	SNDOUTPUT(4, 0x80);    /* reset IRQ */
+	t1 = inportb(GENADDR);     /* read status register */
+	SNDOUTPUT(2, 0xff);    /* set timer-1 latch */
+	SNDOUTPUT(4, 0x21);    /* unmask & start T1 */
 
 	for (i = 0; i < 200; i++)   /* 100 uSec delay for timer-1 overflow */
-		inportb (genAddr);
+		inportb (GENADDR);
 
-	t2 = inportb(genAddr);     /* read status register */
-	SndOutput (4, 0x60);
-	SndOutput (4, 0x80);
+	t2 = inportb(GENADDR);     /* read status register */
+	SNDOUTPUT(4, 0x60);
+	SNDOUTPUT(4, 0x80);
 
 	return (t1 & 0xE0) == 0 && (t2 & 0xE0) == 0xC0;
 	}
@@ -1539,7 +1538,7 @@ unsigned  OutFreq (voice, pitch, bend, keyOn)
 		 then a fraction of this is added to the base value (effNbr). */
 	  if (bend > 0x2000) {
 		 bend -= 0x2000;
-		 n = freqNums [(pitch + pitchRange) % 12];
+		 n = freqNums [(pitch + PITCHRANGE) % 12];
 		 if (n < effNbr) n <<= 1;
 		 n = n - effNbr;                        /* interval as f-num */
 		 effNbr = effNbr + ((n * bend) >> 13);  /* >> 13 is div by 0x2000 */
@@ -1554,7 +1553,7 @@ unsigned  OutFreq (voice, pitch, bend, keyOn)
 	  }
 	  else {
 		 bend = 0x2000 - bend;
-		 n = freqNums [(pitch - pitchRange) % 12];
+		 n = freqNums [(pitch - PITCHRANGE) % 12];
 		 if (n > effNbr) n >>= 1;
 		 n = effNbr - n;
 		 effNbr = effNbr - ((n * bend) >> 13);
@@ -1570,13 +1569,13 @@ unsigned  OutFreq (voice, pitch, bend, keyOn)
    }
 
    /* Write the lower 8 bits of the f-number. */
-   SndOutput (0xA0 + voice, effNbr);
+   SNDOUTPUT(0xA0 + voice, effNbr);
 
    /* Arrange the key-on bit, the octave and the upper two bits of the
 	  f-number in the correct order and write to the register. */
    t1 = keyOn | (octave << 2) | (effNbr >> 8);
 
-   SndOutput (0xB0 + voice, t1);
+   SNDOUTPUT(0xB0 + voice, t1);
 
    return (t1);
 }
