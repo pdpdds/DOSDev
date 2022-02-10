@@ -1,0 +1,61 @@
+/****** egi.c *****/
+void vPointThick(int x, int y, BYTE mode);
+void vPointNormal(int x, int y, BYTE mode);
+BYTE bGetGraphMode(void);
+void vSetHercGraphMode(BYTE flag);
+void vSetPalette(BYTE s, BYTE *pal);
+void vInitOffsetX(BYTE flag, WORD width);
+int iSetVideoMode(BYTE flag);
+int iInitGraphMode(BYTE g_mode, BYTE first_next);
+void vDeinitGraphMode(void);
+void vGraphClipOff(void);
+void vGraphClipOn(int x, int y, int ex, int ey);
+void vNLineXBit(int startx, int endx, int y, BYTE mode);
+void vWLineXBit(int x, int endx, int y);
+void vBLineXBit(int x, int endx, int y);
+void vXORLineXBit(int x, int endx, int y);
+void vWLineYBit(int x, int y, int endy);
+void vBLineYBit(int x, int y, int endy);
+void vXORLineYBit(int x, int y, int endy);
+void vNLineYBit(int x, int y, int ey, BYTE mode);
+void vLineBit(int startx,int starty,int endx,int endy, BYTE mode);
+void vNBoxBit(int x, int y, int ex, int ey, BYTE mode);
+void vWBoxBit(int startx,int starty,int endx,int endy);
+void vBBoxBit(int startx,int starty,int endx,int endy);
+void vXORBoxBit(int startx,int starty,int endx,int endy);
+void vNBarBit(int x, int y, int ex, int ey, BYTE mode);
+void vWBarBit(int startx,int starty,int endx, int endy);
+void vBBarBit(int x,int y,int ex, int ey);
+void vXORBarBit(int x, int y, int ex, int ey);
+void vXORBarByte(int x, int y, int h, int len);
+void vXORBarBytex16(int x, int y, int len);
+void vXORBlockByte(int x, int y, BYTE height, BYTE width);
+void vPutFreeImageByte(int x, int y, WORD hsize, WORD vsize, BYTE *image, BYTE mode);
+void vPutWordImageBit(int x, int y, BYTE *buf);
+WORD wSizeImageBuf(int x, int y, int endx, int endy);
+void vDrawPanelByte(WORD x, WORD y, WORD endx, WORD endy,BYTE flag);
+void vChangeColor(BYTE cur_color, BYTE new_color);
+void vSetColors(void);
+void vSetBlackWhite(void);
+void vFillScreen(unsigned SNode, unsigned second);
+void vBarByte(int x, int y, int endx, int endy, char attr);
+void vScrollRightByte(unsigned x, unsigned endx, unsigned y,\
+									unsigned widthy, unsigned count, unsigned char attr);
+void vScrollLeftByte(unsigned x, unsigned endx, unsigned y,\
+									unsigned widthy, unsigned count, unsigned char attr);
+void vScrollUpByte(unsigned x, unsigned endx, unsigned y,\
+									unsigned widthy, unsigned count);
+void vScrollDownByte(unsigned x, unsigned endx, unsigned y,\
+									unsigned widthy, unsigned count);
+void vPutColorImageLByte(int x, int y, int h, int w, int c, BYTE *buf);
+void vDrawVScrollBarBit(WORD x, WORD ex, WORD y);
+void vDrawHScrollBarBit(WORD x, WORD y, WORD ey);
+void vDelVThumbBit(WORD x, WORD ex, WORD y, WORD total, int old_sub);
+void vDrawVThumbBit(WORD x, WORD ex, WORD y, WORD total, int sub, int old_sub);
+void vDelHThumbBit(WORD x, WORD y, WORD ey, WORD total, int old_sub);
+void vDrawHThumbBit(WORD x, WORD y, WORD ey, WORD total, int sub, int old_sub);
+void vDarkenTextWindowTitle(int n);
+void vResetTextWindowTitle(void);
+void vDrawWindowByte(int x, int y, int lx, int ly, BYTE flag, BYTE *str);
+void vDrawObjByte(int n);
+
