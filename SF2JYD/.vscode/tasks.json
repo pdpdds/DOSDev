@@ -7,7 +7,7 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dosdev\\sf2jdy",
+                "cd dosdev\\sf2jyd",
                 "-c",
                 "compile.bat sf2"
             ],
