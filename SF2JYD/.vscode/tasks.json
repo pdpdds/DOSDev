@@ -9,7 +9,7 @@
                 "-c",
                 "cd dosdev\\sf2jyd",
                 "-c",
-                "compile.bat sf2"
+                "bc /b sf2.prj"
             ],
             "group": {
                 "kind": "build",
@@ -22,9 +22,9 @@
             "command": "dosbox-x",
             "args": [
                 "-c",
-                "cd dosdev\\sf2jdy",
+                "cd dosdev\\sf2jyd",
                 "-c",
-                "bc /d sf2jyd.prj",
+                "bc /d sf2.prj",
                 "-display2"
             ],
             "group": {

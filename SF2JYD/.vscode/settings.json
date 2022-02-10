@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "PLAY.C": "cpp"
+        "PLAY.C": "cpp",
+        "SF2ADL.C": "cpp",
+        "SF186.C": "cpp",
+        "PSPRKER0.C": "cpp"
     }
 }
