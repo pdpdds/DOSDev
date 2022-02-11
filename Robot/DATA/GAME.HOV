@@ -1,0 +1,352 @@
+Hovertank3D.Game
+
+levnames0		"Moon 1: Praxidike (Metal at liberty)"
+levtext0		"The Jupiter Moon Mining Corporation has\n" + 
+				"recently become rather concerned with the\n" + 
+				"loss of communications to several remote moon\n" + 
+				"mining outposts.\n" + 
+				"They have hired you (Mash Hardrock, the only\n" + 
+				"pilot in the vicinity with a Hyperbox Stardrive\n" + 
+				"TM) to investigate."
+levmin0			3
+levsec0			0
+
+levnames1		"Moon 2: Themisto (The Monitor Mystery)"
+levtext1		"An extremely large object has been\n" + 
+				"detected heading on a collision course towards\n" + 
+				"Themisto, the location of an automated\n" + 
+				"mining research facility. Most of the robots\n" + 
+				"have been evacuated however some remain due\n" + 
+				"to the lack of escape pods. Rescue the robots\n" + 
+				"whilst avoiding the automated defence systems\n" +
+				"which have strangely malfunctioned."
+levmin1			3
+levsec1			0
+
+levnames2		"Moon 3: Callirrhoe (The Flow Tunnels)"
+levtext2		"Subspace radio reports a distress signal\n" + 
+				"emanating from Callirrhoe. This moon saw\n" + 
+				"the first use of the highly unstable liquid\n" + 
+				"Trinitric Acid which was used to dissolve\n" + 
+				"tunnels in the rock. This was before the\n" + 
+				"substance was banned for being too dangerous\n" + 
+				"after an unfortunate incident involving the\n" +
+				"loss of an entire planetoid."
+levmin2			4
+levsec2			0
+
+levnames3		"Moon 4: Leda (Unlucky for Some)"
+levtext3		"Leda is home to the furthest military outpost\n" + 
+				"from earth. The automated installation monitors\n" + 
+				"the galactic border for unusual activity.\n" + 
+				"Well, it used to... reports indicate the base\n" + 
+				"has been destroyed!!!\n" +
+				"Get over there and rescue any survivors, they\n" + 
+				"may have critical intelligence regarding the\n" +
+				"situation that is unfolding."
+levmin3			4
+levsec3			0
+
+levnames4		"Moon 5: Adrastea (Underground Evacuation)"
+levtext4		"After interviewing the survivors the military\n" +
+				"have concluded that an alien invasion is under\n" + 
+                "way and informed the JMMC.\n" + 
+				"The JMMC have requested that you visit the\n" + 
+				"underground facility on Adrastea ASAP\n" + 
+				"and evacuate the inhabitants, you will be\n" +
+				"heavily rewarded."
+levmin4			6
+levsec4			0
+
+levnames5		"Moon 6: Lysithea (Scout Ship Salvage)"
+levtext5		"A military scout ship has crashed on Lysithea.\n" + 
+				"The black box transmissions received from the\n" + 
+				"craft indicate that the human survivors appear\n" + 
+				"to be infected by an alien virus (maybe this.\n" + 
+				"explains the horrific mutants you have seen).\n" +
+				"The military want the A.I.s that were aboard for\n" +
+				"the exabytes of log data they collected.\n" +
+				"You have been contracted to retrieve them."
+levmin5			5
+levsec5			0
+
+levnames6		"Moon 7: Ananke (Alloy Adventure)"
+levtext6		"A small colony of highly sentient A.I.s have\n" + 
+				"been stationed on Ananke performing\n" + 
+				"terraforming research. The colony is in danger\n" + 
+				"of being consumed by the alien invasion as it\n" + 
+				"sweeps through this part of the solar system.\n" + 
+				"Retrieve the robots and their precious\n" +
+				"research."
+levmin6			5
+levsec6			0
+
+levnames7		"Moon 8: Sinope (Mutant Mind Control)"
+levtext7		"The military have requested your assistance\n" + 
+				"again due to a lack of resources.\n" + 
+				"The aliens have invaded the military\n" +
+				"installation on Sinope.\n" + 
+				"The military believe the mutants are part of\n" +
+				"a hive mind controlled by the aliens. They are\n" + 
+				"being used to leverage their knowledge of the\n" +
+				"security protocols and abduct important A.I.s."
+levmin7			5
+levsec7			0
+
+levnames8		"Moon 9: Carme (Robot's Return)"
+levtext8		"Your previous efforts were very heroic but\n" + 
+				"unfortunately a significant number of A.I.s\n" + 
+				"were abducted.\n" + 
+				"Luckily you were able to track the alien's\n" + 
+				"spacecraft to Carme and have managed to\n" + 
+				"teleport aboard.\n" + 
+				"Rescue the A.I.s and take them to the\n" + 
+				"rendezvous point at Metis."
+levmin8			5
+levsec8			0
+
+levnames9		"Moon 10: Metis (Delayed Exchange)"
+levtext9		"You arrive at the rendezvous and deploy the\n" +
+				"A.I.s when suddenly you realise... IT'S A TRAP!!!\n" +
+				"Somehow the aliens found out and prepared\n" + 
+				"a formidable welcoming committee to\n" + 
+				"annihilate you.\n" + 
+				"Gather the A.I.s and return them to the\n" + 
+				"orbital station the handover will have to\n" +
+				"be done later."
+levmin9			5
+levsec9			0
+
+levnames10		"Moon 11: Pasiphae (Alien Intelligence)"
+levtext10		"A second rendezvous was arranged with a scout\n" +
+				"ship on Pasiphae, this time it went smoothly.\n" +
+				"The military impressed by your abilities so far\n" + 
+				"have requested you undertake another mission.\n" + 
+				"It is believed that a small group of A.I.s\n" + 
+				"that were captured and reprogrammed by the\n" +
+				"aliens at the start of the conflict have intel\n" + 
+				"about the alien's strategy. Recover them.\n"
+levmin10		7
+levsec10		0
+
+levnames11		"Moon 12: Elara (The Carbomite Manoeuvre)"
+levtext11		"During your military excursions the carbomite\n" + 
+				"mine at Elara was attacked. All humans at the\n" + 
+				"facility were infected.\n" + 
+				"The aliens have been using robots to continue\n" + 
+				"mining the carbomite (a material used for\n" + 
+				"spacecraft shielding).\n" + 
+				"Disable the facility by removing all of the\n" + 
+				"robots that are operating it."
+levmin11		7
+levsec11		0
+
+levnames12		"Moon 13: Thebe (A Purple Pursuance)"
+levtext12		"The famous purple city (one of the few tourist\n" +
+				"attractions on this side of the Ark de Ville)\n" +
+				"is under siege.\n" + 
+				"Most people would scoff at the thought of\n" + 
+				"rescuing a couple of entertainment bots.\n" + 
+				"However the JMMC has invested a shed-load of\n" +
+				"Galax procuring them and the military seem\n" +
+				"to be regaining control of the situation now."
+
+levmin12		7
+levsec12		0
+
+levnames13		"Moon 14: Himalia (Mutant's Medication)"
+levtext13		"Medical research on captured mutant specimens\n" + 
+				"has revealed that the mutated humans were not\n" +
+				"infected with a virus after all but are actually\n" +
+				"hosts to alien parasites. After the parasites\n" +
+				"have entered their unfortunate victims a short\n" +
+				"gestation period ensues whilst they mutate.\n" +
+				"The medical droids that made this discovery have\n" +
+				"data on how to reverse the process. Get them!"
+levmin13		7
+levsec13		0
+
+levnames14		"Moon 15: Amalthea (Android Assistance)"
+levtext14		"A long distance distress transmission has been\n" +
+				"received from a group of androids on Amalthea.\n" + 
+				"Only part of it has been successfully decoded.\n" + 
+				"The droids are unable to escape due to damage\n" + 
+				"done to their teleporters by rogue security\n" + 
+				"drones. The JMMC request you assist them.\n"
+levmin14		7
+levsec14		0
+
+levnames15		"Moon 16: Europa (The Deception Discovery)"
+levtext15		"The recent reduction in alien activity has been\n" + 
+				"a most profound deception. The high security\n" + 
+				"military battle computers that have been\n" +
+				"orchestrating military deployments have in\n" +
+				"fact been conjoined to the hive mind.\n" +
+				"A large alien force has been massing behind\n" + 
+				"Europa. It's too late to do much here.\n" +
+				"Just get what you can and flee to Io."
+levmin15		9
+levsec15		0
+
+levnames16		"Moon 17: Io (A Lucky Escape)"
+levtext16		"When you reached Io you learned that you were\n" + 
+				"lucky to escape Europa. The moon has been\n" + 
+				"completely obliterated by the alien death ball.\n" + 
+				"However, the connection of the conjoined battle\n" +
+				"systems to the hive mind has enabled military\n" +
+				"machines on Io to gain access to alien systems.\n" +
+				"Recover them and take them to the base\n" +
+				"station on Callisto."
+levmin16		9
+levsec16		0
+
+levnames17		"Moon 18: Callisto (The Alien Intention)"
+levtext17		"The military brief you that the information\n" + 
+				"recovered from Io explains the intention of the\n" + 
+				"alien invasion. The aliens are en route to an\n" + 
+				"ancient city located on Ganymede.\n" + 
+				"The aliens are attempting to recover an\n" +
+				"artefact which they believe holds the key\n" +
+				"to major technological advancements.\n" +
+				"This place will fall soon, get to Ganymede!!!"
+levmin17		9
+levsec17		0
+
+levnames18		"Moon 19: Ganymede (One Step Ahead)"
+levtext18		"Who knows what the aliens would do if they had\n" + 
+				"the artefact. Earth's military defence has\n" +
+				"now almost completely been wiped out.\n" +
+				"A team of robots has since been warped in to\n" +
+				"the city (one way teleportation unfortunately).\n" +
+				"They have located the artefact and are waiting\n" +
+				"to be picked up.\n" +
+				"Recover the robots Mash, you're our last hope!"
+levmin18		9
+levsec18		0
+
+levnames19		"Moon 20: Epilogue - A Galaxy Far Far Away"
+levtext19		"You are not sure exactly what happened. You\n" +
+				"believe that after returning to the orbital\n" + 
+				"station the artefact activated somehow and a\n" +
+				"large chunk of space time around the station\n" +
+				"instantaneously warped to an entirely different\n" +
+				"part of the universe. From the debris outside\n" +
+				"it looks as though 99% of the alien death ball\n" +
+				"didn't make the transition. Defend the station!"
+levmin19		9
+levsec19		59
+
+Intro1			"Robot Redemption v1.0\n\n"
+Intro2			"A modification for\n"
+Intro3			"\n"
+Intro4			"Hovertank 3D\n"
+Intro5			"\n"
+Intro6			"by\n"
+Intro7			"A.Stewart\n"
+
+DoHelpText1		"Robot Redemption Commands\n"
+DoHelpText2		"  F2  : Sound on / off\n" + 
+				"  F3  : Keyboard mode / custom\n" +
+				"  F4  : Joystick mode / calibration\n" +
+				"  F5  : Reset game\n" + 
+				"  ESC : Quit\n"
+DoHelpText3		"  UP / DOWN : forward/reverse\n" +
+				"  LEFT / RIGHT : turn\n"
+DoHelpText4		"<MORE>"
+DoHelpText5		"Button 1 / Ctrl\n"
+DoHelpText6		"---------------\n\n"
+DoHelpText7		"  Charge laser.  A fully charged mining laser\n" +
+				"  can shoot through multiple targets.\n" +
+				"  While the laser is charging, your moon\n" + 
+				"  buggies turning speed is halved for fine\n" +
+				"  aiming adjustments.\n" +
+				"\n"
+DoHelpText8		"<MORE>"
+DoHelpText9		"Button 2 / Alt\n"
+DoHelpText10	"---------------\n\n"
+DoHelpText11	"  Turbo jet.  Doubles your forward or\n" +
+				"  backwards speed, but does not affect\n" +
+				"  your turning speed.\n"
+
+DebugMemory1	"Memory Usage\n"
+DebugMemory2	"------------"
+DebugMemory3	"\nTotal     :"
+DebugMemory4	"k\nFree      :"
+DebugMemory5	"k\nWith purge:"
+DebugMemory6	"k\n"
+DebugMemory7	""
+
+DebugKeys1		"Cheat mode off"
+DebugKeys2		"Cheat mode on"
+DebugKeys3		"Warp to which level (1-20): "
+
+CheckKeys1		"Sound (Y/N)?"
+CheckKeys2		"RESET GAME (Y/N)?"
+CheckKeys3		"QUIT (Y/N)?"
+
+main1			"Robot Redemption\n"
+main2			"Copyright 2014 A.Stewart\n"
+main3			"Version 1.0\n"
+
+GameOver1		"New High Score!\n"
+GameOver2		"Score\n"
+GameOver3		"\n\n"
+GameOver4		"Old\n"
+GameOver5		"\n"
+GameOver6		"Congratulations!\n"
+GameOver7		""
+
+Victory1		"Somehow you survived the battle and piloted\n"
+Victory2		"the Hyperbox Stardrive TM to the nearby\n"
+Victory3		"planet's surface. An old man magically appears\n"
+Victory4		"and greets you 'Welcome to Aethargma!' he says.\n"
+
+Victory5		"The old man points at the artefact.\n"
+Victory6		"'Do you mind if I have that back?' he asks.\n"
+Victory7		"'But... how will I get home?' you ask.\n"
+Victory8		"'Ohh, Don't worry about that...' he says.\n"
+
+Victory9		"'Would you like some space tea?' he asks\n"
+Victory10		"whilst beckoning towards a small cave like\n"
+Victory11		"opening between the rocks.\n"
+Victory12		"'Sure...' you say 'I could do with a break'.\n"
+
+Victory13		"Game Over!!!"
+
+BaseScreen1		"-= Orbital Station =-\n"
+BaseScreen2		"Saved: "
+BaseScreen3		", Lost: "
+BaseScreen4		"\nRecovery bonus..."
+BaseScreen5		"\nTime bonus...\n"
+BaseScreen6		"\nRecharging shields..."
+BaseScreen7		"Mission completed!"
+BaseScreen8		"GO TO NEXT MOON"
+BaseScreen9		"\nAliens: "
+BaseScreen10	" / "
+
+PlayGame1		" Start at what level (1-"
+PlayGame2		")? "
+PlayGame3		"Continue game ?"
+
+CalibrateJoy1	"Joystick Configuration\n"
+CalibrateJoy2	"Hold the joystick in the UPPER LEFT\n"
+CalibrateJoy3	"corner and press a button:"
+CalibrateJoy4	"\nHold the joystick in the LOWER RIGHT\n"
+CalibrateJoy5	"corner and press a button:"
+CalibrateJoy6	"\n(F)ire or (A)fterburn with B1 ?"
+
+calibratekeys1	"Keyboard Configuration"
+calibratekeys2	"\n1 north"
+calibratekeys3	"\n2 east"
+calibratekeys4	"\n3 south"
+calibratekeys5	"\n4 west"
+calibratekeys6	"\n5 button1"
+calibratekeys7	"\n6 button2"
+calibratekeys8	"\nModify which action:"
+calibratekeys9	":"
+calibratekeys10	"\nPress the new key:"
+
+cyclecolors0	0
+cyclecolors1	1
+cyclecolors2	15
+barColor		14
