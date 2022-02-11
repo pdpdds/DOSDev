@@ -1,0 +1,44 @@
+// SEG.CPP //////////////////////////////////////////////////////////////////
+
+// Thomas H.
+
+// INCLUDES /////////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <alloc.h>
+#include <stdlib.h>
+
+#include "global.h"
+#include "seg.h"
+
+// VARS /////////////////////////////////////////////////////////////////////
+
+long seg_total;
+
+// EXTERNALS ////////////////////////////////////////////////////////////////
+
+extern void newhandler(void);
+
+// METHODS //////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR
+
+seg_C::seg_C(long len)
+{
+	seglen=len+16l;
+	seg_total+=seglen;
+	ptr=ptr2=(byte*)farmalloc(seglen);
+	if (!ptr)
+		newhandler();
+	ptr=(byte*)((long)ptr+0x10000);
+	ptr-=4;
+}
+
+// DESTRUCTOR
+
+seg_C::~seg_C()
+{
+	seg_total-=seglen;
+	if (ptr2)
+		farfree(ptr2);
+}

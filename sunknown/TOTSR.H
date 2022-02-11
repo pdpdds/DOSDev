@@ -1,0 +1,16 @@
+extern void	um_pitch_bend( int channel, int msb, int lsb );
+extern void	um_program( int channel, int prog );
+extern void	um_chanpressure( int channel, int pitch, int pressure );
+extern void	um_pressure( int channel, int pitch, int pressure );
+extern void	um_parameter( int channel, int control, int value );
+extern int	um_note_on( int channel, int note, int velocity );
+extern void	um_note_off( int channel, int note, int velocity );
+extern void	um_set_tempo( unsigned long us, short divisor);
+extern int	um_init_hardware ( struct MIDILIB *ml );
+extern void	um_init_timers ( void );
+extern void	um_cleanup_timers ( void );
+extern void 	um_reset_tick_counter( void );
+extern int 	um_wait_for ( unsigned long some_time );
+extern int	reset_um( void );
+extern void	um_cleanup( void );
+extern void	um_set_background(void (*routine)(struct MIDILIB *ml, unsigned long time), void *);
