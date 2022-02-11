@@ -1,0 +1,153 @@
+This is a video game for the IBM PC family of compatibles.  It requires an EGA
+display, but that's about it.  It was written on an AT class machine, so
+performance might be a little slow on a 4.77MHz PC, but I don't know.  It WON'T
+work on CGA displays.
+
+The game was inspired by an arcade game of several years called "Tutankham", or
+something like that.  In the process of the development, a number of changes
+and additions have been made.
+
+WARNING: the game is NOT finished.  It is playable, but it is not what I would
+	consider a finished game.  The reason I'm making this release is that
+	I haven't worked on the game for a couple of months, and MAY never get
+	back to it. (On the other hand, I may.  Who knows?)  I'm including the
+	sources, in case anyone gets the urge to do more work on it.  Please,
+	feel free to do so, but I'd appreciate getting copies of anything you
+	do.  This code is copyrighted by me, but I am giving permission to 
+	all sentient beings to modify and redistribute it under the following
+	conditions:
+
+		1) Under no circumstances is it to be sold, or otherwise
+			profitted from.
+		2) Copies of sources for any significant modifications are
+			to be sent to me, electronically at:
+
+				hplabs!hpcvlx!everett
+
+			or by U.S. mail at:
+
+				Everett Kaser
+				35405 Spruce St
+				Albany, OR 97321
+
+				Home phone: (503) 928-5259
+				Work phone: (503) 750-3569
+
+			for possible inclusion in possible future releases
+			(credit will, of course, be given to said sentient
+			beings for said significant contributions).
+
+The files included in this distribution are:
+
+	This file:
+
+		  SNARF.DOC
+
+	SNARF sources:
+
+		  SNARF  	the MAKE file
+		  SNARF.H  	C header file
+		   MAIN.C  	main, init, etc.
+		   MOVE.C  	moving & displaying objects
+		   EDIT.C  	development only, rough code, maze editing
+		 MANDIR.ASM	finding direction & distance for SNARFs to you
+		 DISPIO.ASM	low level display, sound, random functions
+
+	Executables:
+
+		  SNARF.EXE	the Game
+		     BE.EXE	Bitplot Editor (for creating objects)
+
+	Miscellaneous:
+
+		  SOUND.C  	source for developing new sound sequences
+		  SNARF.HI 	High score file for the Game
+
+The Bitplot Editor is a hack of another project I started and never finished,
+so the softkeys are not optimum, but it does provide a reasonable means of
+creating 16x16-pixel-by-16-color images of objects for inclusion in the game.
+There is no documentation for BE.EXE, but it's all softkeys and cursor keys,
+so if you can't figure it out with a little experimenting, then you shouldn't
+be trying to modify the Snarf game, so there!!!
+
+Whew.
+
+
+
+PLAYING THE GAME
+
+The general idea of the game is this:  you have to run around through various
+mazes picking up treasure (rings and crowns) while avoiding the Snarfs.  You
+can should the Snarfs, but you only get points for the treasure, not for the
+Snarfs.  Each time you're touched by a Snarf, you're "tagged".  You start with
+a "tag count" of 50.  Each time you're tagged, the count is decremented.  If
+you get tagged when the count is 0, the game is over.  You can get "healed" at
+a first-aid station (your tag count is pumped back up to 50).  First-aid is
+only available every two to four mazes.  The color of the top and bottom bars
+on the display change with each tag.
+
+The first screen shows the high scores, all of the objects in the game, and
+a brief description of the game.  Pressing the space bar will move you on to
+the main playing screen.  Then, pressing any key will start the game.  The
+keys are:
+
+	four cursor keys	control your movement
+	A			fires a shot to the left
+	D			fires a shot to the right
+	W			fires a shot upwards
+	X			fires a shot downwards
+	escape			exits the game
+	space			pauses the game
+	F10			toggles sound on or off (default is on)
+
+Included for development work only (and their use is possibly cryptic and
+crude):
+
+	F1			modify color pallette
+	F2			modify colors
+	F3			edit walls/mazes/object placement
+
+If you want to play with those three, you'll have to read the source code
+to see exaclty what they're doing, and how they're doing it.  (Remember,
+they're crude, and probably buggy!)
+
+Any other key will stop the motion of your player, if it's in motion.  This
+may be a mistake, as you sometimes hit the wrong keys in the heat of the
+battle, but like I said, the game is NOT finished.
+
+And yes, this IS one of those two handed games that requires a small level of
+ambidexterousnousnosity :-).  You move with your right hand and shoot with
+your left.  By the way, you can only have one shot off at a time (to make the
+game half-way challenging).
+
+Across the top of the display are these fields:
+
+	TAGS		this is the number of tags left (max = 50)
+	POINTS		value of treasure picked up on this level
+	LEVEL SCORE	score for level at end-of-level (POINTS x TAGS)
+	SCORE		total score
+	LEVEL		current level (or maze) number
+	HIGH SCORE	current high score
+
+As you start the game, TAGS=50, POINTS=0, LEVEL SCORE=0, SCORE=0, LEVEL=1.
+As you get tagged, TAGS get decremented.  As you pick up treasure, POINTS gets
+increment, based on the value of the treasure.  When you exit a level, the
+TAGS you have left are multiplied by the POINTS you picked up on that level to
+generate the LEVEL SCORE.  This is then added to SCORE.  Then, as you start the
+next level, POINTS are set back to 0, LEVEL is incremented, and off you go.
+LEVEL SCORE will retain the score for the previous level until you complete the
+current level.  When you run out of TAGS and lose the game, whatever POINTS
+you've earned will get added to your score (as if you had one TAG left).
+
+Occassionally, you'll find yourself in the midst of a cloud of Snarfs, and your
+TAGS will plummet like a falling star.  This is very fondly referred to as
+a "gang-bang".  You will also find yourself in dire peril when a Snarf is 
+running along on your heels, in the same direction as you, taging you with
+every move.  The best thing to do in this situation is to reverse direction for
+a moment to get a little space between you, then shoot it.  You will notice
+that Snarfs can see the shot coming towards them, and will try to avoid it.
+With practice, you can use this to your advantage.
+
+That's about all for now.  As I said, the game is unfinished, and so is the
+documentation, such as it is.  If I can help, give me a holler at the above
+addresses/phones.
