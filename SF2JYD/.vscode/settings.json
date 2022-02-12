@@ -3,6 +3,7 @@
         "PLAY.C": "cpp",
         "SF2ADL.C": "cpp",
         "SF186.C": "cpp",
-        "PSPRKER0.C": "cpp"
+        "PSPRKER0.C": "cpp",
+        "_SF186.C": "cpp"
     }
 }
