@@ -1,10 +1,23 @@
 #include "sed.h"
+#include <stdlib.h>
 
 sprites plane[10];
 sprites juckpic[9];
 sprites back[1];
 
 void soga(void);
+
+typedef int S16;
+
+BYTE C_Cheak(S16 sx1, S16 sx2, S16 sy1, S16 sy2, S16 dx1, S16 dx2, S16 dy1, S16 dy2)
+{
+if(min((sx2), (dx2)) > max((sx1), (dx1)))
+if(min((sy2), (dy2)) > max((sy1), (dy1)))
+return 1;
+return 0;
+}
+
+
 
 main()
 {
@@ -187,4 +200,3 @@ void soga(void)
  Mus_End();
 Fade(0,255,225);
 }
-
