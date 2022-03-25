@@ -9,7 +9,7 @@
                 "-c",
                 "cd dosdev\\wolf3d",                
                 "-c",
-                "bc /b wolf3d.prj"
+                "build.bat"
             ],
             "group": {
                 "kind": "build",
