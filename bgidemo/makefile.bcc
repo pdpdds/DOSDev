@@ -1,0 +1,43 @@
+#
+# Constantin Knizhnik
+# Moscow Software Center
+# BGI for Windows
+#
+
+DEFINES = 
+CC = bcc32 
+
+# Debug
+#CCFLAGS = -I. -Od -c -v $(DEFINES)
+
+# Optimize
+CCFLAGS = -I. -O2 -c -v $(DEFINES)
+
+LD = bcc32 -v
+LDFLAGS =
+
+all: winbgi.lib bgidemo.exe
+
+winbgi.obj: winbgi.cpp graphics.h
+	$(CC) $(CCFLAGS) winbgi.cpp
+
+winbgi.lib: winbgi.obj
+	-del winbgi.lib
+	tlib winbgi.lib +winbgi.obj
+
+
+bgidemo.obj: bgidemo.c graphics.h 
+	$(CC) $(CCFLAGS) bgidemo.c 
+
+bgidemo.exe: bgidemo.obj winbgi.lib
+	$(LD) $(LDFLAGS) bgidemo.obj winbgi.lib
+
+clean:
+	del *.obj,*.ilk,*.pdb,*.zip,*.*~,*~
+
+copyzip: clean
+	cd ..
+	del winbgi.zip
+	zip -r winbgi.zip winbgi
+	copy winbgi.zip a:
+
