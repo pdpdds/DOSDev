@@ -120,7 +120,7 @@ void base_block(void)
 		num1 = random(7); /* whileπÆ æ»ø°º≠ ≥≠ºˆ∏¶ πﬂª˝Ω√≈¥ */
 		/* √≥¿Ω Ω√¿€«“∂ß∏∏ µŒ π¯¿« ≥≠ºˆ πﬂª˝ */
 
-		gprintf_XY(40, 77, YELLOW, LIGHTBLUE, "<  ?a °§q   °Õb ?®œ  >");
+		gprintf_XY(40, 77, YELLOW, LIGHTBLUE, "<  îa ∑q   •b ï©  >");
 
 		draw(num1, 0, -5, 3); /* ¥Ÿ¿Ω ∫Æµ∂¿ª øπ∞Ì ¿ßƒ°ø° ±◊∑¡ ¡ÿ¥Ÿ */
 
@@ -355,7 +355,7 @@ void back_screen(void)
 	line(41, 319, 191, 319);
 	settextstyle(0, HORIZ_DIR, 1);
 	//	outtextxy(46,194,"HIGH SCORE");
-	gprintf_XY(46, 194, YELLOW, LIGHTBLUE, "  ?  ?¢Æ  ¢¨??? ");
+	gprintf_XY( 46, 194, YELLOW, LIGHTBLUE, "  ¬A  â°  ∏Ò  ÆÅ " );
 
 }
 
@@ -367,7 +367,7 @@ int Pause(void)
 {
 	int c = 0;
 
-	gprintf_XY(46, 194, YELLOW, LIGHTBLUE, "??°©°À¨ª?a¢“a ? (Y/N)");
+	gprintf_XY(46, 194, YELLOW, LIGHTBLUE, "CONTINUE ? (Y/N)");
 	c = getch();
 	if (c == 'n' || c == 'N') return(1);
 
@@ -624,7 +624,7 @@ void display_score(void)
 		x = STX; /* πÆ¿⁄ ¿ßƒ° */
 		y = i * 20 + 222;
 		settextstyle(2, 0, 7);
-		gprintf(x, y, "%llu", score[i]); /* ¿ßƒ°ø° score∏¶ √‚∑¬ */
+		gprintf(x, y, "%lu", score[i]); /* ¿ßƒ°ø° score∏¶ √‚∑¬ */
 	}
 }
 

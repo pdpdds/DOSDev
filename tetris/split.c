@@ -7,7 +7,9 @@ char *screen[80][25];
 int  current_x, current_y;
 
 void OpenScreen(void) {
-    /*int i, j;
+
+#ifndef _WIN32
+    int i, j;
 
     current_x = wherex();
     current_y = wherey();
@@ -31,11 +33,14 @@ void OpenScreen(void) {
 	movetext(40+j,1,79,25,41+j,1);
 	delay(10);
 
-    }*/
+    }
+#endif
 }
 
 void CloseScreen(void) {
-    /*int i, j;
+
+#ifndef _WIN32
+    int i, j;
 
     // Step 3
     // 화면을 다시 붙이기 시작하는 부분
@@ -52,7 +57,8 @@ void CloseScreen(void) {
     puttext(1,1,1,25,&screen[40-40]);
     puttext(80,1,80,25,&screen[39+40]);
     gotoxy(current_x, current_y);
-    exit(0);*/
+    exit(0);
+#endif
 }
 
 #ifdef TEST
