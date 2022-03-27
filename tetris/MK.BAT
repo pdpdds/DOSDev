@@ -1,2 +1,2 @@
-@bcc -ml tetris2.c split.c hano.c graphics.lib
+@bcc -ml tetris.c split.c hano.c graphics.lib
 @dir *.exe
