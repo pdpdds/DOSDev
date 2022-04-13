@@ -43,8 +43,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 {
 	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 	char command[0x200];
-	snprintf(command, sizeof(command), "\"dosbox-x\" -c \"cd dosdev\\tetris\" -c \"bc /d tetris.prj\" -display2");
-	//snprintf(command, sizeof(command), "\"dosbox-x\" -c \"cd dosdev\\tetris\" -c \"bc /b tetris.prj\"");
+	//snprintf(command, sizeof(command), "\"dosbox-x\" -c \"cd dosdev\\tetris\" -c \"bc /d tetris.prj\" -display2");
+	snprintf(command, sizeof(command), "\"dosbox-x\" -c \"cd dosdev\\tetris\" -c \"bc /b tetris.prj\"");
 
 	CreateProcessAndWait((char*)command);
 
