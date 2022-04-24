@@ -1,0 +1,38 @@
+.AUTODEPEND
+
+CC = bcc +SOK.CFG
+TASM = TASM
+TLIB = tlib
+TLINK = tlink
+LIBPATH = C:\BC45\LIB;
+INCLUDEPATH = C:\BC45\INCLUDE;
+
+.c.obj:
+  $(CC) -I$(INCLUDEPATH) -c {$< }
+
+EXE_dep =  readscr.obj \
+	   sok.obj     \
+	   VGA320.obj
+
+sok.exe: $(EXE_dep)
+  $(TLINK) /x/c/P-/L$(LIBPATH) @&&|
+c0l.obj+
+readscr.obj+
+sok.obj+
+vga320.obj
+sok
+	# no map file
+graphics.lib+
+emu.lib+
+mathl.lib+
+cl.lib
+|
+
+
+#       *Individual File Dependencies*
+readscr.obj: readscr.c
+
+sok.obj: sok.c
+
+vga320.obj: vga320.c
+
