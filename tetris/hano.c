@@ -327,9 +327,11 @@ void InitGR(void) {
 
     ReadFontData();
     GraphDriver = DETECT;
-
-    //installuserdriver("SVGA256", DETECTVGA256);
+#ifndef _WIN32
+    installuserdriver("SVGA256", DETECTVGA256);
+#endif // !_WIN32
 //    (void) registerbgidriver(SVGA256_driver);
+
     initgraph( &GraphDriver, &GraphMode, "");
     ErrorCode = graphresult();
     if(ErrorCode != grOk) {
